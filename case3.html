@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>사례 3 · PORT-MIS 관제일보 자동화 | VTS AI 포트폴리오</title>
+<meta name="description" content="해양수산부 PORT-MIS와 현장업무포털 간 이중 수동 입력을 원클릭으로 완전 자동화하는 RPA 시스템">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="top-nav">
+  <a class="nav-back" href="index.html">📁 메인 목록으로</a>
+  <span class="nav-title">사례 3 · PORT-MIS 관제일보 자동화</span>
+</nav>
+
+<div class="hero">
+  <span class="hero-label">사례 3 · RPA · WebView2 · Excel COM</span>`n  <span class="hero-label" style="background:#fff7ed;color:#c2410c;border:1px solid #fdba74;margin-left:8px;">💡 센터별 특성에 따라 수정 후 사용가능</span>
+  <h1>VTS 관제일보 자동결산<br>이중 입력 자동화 시스템</h1>
+  <p>PORT-MIS 크롤링 → 엑셀 자동 기입 → 현장업무포털 원클릭 전송. 10~20분 행정 처리를 1분으로.</p>
+</div>
+
+<div class="page-content">
+
+  <div class="internal-badge">
+    <span class="internal-badge-icon">🔒</span>
+    <span class="internal-badge-text">보안을 위해 해수부 내부망 + 해경 내부망 이중 접속이 제한되어 가상 시연으로 대체 진행됩니다</span>
+  </div>
+
+  <!-- 1단계 -->
+  <div class="section-card">
+    <div class="section-header">
+      <span class="section-step">1</span>
+      <span class="section-title">프로젝트 핵심 요약</span>
+    </div>
+    <div class="section-body">
+      <div class="summary-grid">
+        <div class="summary-item">
+          <span class="summary-label">🎯 개발 목적</span>
+          <span class="summary-text">PORT-MIS → 엑셀 → 현장업무포털까지 3단계 이중 수동 입력 완전 자동화</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">⚙️ 주요 기능</span>
+          <span class="summary-text">WebView2 웹 크롤링 · Excel COM 자동 바인딩 · 웹 폼 자동 전송 · 실시간 터미널 GUI</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">🛠️ 기술 스택</span>
+          <span class="summary-text">PowerShell · Microsoft WebView2 · .NET WinForms · Excel COM Interop</span>
+          <div class="tech-tags">
+            <span class="tech-tag">WebView2</span>
+            <span class="tech-tag">Excel COM</span>
+            <span class="tech-tag">WinForms</span>
+            <span class="tech-tag">RPA</span>
+          </div>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">✅ 기대 효과</span>
+          <span class="summary-text">처리 시간 95% 단축 (10~20분 → 1분) · 입력 오차율 0% 달성</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2단계 -->
+  <div class="section-card">
+    <div class="section-header">
+      <span class="section-step">2</span>
+      <span class="section-title">도입 전 / 후 비교</span>
+    </div>
+    <div class="ba-grid">
+      <div class="ba-col before">
+        <div class="ba-badge before">⚠️ Before · 기존 방식</div>
+        <ul class="ba-list">
+          <li>PORT-MIS 접속 → 검색조건 입력 - 검색완료 대기까지 PC컨디션에 따라 수 분 까지도 소요됨</li>
+          <li>수집 데이터를 수식으로 직접 계산하여 엑셀 장부에 수동 기입</li>
+          <li>엑셀 기입 후 현장업무포털에 동일 데이터를 또 다시 타이핑</li>
+          <li>복잡한 창 전환 과정에서 오타·누락 빈발</li>
+        </ul>
+        <div class="ba-stat">매일 10~20분 소요</div>
+      </div>
+      <div class="ba-col after">
+        <div class="ba-badge after">✅ After · 자동화 후</div>
+        <ul class="ba-list">
+          <li>버튼 클릭 하나로 PORT-MIS 자동 접속 및 데이터 크롤링</li>
+          <li>크롤링 결과 엑셀 지정 셀에 정확하게 자동 바인딩 저장</li>
+          <li>현장업무포털 자동 로그인 → 폼 자동 입력 → 전송까지 원클릭</li>
+          <li>실시간 터미널 GUI로 전 과정 모니터링 가능</li>
+        </ul>
+        <div class="ba-stat">🕐 전체 처리 시간 → 약 1분</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3단계: 가상 시연 -->
+  <div class="section-card">
+    <div class="section-header">
+      <span class="section-step">3</span>
+      <span class="section-title">가상 시연 · RPA 실행 흐름</span>
+    </div>
+    <div class="section-body">
+
+      <div class="step-timeline" id="timeline-3">
+        <div class="step-item active" id="step-3-1">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h4>시스템 접속 및 데이터 크롤링</h4>
+            <p>WebView2 내장 브라우저로 PORT-MIS 자동 로그인 · 선박 실적 데이터 자동 수집</p>
+          </div>
+        </div>
+        <div class="step-item" id="step-3-2">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h4>엑셀 자동 가공 및 기입</h4>
+            <p>수집 데이터 자동 연산 · 운영실적.xls + 일일통계표.xlsx 지정 셀에 COM 자동 바인딩</p>
+          </div>
+        </div>
+        <div class="step-item" id="step-3-3">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h4>현장업무포털 자동 전송 완료</h4>
+            <p>현장업무포털 자동 로그인 → 폼 데이터 매칭 → 제출 완료. 약 1분 내 전 과정 종결.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- [NEW] 수려한 .NET WinForms GUI 시뮬레이션 시연 -->
+      <div class="mockup-vts-gui">
+        <div class="vts-titlebar">
+          <span style="font-weight:bold;color:#1e3a8a;">📊 PORT-MIS 관제일보 자동결산 시스템 (v1.0)</span>
+          <span style="color:#718096;font-size:10px;font-family:monospace;">[⬜][❌]</span>
+        </div>
+        <div class="vts-content" style="background:#f7fafc;padding:16px;">
+          
+          <!-- 상단 계정/망 연동 상태 -->
+          <div class="vts-login-container" style="display:flex;gap:12px;margin-bottom:14px;">
+            <div class="vts-box" style="flex:1;border:1px solid #cbd5e1;padding:8px;background:#ffffff;border-radius:4px;font-size:11px;">
+              <span style="color:#2b6cb0;font-weight:bold;">PORT-MIS 계정 설정</span>
+              <div style="margin-top:3px;color:#4a5568;">아이디: vts_pyungtaek / 비밀번호: •••••••••••</div>
+            </div>
+            <div class="vts-box" style="flex:1;border:1px solid #cbd5e1;padding:8px;background:#ffffff;border-radius:4px;font-size:11px;">
+              <span style="color:#2b6cb0;font-weight:bold;">현장업무포털 연동</span>
+              <div style="margin-top:3px;color:#4a5568;">내부망 도메인: hp.kcg.internal (연동 대기)</div>
+            </div>
+          </div>
+
+          <!-- 실행 컨트롤 버튼 -->
+          <div class="vts-execute-btn" id="vts-gui-btn" onclick="runDemo3()" style="background:#9333ea;color:white;border:1px solid #7e22ce;text-align:center;padding:12px;font-weight:bold;font-size:15px;border-radius:6px;cursor:pointer;transition:all 0.2s;user-select:none;margin-bottom:14px;">
+            ▶ 자동화 프로세스 실행 (PORT-MIS 크롤링 → 엑셀 자동 기입 → 자동 전송)
+          </div>
+
+          <!-- 가상 엑셀 데이터 바인딩 그리드 -->
+          <div style="background:#ffffff;border:1px solid #cbd5e1;border-radius:6px;padding:14px;margin-bottom:14px;">
+            <div style="font-size:12px;font-weight:bold;color:#2d3748;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;">
+              <span>📈 실시간 데이터 그리드 (엑셀 일일통계표.xlsx 실시간 동기화)</span>
+              <span style="color:#9333ea;font-weight:bold;font-size:11px;background:#faf5ff;padding:2px 8px;border-radius:4px;border:1px solid #ebd5ff;" id="excel-status-label">대기 중</span>
+            </div>
+            <table class="vts-grid-table" style="width:100%;border-collapse:collapse;font-size:11px;text-align:center;">
+              <thead>
+                <tr style="background:#f7fafc;font-weight:bold;border-bottom:2px solid #cbd5e1;">
+                  <th style="padding:6px;border:1px solid #cbd5e1;">구분</th>
+                  <th style="padding:6px;border:1px solid #cbd5e1;color:#b91c1c;">입항 (선박수)</th>
+                  <th style="padding:6px;border:1px solid #cbd5e1;color:#15803d;">출항 (선박수)</th>
+                  <th style="padding:6px;border:1px solid #cbd5e1;color:#2563eb;">이동 (선박수)</th>
+                  <th style="padding:6px;border:1px solid #cbd5e1;color:#b45309;">투묘 (선박수)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom:1px solid #e2e8f0;">
+                  <td style="padding:6px;border:1px solid #cbd5e1;background:#f7fafc;font-weight:bold;">1섹터</td>
+                  <td id="ex-val-1" style="font-weight:600;color:#cbd5e1;">--</td>
+                  <td id="ex-val-2" style="font-weight:600;color:#cbd5e1;">--</td>
+                  <td id="ex-val-3" style="font-weight:600;color:#cbd5e1;">--</td>
+                  <td id="ex-val-4" style="font-weight:600;color:#cbd5e1;">--</td>
+                </tr>
+                <tr style="border-bottom:1px solid #e2e8f0;background:#fcfcfc;">
+                  <td style="padding:6px;border:1px solid #cbd5e1;background:#f7fafc;font-weight:bold;">2섹터</td>
+                  <td id="ex-val-5" style="font-weight:600;color:#cbd5e1;">--</td>
+                  <td id="ex-val-6" style="font-weight:600;color:#cbd5e1;">--</td>
+                  <td id="ex-val-7" style="font-weight:600;color:#cbd5e1;">--</td>
+                  <td id="ex-val-8" style="font-weight:600;color:#cbd5e1;">--</td>
+                </tr>
+                <tr>
+                  <td style="padding:6px;border:1px solid #cbd5e1;background:#f7fafc;font-weight:bold;">3섹터</td>
+                  <td id="ex-val-9" style="font-weight:600;color:#cbd5e1;">--</td>
+                  <td id="ex-val-10" style="font-weight:600;color:#cbd5e1;">--</td>
+                  <td id="ex-val-11" style="font-weight:600;color:#cbd5e1;">--</td>
+                  <td id="ex-val-12" style="font-weight:600;color:#cbd5e1;">--</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- 프로세스 터미널 로그 -->
+          <div class="vts-terminal" id="terminal-3" style="min-height:110px;max-height:150px;font-size:12px;background:#0c0c0c;color:#00ff00;padding:10px;border-radius:4px;font-family:monospace;overflow-y:auto;text-align:left;">
+            <span style="color:#718096;">[대기] '자동화 프로세스 실행' 버튼을 눌러 시뮬레이션을 개시하세요.</span>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="result-badges" id="results-3" style="display:none;margin-top:20px;">
+        <div class="result-badge">
+          <span class="result-badge-num">95%</span>
+          <span class="result-badge-label">처리 시간 단축</span>
+        </div>
+        <div class="result-badge">
+          <span class="result-badge-num">0%</span>
+          <span class="result-badge-label">입력 오차율</span>
+        </div>
+        <div class="result-badge">
+          <span class="result-badge-num">1분</span>
+          <span class="result-badge-label">전체 자동화 처리 시간</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WebView2 설치 방법 상세 안내 -->
+  <div class="section-card">
+    <div class="section-header">
+      <span class="section-step">ℹ️</span>
+      <span class="section-title">RPA 구동을 위한 WebView2 런타임 설치 가이드</span>
+    </div>
+    <div class="section-body">
+      <p style="font-size:15px;color:#374151;margin-bottom:14px;font-weight:600;">🔒 내부망 및 폐쇄망 PC를 위한 WebView2 오프라인 설치 및 DLL 빌드 환경 구성법</p>
+      
+      <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:16px; margin-bottom:20px; font-size:13.5px; color:#475569; line-height:1.6;">
+        💡 <strong>오프라인 DLL 배치가 필수인 이유:</strong><br>
+        PowerShell RPA 자동화 스크립트 실행 시 WinForms GUI와 Chromium 브라우저를 연동하기 위해서는 WebView2 핵심 동적 라이브러리(DLL) 모듈이 로컬 특정 경로에 정확하게 탑재되어 있어야 합니다.
+      </div>
+
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:18px;padding:0;font-size:14px;color:#4b5563;" class="no-bullet">
+        <li style="padding-left: 0; margin-bottom: 0;">
+          <strong style="color:#2563eb;">1. 런타임(Standalone) 다운로드 및 보안망 이동</strong><br>
+          인터넷이 연결된 외부 PC에서 Microsoft 공식 WebView2 다운로드 페이지에 접속하여 <span style="background:#f3f4f6;padding:2px 6px;border-radius:4px;font-weight:bold;color:#0f172a;">Evergreen Standalone Installer (x64)</span> 버전을 다운로드한 뒤, 내부 승인 매체(보안 USB 등)를 통해 내부망 관제 PC로 파일(<span style="font-family:monospace;background:#f3f4f6;padding:2px 4px;border-radius:4px;">MicrosoftEdgeWebview2Setup.exe</span>)을 안전하게 복사합니다.
+        </li>
+        <li style="padding-left: 0; margin-bottom: 0;">
+          <strong style="color:#2563eb;">2. 명령 프롬프트(CMD)를 통한 강제 오프라인 무소음 설치</strong><br>
+          관리자 권한으로 실행한 명령 프롬프트(CMD)에서 설치 파일 경로로 이동 후 아래 명령어를 입력하여 네트워크 통신 없이 로컬 디렉토리에 설치를 마무리합니다:
+          <pre style="background:#0f172a;color:#10b981;padding:12px;border-radius:6px;margin-top:8px;font-family:monospace;font-size:12.5px;">MicrosoftEdgeWebview2Setup.exe /silent /install</pre>
+        </li>
+        <li style="padding-left: 0; margin-bottom: 0;">
+          <strong style="color:#2563eb;">3. [핵심] C:\webview2\ 라이브러리 및 DLL 폴더 구조 수동 구성</strong><br>
+          관제 스크립트가 참조할 수 있도록 C드라이브 바로 밑에 <span style="font-family:monospace;background:#f3f4f6;padding:2px 4px;border-radius:4px;font-weight:bold;">C:\webview2</span> 폴더를 생성하고, 필수 작동 DLL들을 다음과 같이 완벽한 디렉토리 트리 구조로 배치해야 합니다:
+          
+          <pre style="background:#1e293b;color:#f8fafc;padding:14px;border-radius:6px;margin-top:8px;font-family:monospace;font-size:12.5px;line-height:1.5;border-left:4px solid #f59e0b;">
+C:\
+└── webview2\
+    ├── Microsoft.Web.WebView2.Core.dll  (RPA Core 인터페이스 API)
+    ├── Microsoft.Web.WebView2.WinForms.dll  (윈폼 데이터 시각화 라이브러리)
+    └── runtimes\
+        └── win-x64\
+            └── native\
+                └── WebView2Loader.dll   (x64 아키텍처 필수 로더)
+          </pre>
+          <span style="font-size:12px;color:#6b7280;display:block;margin-top:4px;">※ 해당 DLL 파일들은 배포 패키지 내부 `사례3/` 폴더 내부에 사전 동봉되어 있으므로 그대로 지정 경로에 복사해 넣으시면 됩니다.</span>
+        </li>
+        <li style="padding-left: 0; margin-bottom: 0;">
+          <strong style="color:#2563eb;">4. 제어판을 통한 설치 완료 여부 크로스체크</strong><br>
+          설치 완료 후 <strong>[제어판] -> [프로그램 및 기능]</strong>에서 <span style="font-weight:bold;color:#0f172a;">Microsoft Edge WebView2 Runtime</span> 항목이 리스트에 존재하며, 버전 정보(예: 110.x.xxxx.xx 이상)가 정상 표출되는지 검증합니다.
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 소스코드 -->
+  <div class="section-card">
+    <div class="section-header">
+      <span class="section-step">+</span>
+      <span class="section-title">소스코드 전문 공개</span>
+    </div>
+    <div class="section-body">
+      <p style="font-size:13px;color:#6b7280;margin-bottom:4px;">실제 구동되는 스크립트 소스코드 원본입니다.</p>
+      <p style="font-size:12px;color:#9ca3af;margin-bottom:16px;">※ 내부망 도메인은 더미값(hp.kcg.internal)으로 마스킹 처리되어 있습니다.</p>
+      <div class="code-wrap">
+        <div class="code-header">
+          <span class="code-filename">portmis.ps1</span>
+          <div class="btn-row">
+            <button class="code-copy-btn" onclick="copyCode('code-3', this)">복사</button>
+            <a class="code-copy-btn" href="https://raw.githubusercontent.com/pmh119/vts-ai-automation/main/%EC%82%AC%EB%A1%803/portmis.ps1" target="_blank" style="text-decoration:none">⬇ 다운로드</a>
+          </div>
+        </div>
+        <pre class="code-pre"><code id="code-3"># PORT-MIS Auto-Reporter
+# WebView2 기반 RPA 자동화 스크립트
+Add-Type -AssemblyName System.Windows.Forms
+Add-Type -AssemblyName System.Drawing
+
+$wv2Core     = "C:\WebView2\Microsoft.Web.WebView2.Core.dll"
+$wv2WinForms = "C:\WebView2\Microsoft.Web.WebView2.WinForms.dll"
+Add-Type -Path $wv2Core
+Add-Type -Path $wv2WinForms
+
+# 내부망 URL (더미 처리)
+$PORTMIS_URL       = "https://portmis.go.kr"
+$FIELD_LOGIN_URL   = "http://hp.kcg.internal/FisdOBS/index.jsp"
+$FIELD_DIARY_URL   = "http://hp.kcg.internal/FisdOBS/vt/vtsWorkDiary.do?progrm_id=OBS0501"
+
+# GUI Form 초기화
+$form = New-Object System.Windows.Forms.Form
+$form.Text = "PORT-MIS 관제일보 자동화"
+$form.Size = New-Object System.Drawing.Size(900, 650)
+
+# WebView2 컨트롤 초기화
+$webView = New-Object Microsoft.Web.WebView2.WinForms.WebView2
+$webView.Dock = "Fill"
+
+# 터미널 출력 패널
+$terminal = New-Object System.Windows.Forms.RichTextBox
+$terminal.BackColor = [System.Drawing.Color]::FromArgb(13,17,23)
+$terminal.ForeColor = [System.Drawing.Color]::FromArgb(230,237,243)
+$terminal.Font = New-Object System.Drawing.Font("Consolas", 9)
+
+# 실행 버튼
+$runBtn = New-Object System.Windows.Forms.Button
+$runBtn.Text = "엑셀 및 현장업무포털 실적 입력 실행"
+$runBtn.Add_Click({
+    Write-Terminal "[시작] PORT-MIS 자동 접속 중..."
+    # 웹 크롤링 및 데이터 처리 로직 실행
+})
+# ... (이하 GUI 조립 및 이벤트 핸들러 생략)</code></pre>
+      </div>
+      <div style="margin-top:12px;">
+        <a class="btn-download" href="https://github.com/pmh119/vts-ai-automation/blob/main/%EC%82%AC%EB%A1%803/portmis.ps1" target="_blank" style="font-size:13px;">
+          📄 GitHub에서 전체 소스코드 보기 ↗
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="page-footer">
+  <p>평택항 해상교통관제센터 · <a href="https://github.com/pmh119/vts-ai-automation" target="_blank">GitHub ↗</a></p>
+</div>
+
+<script>
+function copyCode(id, btn) {
+  navigator.clipboard.writeText(document.getElementById(id).innerText).then(() => {
+    btn.textContent = '✓ 복사됨'; btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '복사'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+const lines3 = [
+  {cls:'t-prompt', txt:'PS C:\\Users\\vts> .\\portmis.ps1'},
+  {cls:'t-ok',  txt:'[초기화] WebView2 엔진 로드 완료'},
+  {cls:'t-ok',  txt:'[초기화] Excel COM Object 연결 완료'},
+  {cls:'', txt:''},
+  {cls:'t-warn', txt:'[Step 1] PORT-MIS 자동 로그인 중...'},
+  {cls:'t-dim',  txt:'  → 세션 쿠키 획득 완료'},
+  {cls:'t-dim',  txt:'  → 선박입항 조회: 1섹터 12건, 2섹터 8건, 3섹터 5건'},
+  {cls:'t-dim',  txt:'  → 선박출항 조회: 1섹터 10건, 2섹터 7건, 3섹터 4건'},
+  {cls:'t-dim',  txt:'  → 이동·투묘 데이터 수집 완료'},
+  {cls:'t-ok',   txt:'[완료] PORT-MIS 데이터 크롤링 종료'},
+  {cls:'', txt:''},
+  {cls:'t-warn', txt:'[Step 2] 엑셀 자동 기입 중...'},
+  {cls:'t-dim',  txt:'  → 평택VTS 일일통계 계산표.xlsx 오픈'},
+  {cls:'t-dim',  txt:'  → D5:D20 섹터별 데이터 바인딩 완료'},
+  {cls:'t-dim',  txt:'  → 평택VTS 운영실적.xls 자동 저장'},
+  {cls:'t-ok',   txt:'[완료] 엑셀 자동 기입 및 저장 완료'},
+  {cls:'', txt:''},
+  {cls:'t-warn', txt:'[Step 3] 현장업무포털 자동 전송 중...'},
+  {cls:'t-dim',  txt:'  → hp.kcg.internal 자동 로그인'},
+  {cls:'t-dim',  txt:'  → 관제일보 폼 데이터 매칭 및 입력'},
+  {cls:'t-dim',  txt:'  → 제출 버튼 자동 클릭'},
+  {cls:'', txt:''},
+  {cls:'t-ok',   txt:'✅ 모든 작업 완료 — 소요 시간: 00:01:02'},
+];
+
+let running3 = false;
+function runDemo3() {
+  if (running3) return;
+  running3 = true;
+  const btn = document.getElementById('demo-btn-3');
+  btn.disabled = true; btn.textContent = '실행 중...';
+  const terminal = document.getElementById('terminal-3');
+  terminal.innerHTML = '';
+  const steps = document.querySelectorAll('#timeline-3 .step-item');
+  steps.forEach((s,i) => { s.classList.remove('active'); if(i===0) s.classList.add('active'); });
+
+  const btn = document.getElementById('vts-gui-btn');
+  btn.style.opacity = '0.6';
+  btn.textContent = '프로세스 실행 중...';
+  
+  const excelCells = [
+    {id:'ex-val-1', val:'12'}, {id:'ex-val-2', val:'10'}, {id:'ex-val-3', val:'4'}, {id:'ex-val-4', val:'2'},
+    {id:'ex-val-5', val:'8'}, {id:'ex-val-6', val:'7'}, {id:'ex-val-7', val:'3'}, {id:'ex-val-8', val:'1'},
+    {id:'ex-val-9', val:'5'}, {id:'ex-val-10', val:'4'}, {id:'ex-val-11', val:'2'}, {id:'ex-val-12', val:'0'}
+  ];
+  excelCells.forEach(cell => {
+    const el = document.getElementById(cell.id);
+    if(el) {
+      el.textContent = '--';
+      el.style.color = '#cbd5e1';
+      el.style.background = 'transparent';
+    }
+  });
+  
+  document.getElementById('excel-status-label').textContent = '대기 중';
+  document.getElementById('excel-status-label').style.background = '#f7fafc';
+  document.getElementById('excel-status-label').style.color = '#4a5568';
+
+  let i = 0;
+  function next() {
+    if (i >= lines3.length) {
+      document.getElementById('results-3').style.display = 'flex';
+      steps.forEach(s => s.classList.add('active'));
+      btn.style.opacity = '1';
+      btn.textContent = '▶ 다시 시연';
+      running3 = false;
+      return;
+    }
+    const l = lines3[i];
+    const span = document.createElement('span');
+    if (l.cls) span.className = l.cls;
+    span.textContent = l.txt;
+    terminal.appendChild(span);
+    terminal.appendChild(document.createElement('br'));
+    terminal.scrollTop = terminal.scrollHeight;
+
+    if (i === 9) steps[1].classList.add('active');
+    if (i === 15) steps[2].classList.add('active');
+
+    // 엑셀 기입
+    if (i === 11) {
+      document.getElementById('excel-status-label').textContent = '엑셀 기입 중...';
+      document.getElementById('excel-status-label').style.background = '#fffbeb';
+      document.getElementById('excel-status-label').style.color = '#d97706';
+      
+      excelCells.forEach((cell, idx) => {
+        setTimeout(() => {
+          const el = document.getElementById(cell.id);
+          if(el) {
+            el.textContent = cell.val;
+            el.style.color = '#1a1d23';
+            el.style.background = '#fffbeb';
+            setTimeout(() => {
+              el.style.background = '#e6fffa';
+            }, 300);
+          }
+        }, idx * 100);
+      });
+    }
+
+    if (i === 15) {
+      setTimeout(() => {
+        document.getElementById('excel-status-label').textContent = '동기화 완료 (저장됨)';
+        document.getElementById('excel-status-label').style.background = '#f0fdf4';
+        document.getElementById('excel-status-label').style.color = '#16a34a';
+      }, 1300);
+    }
+
+    i++;
+    setTimeout(next, l.txt === '' ? 60 : 180);
+  }
+  next();
+}
+</script>
+</body>
+</html>
