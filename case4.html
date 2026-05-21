@@ -133,42 +133,156 @@
         </div>
       </div>
 
-      <!-- 위젯 UI 미리보기 -->
-      <div style="margin-top:24px;">
-        <p style="font-size:12px;color:#9ca3af;margin-bottom:10px;">📟 위젯 UI 미리보기 (실제 렌더링과 유사)</p>
-        <div style="background:#2b3b4d;border-radius:8px;padding:14px 20px;display:flex;align-items:center;gap:24px;font-family:'JetBrains Mono',monospace;color:#e2e8f0;max-width:700px;overflow-x:auto;">
-          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
-            <span style="font-size:10px;color:#90a0b0;">일출</span>
-            <span style="font-size:16px;font-weight:700;color:#fbbf24;">05:18</span>
+      <!-- 대화형 시뮬레이터 영역 -->
+      <div style="margin-top:32px;">
+        <h4 style="font-size:15px;font-weight:600;margin-bottom:16px;color:#1f2937;">🎮 가상 비교 시뮬레이터 (마우스 드래그 및 지도 확인 가능)</h4>
+        
+        <div class="emulator-grid">
+          
+          <!-- 왼쪽: Before (기존 방식) -->
+          <div>
+            <p style="font-size:12px;color:#ef4444;font-weight:600;margin-bottom:8px;">⚠️ Before · 국립해양조사원 웹페이지 접속 및 조회</p>
+            <div class="mockup-browser">
+              <div class="mockup-header">
+                <div class="mockup-dots">
+                  <span class="mockup-dot-red"></span>
+                  <span class="mockup-dot-yellow"></span>
+                  <span class="mockup-dot-green"></span>
+                </div>
+                <div class="mockup-address-bar">
+                  🔒 https://www.khoa.go.kr/swtc/main.do
+                </div>
+              </div>
+              <div class="mockup-content" style="padding:0; background:#f4f6f9; display:flex; flex-direction:column; height: 100%;">
+                <!-- 스마트 조석예보 웹 헤더 -->
+                <div style="background:#1e293b; color:#fff; padding:10px 16px; display:flex; justify-content:space-between; align-items:center; font-size:12px; flex-shrink:0;">
+                  <span style="font-weight:bold;">🌊 스마트 조석 예보 (스마트 물때)</span>
+                  <span style="background:#0284c7; padding:2px 6px; border-radius:4px; font-size:10px;">평택항 관측소</span>
+                </div>
+                <!-- 조석 정보 가상 콘텐츠 -->
+                <div style="padding:16px; flex-grow:1; overflow-y:auto; font-size:11px;">
+                  <div style="background:#fff; border:1px solid #e2e8f0; border-radius:6px; padding:12px; margin-bottom:12px;">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:8px; border-bottom:1px solid #f1f5f9; padding-bottom:6px; font-weight:bold;">
+                      <span>평택항 실시간 조석 예보표</span>
+                      <span style="color:#ef4444;" id="tide-today-label">05-21</span>
+                    </div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; text-align:center;">
+                      <div style="background:#eff6ff; padding:6px; border-radius:4px; border:1px solid #bfdbfe;">
+                        <span style="color:#1d4ed8; font-weight:bold; display:block; font-size:10px;">저조 (물빠짐)</span>
+                        <span style="font-size:12px; font-weight:bold; color:#1e293b; display:block; margin:2px 0;" id="before-low-1">02:34</span>
+                        <span style="color:#64748b; font-size:10px;" id="before-low-h-1">42cm</span>
+                      </div>
+                      <div style="background:#ecfdf5; padding:6px; border-radius:4px; border:1px solid #a7f3d0;">
+                        <span style="color:#047857; font-weight:bold; display:block; font-size:10px;">고조 (물참)</span>
+                        <span style="font-size:12px; font-weight:bold; color:#1e293b; display:block; margin:2px 0;" id="before-high-1">08:51</span>
+                        <span style="color:#64748b; font-size:10px;" id="before-high-h-1">821cm</span>
+                      </div>
+                      <div style="background:#eff6ff; padding:6px; border-radius:4px; border:1px solid #bfdbfe;">
+                        <span style="color:#1d4ed8; font-weight:bold; display:block; font-size:10px;">저조 (물빠짐)</span>
+                        <span style="font-size:12px; font-weight:bold; color:#1e293b; display:block; margin:2px 0;" id="before-low-2">15:12</span>
+                        <span style="color:#64748b; font-size:10px;" id="before-low-h-2">38cm</span>
+                      </div>
+                      <div style="background:#ecfdf5; padding:6px; border-radius:4px; border:1px solid #a7f3d0;">
+                        <span style="color:#047857; font-weight:bold; display:block; font-size:10px;">고조 (물참)</span>
+                        <span style="font-size:12px; font-weight:bold; color:#1e293b; display:block; margin:2px 0;" id="before-high-2">21:28</span>
+                        <span style="color:#64748b; font-size:10px;" id="before-high-h-2">835cm</span>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- 가상 지도/인포그래픽 -->
+                  <div style="background:#fff; border:1px solid #e2e8f0; border-radius:6px; padding:10px; text-align:center;">
+                    <p style="font-weight:600; color:#334155; margin-bottom:6px; font-size:11px;">조위 분포 및 실시간 흐름 예측</p>
+                    <div style="height:120px; background:#e0f2fe; border-radius:4px; border:1px dashed #0284c7; display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; overflow:hidden;">
+                      <!-- 물결 애니메이션 시각화 -->
+                      <div style="position:absolute; bottom:0; left:0; width:100%; height:55%; background:rgba(14,165,233,0.25); border-top:2px solid #0284c7;"></div>
+                      <span style="font-weight:bold; color:#0369a1; z-index:1; font-size:12px; text-shadow:0 1px 1px #fff;">평택항 해역 시뮬레이션</span>
+                      <span style="font-size:9px; color:#0369a1; z-index:1;">조위 기준선 대비 현재 수위: +420cm</span>
+                    </div>
+                  </div>
+                  <p style="font-size:10px; color:#94a3b8; text-align:center; margin-top:8px;">* 매번 웹 브라우저를 띄워 수십 번의 검색과 스크롤을 거쳐야만 얻을 수 있는 정보입니다.</p>
+                </div>
+              </div>
+            </div>
           </div>
-          <div style="width:1px;height:36px;background:#3d5060;"></div>
-          <div style="display:flex;gap:16px;">
-            <div style="text-align:center;">
-              <div style="font-size:10px;color:#90a0b0;">저조</div>
-              <div style="font-size:15px;font-weight:700;color:#60a5fa;">02:34</div>
-              <div style="font-size:11px;color:#90a0b0;">42cm</div>
-            </div>
-            <div style="text-align:center;">
-              <div style="font-size:10px;color:#90a0b0;">고조</div>
-              <div style="font-size:15px;font-weight:700;color:#34d399;">08:51</div>
-              <div style="font-size:11px;color:#90a0b0;">821cm</div>
-            </div>
-            <div style="text-align:center;">
-              <div style="font-size:10px;color:#90a0b0;">저조</div>
-              <div style="font-size:15px;font-weight:700;color:#60a5fa;">15:12</div>
-              <div style="font-size:11px;color:#90a0b0;">38cm</div>
-            </div>
-            <div style="text-align:center;">
-              <div style="font-size:10px;color:#90a0b0;">고조</div>
-              <div style="font-size:15px;font-weight:700;color:#34d399;">21:28</div>
-              <div style="font-size:11px;color:#90a0b0;">835cm</div>
+
+          <!-- 오른쪽: After (자동화 후) -->
+          <div>
+            <p style="font-size:12px;color:#10b981;font-weight:600;margin-bottom:8px;">✅ After · 실시간 데스크바 위젯 오버레이 (위젯 드래그해 보세요! 👆)</p>
+            <!-- 윈도우 바탕화면 목업 -->
+            <div class="window-mockup" id="desktop-simulator">
+              
+              <!-- 바탕화면 아이콘 -->
+              <div class="desktop-icons">
+                <div class="desktop-icon">
+                  <div class="desktop-icon-img">🖥️</div>
+                  <span>내 PC</span>
+                </div>
+                <div class="desktop-icon">
+                  <div class="desktop-icon-img">🛰️</div>
+                  <span>VTS 시스템</span>
+                </div>
+                <div class="desktop-icon">
+                  <div class="desktop-icon-img">🗑️</div>
+                  <span>휴지통</span>
+                </div>
+              </div>
+
+              <!-- ⚓ 드래그 가능한 실제 조석 위젯 -->
+              <div class="widget-overlay" id="drag-widget" style="left: 20px; bottom: 65px;">
+                <span class="widget-drag-handle">⋮⋮</span>
+                <div style="display:flex; align-items:center; gap:16px;">
+                  <div style="display:flex; flex-direction:column; align-items:center;">
+                    <span style="font-size:8px; color:#90a0b0; line-height:1;">일출</span>
+                    <span style="font-size:11px; font-weight:700; color:#fbbf24; margin-top:2px;">05:19</span>
+                  </div>
+                  <div style="width:1px; height:20px; background:#3d5060;"></div>
+                  <div style="display:flex; gap:10px; font-size:9px;">
+                    <div style="text-align:center;">
+                      <div style="font-size:7px; color:#90a0b0; line-height:1;">저조</div>
+                      <div style="font-weight:700; color:#60a5fa; margin-top:2px;" id="widget-low-1">02:34</div>
+                      <div style="font-size:7px; color:#90a0b0;" id="widget-low-h-1">42cm</div>
+                    </div>
+                    <div style="text-align:center;">
+                      <div style="font-size:7px; color:#90a0b0; line-height:1;">고조</div>
+                      <div style="font-weight:700; color:#34d399; margin-top:2px;" id="widget-high-1">08:51</div>
+                      <div style="font-size:7px; color:#90a0b0;" id="widget-high-h-1">821cm</div>
+                    </div>
+                    <div style="text-align:center;">
+                      <div style="font-size:7px; color:#90a0b0; line-height:1;">저조</div>
+                      <div style="font-weight:700; color:#60a5fa; margin-top:2px;" id="widget-low-2">15:12</div>
+                      <div style="font-size:7px; color:#90a0b0;" id="widget-low-h-2">38cm</div>
+                    </div>
+                    <div style="text-align:center;">
+                      <div style="font-size:7px; color:#90a0b0; line-height:1;">고조</div>
+                      <div style="font-weight:700; color:#34d399; margin-top:2px;" id="widget-high-2">21:28</div>
+                      <div style="font-size:7px; color:#90a0b0;" id="widget-high-h-2">835cm</div>
+                    </div>
+                  </div>
+                  <div style="width:1px; height:20px; background:#3d5060;"></div>
+                  <div style="display:flex; flex-direction:column; align-items:center;">
+                    <span style="font-size:8px; color:#90a0b0; line-height:1;">일몰</span>
+                    <span style="font-size:11px; font-weight:700; color:#f97316; margin-top:2px;">19:37</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 가상 윈도우 작업표시줄 -->
+              <div class="taskbar-mockup">
+                <div class="taskbar-start">
+                  <div class="taskbar-btn">🪟</div>
+                  <div class="taskbar-btn">🔍</div>
+                  <div class="taskbar-btn">📂</div>
+                  <div class="taskbar-btn">🌐</div>
+                </div>
+                <div class="taskbar-clock">
+                  <div style="font-weight:bold; font-size:11px;" id="taskbar-time">12:30 PM</div>
+                  <div style="font-size:9px; color:#cbd5e1; margin-top:1px;" id="taskbar-date">2026-05-21</div>
+                </div>
+              </div>
+
             </div>
           </div>
-          <div style="width:1px;height:36px;background:#3d5060;"></div>
-          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
-            <span style="font-size:10px;color:#90a0b0;">일몰</span>
-            <span style="font-size:16px;font-weight:700;color:#f97316;">19:52</span>
-          </div>
+
         </div>
       </div>
 
@@ -271,6 +385,119 @@ $HtmlContent = @"
 </div>
 
 <script>
+// 실시간 날짜/시계 동적 세팅 및 위젯 드래그 앤 드롭 기능 구현
+(function(){
+  const now = new Date();
+  
+  // 1. 날짜 정보 세팅
+  const yyyy = now.getFullYear();
+  const m = String(now.getMonth()+1).padStart(2,'0');
+  const d = String(now.getDate()).padStart(2,'0');
+  const todayStr = `${m}-${d}`;
+  const todayFullStr = `${yyyy}-${m}-${d}`;
+  
+  if (document.getElementById('tide-today-label')) document.getElementById('tide-today-label').textContent = todayStr;
+  if (document.getElementById('taskbar-date')) document.getElementById('taskbar-date').textContent = todayFullStr;
+
+  // 2. 가상 윈도우 작업표시줄 시계 실시간 업데이트
+  const updateClock = () => {
+    const timeNow = new Date();
+    let hours = timeNow.getHours();
+    const minutes = String(timeNow.getMinutes()).padStart(2,'0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // 0시는 12시로 표시
+    const hoursStr = String(hours).padStart(2,'0');
+    
+    const timeEl = document.getElementById('taskbar-time');
+    if (timeEl) {
+      timeEl.textContent = `${hoursStr}:${minutes} ${ampm}`;
+    }
+  };
+  setInterval(updateClock, 1000);
+  updateClock();
+
+  // 3. 위젯 드래그 앤 드롭 기능 (마우스 & 터치 완벽 대응, 경계선 이탈 방지)
+  const widget = document.getElementById('drag-widget');
+  const desktop = document.getElementById('desktop-simulator');
+  
+  if (widget && desktop) {
+    let isDragging = false;
+    let startX = 0, startY = 0;
+    let initialLeft = 0, initialTop = 0;
+
+    const onStart = (clientX, clientY) => {
+      isDragging = true;
+      startX = clientX;
+      startY = clientY;
+      
+      // 드래그 시작 시 위젯의 절대 위치값 캡처
+      const rect = widget.getBoundingClientRect();
+      const desktopRect = desktop.getBoundingClientRect();
+      
+      initialLeft = rect.left - desktopRect.left;
+      initialTop = rect.top - desktopRect.top;
+      
+      // bottom 기반 배치를 top/left 기반으로 전환하여 드래그가 끊김 없이 처리되도록 함
+      widget.style.bottom = 'auto';
+      widget.style.top = `${initialTop}px`;
+      widget.style.left = `${initialLeft}px`;
+      
+      widget.style.transition = 'none'; // 드래그 중에는 애니메이션 무효화
+    };
+
+    const onMove = (clientX, clientY) => {
+      if (!isDragging) return;
+      
+      const dx = clientX - startX;
+      const dy = clientY - startY;
+      
+      let newLeft = initialLeft + dx;
+      let newTop = initialTop + dy;
+      
+      // 경계면 제약 조건 (바탕화면 영역 밖으로 이탈 방지)
+      const desktopRect = desktop.getBoundingClientRect();
+      const widgetRect = widget.getBoundingClientRect();
+      
+      const maxLeft = desktopRect.width - widgetRect.width;
+      const maxTop = desktopRect.height - widgetRect.height - 48; // 작업표시줄 높이(48px)만큼 위로 제한
+      
+      newLeft = Math.max(0, Math.min(newLeft, maxLeft));
+      newTop = Math.max(0, Math.min(newTop, maxTop));
+      
+      widget.style.left = `${newLeft}px`;
+      widget.style.top = `${newTop}px`;
+    };
+
+    const onEnd = () => {
+      isDragging = false;
+    };
+
+    // 마우스 이벤트
+    widget.addEventListener('mousedown', (e) => {
+      onStart(e.clientX, e.clientY);
+      e.preventDefault(); // 드래그 시 텍스트 블록 지정 방지
+    });
+    document.addEventListener('mousemove', (e) => {
+      onMove(e.clientX, e.clientY);
+    });
+    document.addEventListener('mouseup', onEnd);
+
+    // 모바일 터치 이벤트
+    widget.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 1) {
+        onStart(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    });
+    widget.addEventListener('touchmove', (e) => {
+      if (isDragging && e.touches.length === 1) {
+        onMove(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    });
+    widget.addEventListener('touchend', onEnd);
+  }
+})();
+
 function copyCode(id, btn) {
   navigator.clipboard.writeText(document.getElementById(id).innerText).then(() => {
     btn.textContent = '✓ 복사됨'; btn.classList.add('copied');
