@@ -225,10 +225,19 @@ C:\
                   <div style="background:#fff; border:1px solid #e2e8f0; border-radius:6px; padding:10px; text-align:center;">
                     <p style="font-weight:600; color:#334155; margin-bottom:6px; font-size:11px;">조위 분포 및 실시간 흐름 예측</p>
                     <div style="height:120px; background:#e0f2fe; border-radius:4px; border:1px dashed #0284c7; display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; overflow:hidden;">
-                      <!-- 물결 애니메이션 시각화 -->
-                      <div style="position:absolute; bottom:0; left:0; width:100%; height:55%; background:rgba(14,165,233,0.25); border-top:2px solid #0284c7;"></div>
+                      <!-- 수려한 반응형 Sine 조석 예측 그래프 SVG -->
+                      <svg width="100%" height="100%" viewBox="0 0 300 100" preserveAspectRatio="none" style="position:absolute; bottom:0; left:0; z-index:0;">
+                        <!-- 곡선 채우기 -->
+                        <path d="M 0 100 L 0 70 C 50 30, 100 30, 150 70 C 200 110, 250 110, 300 70 L 300 100 Z" fill="rgba(14,165,233,0.15)" />
+                        <!-- 조석 곡선 -->
+                        <path d="M 0 70 C 50 30, 100 30, 150 70 C 200 110, 250 110, 300 70" fill="none" stroke="#0284c7" stroke-width="2" />
+                        <!-- 실시간 관측 위치 세로 점선 (374cm 지점) -->
+                        <line x1="110" y1="100" x2="110" y2="46" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3" />
+                        <!-- 실시간 조위 마커 빨간 점 -->
+                        <circle cx="110" cy="46" r="4" fill="#ef4444" />
+                      </svg>
                       <span style="font-weight:bold; color:#0369a1; z-index:1; font-size:12px; text-shadow:0 1px 1px #fff;">평택항 해역 시뮬레이션</span>
-                      <span style="font-size:9px; color:#0369a1; z-index:1;">조위 기준선 대비 현재 수위: +420cm</span>
+                      <span style="font-size:9px; color:#0369a1; z-index:1; font-weight:bold; text-shadow:0 1px 1px #fff;">조위 기준선 대비 현재 수위: +374cm</span>
                     </div>
                   </div>
                   <p style="font-size:10px; color:#94a3b8; text-align:center; margin-top:8px;">* 매번 웹 브라우저를 띄워 수십 번의 검색과 스크롤을 거쳐야만 얻을 수 있는 정보입니다.</p>
