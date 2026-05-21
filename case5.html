@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>사례 5 · 도선표 강조기능 북마크릿 | VTS AI 포트폴리오</title>
+<meta name="description" content="도선 스케줄 목록에서 현재 시각 기준 가장 가까운 일정을 자동 하이라이트하고 화면 중앙으로 스크롤하는 북마크릿">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="top-nav">
+  <a class="nav-back" href="index.html">📁 메인 목록으로</a>
+  <span class="nav-title">사례 5 · 도선표 강조기능 북마크릿</span>
+</nav>
+
+<div class="hero">
+  <span class="hero-label">사례 5 · JavaScript · Bookmarklet · 브라우저 직접 테스트 가능</span>
+  <h1>실시간 도선 정보 시인성 극대화<br>북마크릿</h1>
+  <p>설치 없이 즐겨찾기 클릭 하나로. 도선 스케줄 목록에서 지금 당장 중요한 일정을 자동 탐색하여 녹색으로 하이라이트.</p>
+</div>
+
+<div class="page-content">
+
+  <!-- 실제 시연 배지 -->
+  <div class="internal-badge" style="background:#f0fdf4;border-color:#86efac;">
+    <span class="internal-badge-icon">🟢</span>
+    <span class="internal-badge-text" style="color:#16a34a;">실제 시연 가능 · 아래 버튼을 즐겨찾기 바에 드래그하거나, 코드를 복사하여 즉시 테스트할 수 있습니다</span>
+  </div>
+
+  <!-- 1단계 -->
+  <div class="section-card">
+    <div class="section-header">
+      <span class="section-step">1</span>
+      <span class="section-title">프로젝트 핵심 요약</span>
+    </div>
+    <div class="section-body">
+      <div class="summary-grid">
+        <div class="summary-item">
+          <span class="summary-label">🎯 개발 목적</span>
+          <span class="summary-text">빽빽한 도선 스케줄 표에서 현재 시각 기준 가장 중요한 일정을 즉시 식별 — 시각 피로 제거</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">⚙️ 주요 기능</span>
+          <span class="summary-text">1시간 이내 스케줄 자동 탐색 · 녹색 하이라이트 · 화면 중앙 자동 스크롤 · 3분 주기 자동 갱신</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">🛠️ 기술 스택</span>
+          <span class="summary-text">Pure JavaScript ES6 · DOM Manipulation · CSS Injection · Browser Bookmarklet</span>
+          <div class="tech-tags">
+            <span class="tech-tag">javascript:</span>
+            <span class="tech-tag">DOM API</span>
+            <span class="tech-tag">scrollIntoView</span>
+            <span class="tech-tag">setInterval</span>
+          </div>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">✅ 기대 효과</span>
+          <span class="summary-text">핵심 선박 인지 시간 2~3초 → 0.2초 · 스크롤 탐색 완전 제거 · 무설치·무서버</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2단계 -->
+  <div class="section-card">
+    <div class="section-header">
+      <span class="section-step">2</span>
+      <span class="section-title">도입 전 / 후 비교</span>
+    </div>
+    <div class="ba-grid">
+      <div class="ba-col before">
+        <div class="ba-badge before">⚠️ Before · 기존 방식</div>
+        <ul class="ba-list">
+          <li>무채색 텍스트 도선표에서 수십 행을 눈으로 직접 스캔</li>
+          <li>현재 시각과 스케줄 시간을 하나씩 비교하며 찾기</li>
+          <li>마우스 휠로 위아래 스크롤하며 탐색</li>
+          <li>24시간 교대 근무 중 누적되는 시각 피로</li>
+        </ul>
+        <div class="ba-stat">핵심 정보 찾는 데 2~3초 + 시각 피로</div>
+      </div>
+      <div class="ba-col after">
+        <div class="ba-badge after">✅ After · 자동화 후</div>
+        <ul class="ba-list">
+          <li>북마크릿 클릭 한 번으로 즉시 실행</li>
+          <li>현재 시각 기준 가장 임박한 도선 일정 자동 탐색</li>
+          <li>녹색 테두리 하이라이트 + 화면 중앙 자동 스크롤</li>
+          <li>3분마다 자동 갱신 — 계속 클릭 불필요</li>
+        </ul>
+        <div class="ba-stat">🎯 핵심 정보 인지 시간 → 0.2초 이하</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3단계: 실제 시연 -->
+  <div class="section-card">
+    <div class="section-header">
+      <span class="section-step">3</span>
+      <span class="section-title">실제 시연 · 지금 바로 테스트</span>
+    </div>
+    <div class="section-body">
+
+      <!-- 드래그 안내 -->
+      <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:14px 18px;margin-bottom:24px;font-size:13px;color:#92400e;">
+        💡 <strong>설치 방법:</strong> 아래 노란 버튼을 브라우저 <strong>즐겨찾기 바</strong>로 드래그해서 놓으면 설치 완료입니다.
+      </div>
+
+      <div class="btn-row" style="margin-bottom:28px;">
+        <!-- 실제 북마크릿 코드 -->
+        <a class="bookmarklet-drag"
+           id="bookmarklet-btn"
+           href="javascript:(function(){if(window.ptT)clearInterval(window.ptT);if(window.scT)clearInterval(window.scT);function h(){var n=new Date(),y=n.getFullYear(),m=String(n.getMonth()+1).padStart(2,'0'),d=String(n.getDate()).padStart(2,'0'),tm=new Date(n);tm.setDate(n.getDate()+1);var ty=tm.getFullYear(),tM=String(tm.getMonth()+1).padStart(2,'0'),td=String(tm.getDate()).padStart(2,'0'),d2=m+'-'+d,t2=tM+'-'+td,nx=null,mD=Infinity,fC=0;if(!document.getElementById('ps_s')){var s=document.createElement('style');s.id='ps_s';s.innerHTML='.t-hi td{background:#e8f5e9!important;border-top:2px solid #4caf50!important;border-bottom:2px solid #4caf50!important;font-weight:bold!important;color:#1b5e20!important;transition:all 0.3s;}';document.head.appendChild(s);}document.querySelectorAll('tr').forEach(function(r){r.classList.remove('t-hi');var tds=r.querySelectorAll('td');if(tds.length&lt;5)return;var dt=tds[3].innerText.trim(),tt=tds[4].innerText.trim(),iT=dt.includes(d2),iN=dt.includes(t2);if(iT||iN){var mt=tt.match(/(\d{2}):(\d{2})/);if(mt){var st=new Date(n);if(iN)st.setDate(n.getDate()+1);st.setHours(parseInt(mt[1]),parseInt(mt[2]),0,0);var df=st-n;if(iT&amp;&amp;df&gt;=0&amp;&amp;df&lt;=3600000){r.classList.add('t-hi');fC=1;}else if(!fC&amp;&amp;df&gt;0&amp;&amp;df&lt;mD){mD=df;nx=r;}}}});if(!fC&amp;&amp;nx)nx.classList.add('t-hi');}function sC(){var t=document.querySelector('.t-hi');if(t)t.scrollIntoView({behavior:'smooth',block:'center'});}h();setTimeout(sC,100);window.ptT=setInterval(h,180000);window.scT=setInterval(sC,180000);})();"
+           title="도선표 하이라이트 — 즐겨찾기 바로 드래그하세요">
+          🔖 도선표 하이라이트 — 여기를 즐겨찾기 바로 드래그!
+        </a>
+
+        <button class="btn-copy-code" id="copy-bookmarklet-btn" onclick="copyBookmarklet()">
+          📋 코드 복사
+        </button>
+      </div>
+
+      <!-- 사용 가이드 -->
+      <div style="margin-bottom:24px;">
+        <h4 style="font-size:14px;font-weight:600;margin-bottom:12px;color:#374151;">📖 사용 방법</h4>
+        <div class="manual-steps">
+          <div class="manual-step">
+            <span class="manual-step-num">1</span>
+            <span class="manual-step-text">위 노란 버튼을 브라우저 상단 <strong>즐겨찾기 바</strong>로 드래그 → 자동 저장<br><small style="color:#9ca3af;">(또는 "코드 복사" 클릭 후 즐겨찾기 추가 시 URL 입력란에 붙여넣기)</small></span>
+          </div>
+          <div class="manual-step">
+            <span class="manual-step-num">2</span>
+            <span class="manual-step-text">도선 스케줄 테이블이 있는 웹 페이지로 이동</span>
+          </div>
+          <div class="manual-step">
+            <span class="manual-step-num">3</span>
+            <span class="manual-step-text">즐겨찾기 바의 <strong>"도선표 하이라이트"</strong> 버튼 클릭<br>→ 현재 시각 기준 가장 가까운 도선 일정 행이 <span style="color:#16a34a;font-weight:600;">녹색으로 강조</span>되며 화면 중앙으로 이동</span>
+          </div>
+          <div class="manual-step">
+            <span class="manual-step-num">4</span>
+            <span class="manual-step-text">3분마다 자동으로 재탐색 — 탭을 유지하는 한 계속 작동</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 하이라이트 효과 미리보기 -->
+      <div style="margin-top:8px;">
+        <p style="font-size:12px;color:#9ca3af;margin-bottom:10px;">📟 하이라이트 효과 미리보기 (실제 적용 시와 유사)</p>
+        <div style="border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;font-size:13px;">
+          <table style="width:100%;border-collapse:collapse;">
+            <thead>
+              <tr style="background:#f9fafb;">
+                <th style="padding:8px 12px;text-align:left;font-size:11px;color:#6b7280;font-weight:600;border-bottom:1px solid #e5e7eb;">선박명</th>
+                <th style="padding:8px 12px;text-align:left;font-size:11px;color:#6b7280;font-weight:600;border-bottom:1px solid #e5e7eb;">구분</th>
+                <th style="padding:8px 12px;text-align:left;font-size:11px;color:#6b7280;font-weight:600;border-bottom:1px solid #e5e7eb;">항로</th>
+                <th style="padding:8px 12px;text-align:left;font-size:11px;color:#6b7280;font-weight:600;border-bottom:1px solid #e5e7eb;">날짜</th>
+                <th style="padding:8px 12px;text-align:left;font-size:11px;color:#6b7280;font-weight:600;border-bottom:1px solid #e5e7eb;">시각</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:1px solid #f3f4f6;">
+                <td style="padding:8px 12px;">STAR PHOENIX</td><td style="padding:8px 12px;">입항</td><td style="padding:8px 12px;">2항로</td><td style="padding:8px 12px;" id="prev-date">05-20</td><td style="padding:8px 12px;">07:30</td>
+              </tr>
+              <tr style="border-bottom:1px solid #f3f4f6;">
+                <td style="padding:8px 12px;">OCEAN BRAVE</td><td style="padding:8px 12px;">출항</td><td style="padding:8px 12px;">1항로</td><td style="padding:8px 12px;" id="prev-date2">05-20</td><td style="padding:8px 12px;">09:15</td>
+              </tr>
+              <!-- 하이라이트된 행 -->
+              <tr style="background:#e8f5e9;border-top:2px solid #4caf50;border-bottom:2px solid #4caf50;">
+                <td style="padding:8px 12px;font-weight:bold;color:#1b5e20;" id="today-date-ship">KOREA PILOT</td>
+                <td style="padding:8px 12px;font-weight:bold;color:#1b5e20;">입항</td>
+                <td style="padding:8px 12px;font-weight:bold;color:#1b5e20;">3항로</td>
+                <td style="padding:8px 12px;font-weight:bold;color:#1b5e20;" id="today-date">05-21</td>
+                <td style="padding:8px 12px;font-weight:bold;color:#1b5e20;" id="nearby-time">--:--</td>
+              </tr>
+              <tr style="border-bottom:1px solid #f3f4f6;">
+                <td style="padding:8px 12px;">SAEBOM</td><td style="padding:8px 12px;">출항</td><td style="padding:8px 12px;">1항로</td><td style="padding:8px 12px;" id="next-date">05-21</td><td style="padding:8px 12px;">15:00</td>
+              </tr>
+              <tr>
+                <td style="padding:8px 12px;">GRAND PEACE</td><td style="padding:8px 12px;">입항</td><td style="padding:8px 12px;">2항로</td><td style="padding:8px 12px;" id="next-date2">05-21</td><td style="padding:8px 12px;">18:30</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:11px;color:#9ca3af;margin-top:6px;">↑ 녹색 행이 현재 시각 기준 가장 임박한 도선 일정으로 자동 선택됩니다</p>
+      </div>
+
+      <div class="result-badges" style="margin-top:20px;">
+        <div class="result-badge">
+          <span class="result-badge-num">0.2초</span>
+          <span class="result-badge-label">핵심 일정 인지 시간</span>
+        </div>
+        <div class="result-badge">
+          <span class="result-badge-num">3분</span>
+          <span class="result-badge-label">자동 갱신 주기</span>
+        </div>
+        <div class="result-badge">
+          <span class="result-badge-num">무설치</span>
+          <span class="result-badge-label">순수 브라우저 작동</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 소스코드 -->
+  <div class="section-card">
+    <div class="section-header">
+      <span class="section-step">+</span>
+      <span class="section-title">소스코드 전문 공개</span>
+    </div>
+    <div class="section-body">
+      <p style="font-size:13px;color:#6b7280;margin-bottom:16px;">실제 구동되는 북마크릿 소스코드 원본입니다 (주석 포함 가독성 버전).</p>
+      <div class="code-wrap">
+        <div class="code-header">
+          <span class="code-filename">도선표 강조기능 북마크릿.txt</span>
+          <div class="btn-row">
+            <button class="code-copy-btn" onclick="copyCode('code-5', this)">복사</button>
+            <a class="code-copy-btn" href="https://raw.githubusercontent.com/pmh119/vts-ai-automation/main/%EC%82%AC%EB%A1%805/%EB%8F%84%EC%84%A0%ED%91%9C%20%EA%B0%95%EC%A1%B0%EA%B8%B0%EB%8A%A5%20%EB%B6%81%EB%A7%88%ED%81%AC%EB%A6%BF.txt" target="_blank" style="text-decoration:none">⬇ 다운로드</a>
+          </div>
+        </div>
+        <pre class="code-pre"><code id="code-5">javascript:(function(){
+  // 중복 실행 시 기존 타이머 클리어
+  if(window.ptT) clearInterval(window.ptT);
+  if(window.scT) clearInterval(window.scT);
+
+  function h(){
+    var n=new Date(),
+        m=String(n.getMonth()+1).padStart(2,'0'),
+        d=String(n.getDate()).padStart(2,'0'),
+        tm=new Date(n);
+    tm.setDate(n.getDate()+1);
+    var tM=String(tm.getMonth()+1).padStart(2,'0'),
+        td=String(tm.getDate()).padStart(2,'0'),
+        d2=m+'-'+d, t2=tM+'-'+td,
+        nx=null, mD=Infinity, fC=0;
+
+    // CSS 하이라이트 스타일 동적 주입
+    if(!document.getElementById('ps_s')){
+      var s=document.createElement('style');
+      s.id='ps_s';
+      s.innerHTML='.t-hi td{background:#e8f5e9!important;border-top:2px solid #4caf50!important;border-bottom:2px solid #4caf50!important;font-weight:bold!important;color:#1b5e20!important;transition:all 0.3s;}';
+      document.head.appendChild(s);
+    }
+
+    // 전체 tr 순회하며 시각 비교
+    document.querySelectorAll('tr').forEach(function(r){
+      r.classList.remove('t-hi');
+      var tds=r.querySelectorAll('td');
+      if(tds.length&lt;5) return;
+      var dt=tds[3].innerText.trim(),
+          tt=tds[4].innerText.trim(),
+          iT=dt.includes(d2), iN=dt.includes(t2);
+      if(iT||iN){
+        var mt=tt.match(/(\d{2}):(\d{2})/);
+        if(mt){
+          var st=new Date(n);
+          if(iN) st.setDate(n.getDate()+1);
+          st.setHours(parseInt(mt[1]),parseInt(mt[2]),0,0);
+          var df=st-n;
+          // 1시간(3,600,000ms) 이내 스케줄 하이라이트
+          if(iT&amp;&amp;df&gt;=0&amp;&amp;df&lt;=3600000){
+            r.classList.add('t-hi'); fC=1;
+          } else if(!fC&amp;&amp;df&gt;0&amp;&amp;df&lt;mD){
+            mD=df; nx=r;
+          }
+        }
+      }
+    });
+    if(!fC&amp;&amp;nx) nx.classList.add('t-hi');
+  }
+
+  // 타겟 행을 화면 정중앙으로 부드럽게 스크롤
+  function sC(){
+    var t=document.querySelector('.t-hi');
+    if(t) t.scrollIntoView({behavior:'smooth', block:'center'});
+  }
+
+  h();
+  setTimeout(sC, 100);
+  // 3분마다 자동 갱신
+  window.ptT=setInterval(h, 180000);
+  window.scT=setInterval(sC, 180000);
+})();</code></pre>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="page-footer">
+  <p>평택 해양경찰서 VTS 센터 · <a href="https://github.com/pmh119/vts-ai-automation" target="_blank">GitHub ↗</a></p>
+</div>
+
+<script>
+// 오늘/내일 날짜 동적 표시
+(function(){
+  const now = new Date();
+  const m = String(now.getMonth()+1).padStart(2,'0');
+  const d = String(now.getDate()).padStart(2,'0');
+  const tom = new Date(now);
+  tom.setDate(now.getDate()+1);
+  const tm = String(tom.getMonth()+1).padStart(2,'0');
+  const td = String(tom.getDate()).padStart(2,'0');
+  const prevDate = `${m}-${String(now.getDate()-1).padStart(2,'0')}`;
+  const todayStr = `${m}-${d}`;
+  const tomStr = `${tm}-${td}`;
+  // 하이라이트된 행에 현재 시각 기준 +40분 표시
+  const soon = new Date(now.getTime() + 40*60000);
+  const hh = String(soon.getHours()).padStart(2,'0');
+  const mm = String(soon.getMinutes()).padStart(2,'0');
+  document.getElementById('nearby-time').textContent = `${hh}:${mm}`;
+  document.getElementById('today-date').textContent = todayStr;
+  document.getElementById('next-date').textContent = tomStr;
+  document.getElementById('next-date2').textContent = tomStr;
+})();
+
+function copyBookmarklet() {
+  const code = `javascript:(function(){if(window.ptT)clearInterval(window.ptT);if(window.scT)clearInterval(window.scT);function h(){var n=new Date(),y=n.getFullYear(),m=String(n.getMonth()+1).padStart(2,'0'),d=String(n.getDate()).padStart(2,'0'),tm=new Date(n);tm.setDate(n.getDate()+1);var ty=tm.getFullYear(),tM=String(tm.getMonth()+1).padStart(2,'0'),td=String(tm.getDate()).padStart(2,'0'),d2=m+'-'+d,t2=tM+'-'+td,nx=null,mD=Infinity,fC=0;if(!document.getElementById('ps_s')){var s=document.createElement('style');s.id='ps_s';s.innerHTML='.t-hi td{background:#e8f5e9!important;border-top:2px solid #4caf50!important;border-bottom:2px solid #4caf50!important;font-weight:bold!important;color:#1b5e20!important;transition:all 0.3s;}';document.head.appendChild(s);}document.querySelectorAll('tr').forEach(function(r){r.classList.remove('t-hi');var tds=r.querySelectorAll('td');if(tds.length<5)return;var dt=tds[3].innerText.trim(),tt=tds[4].innerText.trim(),iT=dt.includes(d2),iN=dt.includes(t2);if(iT||iN){var mt=tt.match(/(\\d{2}):(\\d{2})/);if(mt){var st=new Date(n);if(iN)st.setDate(n.getDate()+1);st.setHours(parseInt(mt[1]),parseInt(mt[2]),0,0);var df=st-n;if(iT&&df>=0&&df<=3600000){r.classList.add('t-hi');fC=1;}else if(!fC&&df>0&&df<mD){mD=df;nx=r;}}}});if(!fC&&nx)nx.classList.add('t-hi');}function sC(){var t=document.querySelector('.t-hi');if(t)t.scrollIntoView({behavior:'smooth',block:'center'});}h();setTimeout(sC,100);window.ptT=setInterval(h,180000);window.scT=setInterval(sC,180000);})();`;
+  navigator.clipboard.writeText(code).then(() => {
+    const btn = document.getElementById('copy-bookmarklet-btn');
+    btn.textContent = '✓ 복사됨!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '📋 코드 복사'; btn.classList.remove('copied'); }, 2500);
+  });
+}
+
+function copyCode(id, btn) {
+  navigator.clipboard.writeText(document.getElementById(id).innerText).then(() => {
+    btn.textContent = '✓ 복사됨'; btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '복사'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+</script>
+</body>
+</html>

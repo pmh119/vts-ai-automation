@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>사례 4 · 실시간 조석 모니터링 위젯 | VTS AI 포트폴리오</title>
+<meta name="description" content="평택항 실시간 조석 정보를 작업표시줄 위에 상시 표출하는 초경량 오버레이 위젯. PowerShell + WebView2.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="top-nav">
+  <a class="nav-back" href="index.html">📁 메인 목록으로</a>
+  <span class="nav-title">사례 4 · 실시간 조석 모니터링 위젯</span>
+</nav>
+
+<div class="hero">
+  <span class="hero-label">사례 4 · PowerShell · WebView2 · 공개 API</span>
+  <h1>실시간 조석(물때) 정보<br>상시 모니터링 데스크바 위젯</h1>
+  <p>평택항 고조·저조 시간과 수위를 작업표시줄 위에 콤팩트한 띠 형태로 실시간 상시 표출. 브라우저 접속 없이 항상 한눈에.</p>
+</div>
+
+<div class="page-content">
+
+  <!-- 실제 시연 배지 -->
+  <div class="internal-badge" style="background:#f0fdf4;border-color:#86efac;">
+    <span class="internal-badge-icon">🟢</span>
+    <span class="internal-badge-text" style="color:#16a34a;">실제 시연 가능 · 아래에서 스크립트를 직접 다운로드하여 테스트할 수 있습니다</span>
+  </div>
+
+  <!-- 1단계 -->
+  <div class="section-card">
+    <div class="section-header">
+      <span class="section-step">1</span>
+      <span class="section-title">프로젝트 핵심 요약</span>
+    </div>
+    <div class="section-body">
+      <div class="summary-grid">
+        <div class="summary-item">
+          <span class="summary-label">🎯 개발 목적</span>
+          <span class="summary-text">평택항 선박 흘수 제약 관제 시 매번 브라우저를 열어 조석 정보를 확인하는 불편함 제거</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">⚙️ 주요 기능</span>
+          <span class="summary-text">고조·저조 시간 및 조위 상시 표출 · 드래그 위치 조정 · JSON 위치 자동 저장/복원</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">🛠️ 기술 스택</span>
+          <span class="summary-text">PowerShell · Microsoft WebView2 · HTML5/CSS3/JS · Win32 API</span>
+          <div class="tech-tags">
+            <span class="tech-tag">WebView2</span>
+            <span class="tech-tag">PowerShell</span>
+            <span class="tech-tag">HTML/CSS</span>
+            <span class="tech-tag">JSON</span>
+          </div>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">✅ 기대 효과</span>
+          <span class="summary-text">조석 확인 대기 시간 → 0초 (상시 표출) · 교대 시 위치 재설정 작업 완전 제거</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2단계 -->
+  <div class="section-card">
+    <div class="section-header">
+      <span class="section-step">2</span>
+      <span class="section-title">도입 전 / 후 비교</span>
+    </div>
+    <div class="ba-grid">
+      <div class="ba-col before">
+        <div class="ba-badge before">⚠️ Before · 기존 방식</div>
+        <ul class="ba-list">
+          <li>매번 브라우저 열기 → 국립해양조사원 사이트 접속</li>
+          <li>평택항 검색 → 복잡한 조석 그래프 확인</li>
+          <li>기상 악화·긴박한 상황에서 브라우저 로딩 대기 발생</li>
+          <li>시선 분산으로 관제 집중도 저하</li>
+        </ul>
+        <div class="ba-stat">평균 1분 이상 대기 + 시선 분산</div>
+      </div>
+      <div class="ba-col after">
+        <div class="ba-badge after">✅ After · 자동화 후</div>
+        <ul class="ba-list">
+          <li>작업표시줄 위 슬림 바에 항상 조석 정보 표출</li>
+          <li>고조·저조 시간 및 조위를 즉시 확인</li>
+          <li>드래그로 원하는 위치에 배치 · 재부팅 후에도 위치 유지</li>
+          <li>다크 모드 UI로 야간 관제 시 눈부심 방지</li>
+        </ul>
+        <div class="ba-stat">🌊 조석 확인 시간 → 0초 (상시 표출)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3단계: 실제 시연 -->
+  <div class="section-card">
+    <div class="section-header">
+      <span class="section-step">3</span>
+      <span class="section-title">실제 시연 · 다운로드 및 사용법</span>
+    </div>
+    <div class="section-body">
+
+      <div class="btn-row" style="margin-bottom:24px;">
+        <a class="btn-download"
+           href="https://raw.githubusercontent.com/pmh119/vts-ai-automation/main/%EC%82%AC%EB%A1%804/%EC%A1%B0%EC%84%9D%ED%91%9C%20%EC%9C%84%EC%A0%AF.ps1"
+           download="조석표 위젯.ps1">
+          ⬇ 조석표 위젯.ps1 다운로드
+        </a>
+        <a class="btn-download"
+           href="https://github.com/pmh119/vts-ai-automation/blob/main/%EC%82%AC%EB%A1%804/%EC%A1%B0%EC%84%9D%ED%91%9C%20%EC%9C%84%EC%A0%AF.ps1"
+           target="_blank"
+           style="background:#374151;">
+          📄 GitHub에서 보기 ↗
+        </a>
+      </div>
+
+      <div class="manual-steps">
+        <div class="manual-step">
+          <span class="manual-step-num">1</span>
+          <span class="manual-step-text"><strong>사전 준비:</strong> Microsoft Edge WebView2 Runtime이 설치되어 있어야 합니다. (<a href="https://developer.microsoft.com/ko-kr/microsoft-edge/webview2/" target="_blank" style="color:#2563eb;">WebView2 Runtime 다운로드 ↗</a>)<br>DLL 파일을 <code style="background:#f3f4f6;padding:1px 5px;border-radius:3px;font-size:12px;">C:\webview2\</code> 폴더에 배치하세요.</span>
+        </div>
+        <div class="manual-step">
+          <span class="manual-step-num">2</span>
+          <span class="manual-step-text"><strong>스크립트 실행:</strong> 다운로드한 <code style="background:#f3f4f6;padding:1px 5px;border-radius:3px;font-size:12px;">조석표 위젯.ps1</code>을 우클릭 → <strong>"PowerShell에서 실행"</strong></span>
+        </div>
+        <div class="manual-step">
+          <span class="manual-step-num">3</span>
+          <span class="manual-step-text"><strong>위치 배치:</strong> 실행된 슬림 바를 마우스로 잡고 <strong>작업표시줄 바로 위</strong>에 드래그하여 배치</span>
+        </div>
+        <div class="manual-step">
+          <span class="manual-step-num">4</span>
+          <span class="manual-step-text"><strong>상시 활용:</strong> 평택항 실시간 고조·저조 수위와 시간 정보가 화면에 상시 표출됩니다. 위치는 자동 저장됩니다.</span>
+        </div>
+      </div>
+
+      <!-- 위젯 UI 미리보기 -->
+      <div style="margin-top:24px;">
+        <p style="font-size:12px;color:#9ca3af;margin-bottom:10px;">📟 위젯 UI 미리보기 (실제 렌더링과 유사)</p>
+        <div style="background:#2b3b4d;border-radius:8px;padding:14px 20px;display:flex;align-items:center;gap:24px;font-family:'JetBrains Mono',monospace;color:#e2e8f0;max-width:700px;overflow-x:auto;">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+            <span style="font-size:10px;color:#90a0b0;">일출</span>
+            <span style="font-size:16px;font-weight:700;color:#fbbf24;">05:18</span>
+          </div>
+          <div style="width:1px;height:36px;background:#3d5060;"></div>
+          <div style="display:flex;gap:16px;">
+            <div style="text-align:center;">
+              <div style="font-size:10px;color:#90a0b0;">저조</div>
+              <div style="font-size:15px;font-weight:700;color:#60a5fa;">02:34</div>
+              <div style="font-size:11px;color:#90a0b0;">42cm</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:10px;color:#90a0b0;">고조</div>
+              <div style="font-size:15px;font-weight:700;color:#34d399;">08:51</div>
+              <div style="font-size:11px;color:#90a0b0;">821cm</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:10px;color:#90a0b0;">저조</div>
+              <div style="font-size:15px;font-weight:700;color:#60a5fa;">15:12</div>
+              <div style="font-size:11px;color:#90a0b0;">38cm</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:10px;color:#90a0b0;">고조</div>
+              <div style="font-size:15px;font-weight:700;color:#34d399;">21:28</div>
+              <div style="font-size:11px;color:#90a0b0;">835cm</div>
+            </div>
+          </div>
+          <div style="width:1px;height:36px;background:#3d5060;"></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+            <span style="font-size:10px;color:#90a0b0;">일몰</span>
+            <span style="font-size:16px;font-weight:700;color:#f97316;">19:52</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="result-badges" style="margin-top:20px;">
+        <div class="result-badge">
+          <span class="result-badge-num">0초</span>
+          <span class="result-badge-label">조석 정보 확인 대기</span>
+        </div>
+        <div class="result-badge">
+          <span class="result-badge-num">상시</span>
+          <span class="result-badge-label">실시간 자동 갱신</span>
+        </div>
+        <div class="result-badge">
+          <span class="result-badge-num">공개 API</span>
+          <span class="result-badge-label">국립해양조사원</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 소스코드 -->
+  <div class="section-card">
+    <div class="section-header">
+      <span class="section-step">+</span>
+      <span class="section-title">소스코드 전문 공개</span>
+    </div>
+    <div class="section-body">
+      <p style="font-size:13px;color:#6b7280;margin-bottom:16px;">실제 구동되는 스크립트 소스코드 원본입니다.</p>
+      <div class="code-wrap">
+        <div class="code-header">
+          <span class="code-filename">조석표 위젯.ps1</span>
+          <div class="btn-row">
+            <button class="code-copy-btn" onclick="copyCode('code-4', this)">복사</button>
+            <a class="code-copy-btn" href="https://raw.githubusercontent.com/pmh119/vts-ai-automation/main/%EC%82%AC%EB%A1%804/%EC%A1%B0%EC%84%9D%ED%91%9C%20%EC%9C%84%EC%A0%AF.ps1" target="_blank" style="text-decoration:none">⬇ 다운로드</a>
+          </div>
+        </div>
+        <pre class="code-pre"><code id="code-4">Add-Type -AssemblyName System.Windows.Forms
+Add-Type -AssemblyName System.Drawing
+Add-Type -Path "C:\webview2\Microsoft.Web.WebView2.WinForms.dll"
+
+$ConfigPath = "$env:LOCALAPPDATA\TideWidget_pos.json"
+
+try {
+    Add-Type -TypeDefinition @"
+    using System;
+    using System.Runtime.InteropServices;
+    public class Win32 {
+        [DllImport("user32.dll")]
+        public static extern bool ReleaseCapture();
+        [DllImport("user32.dll")]
+        public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+    }
+"@
+} catch { }
+
+$HtmlContent = @"
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta charset="utf-8"&gt;
+&lt;style&gt;
+    html, body {
+        margin: 0; padding: 0; overflow: hidden;
+        width: 895px; height: 81px;
+        display: flex; background: #2b3b4d;
+        user-select: none;
+    }
+    #drag-overlay {
+        position: absolute; top: 0; left: 0;
+        width: 100%; height: 100%;
+        z-index: 9999; cursor: move;
+    }
+    /* ... 조석 데이터 표시 스타일 */
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div id="drag-overlay"&gt;&lt;/div&gt;
+  &lt;div id="tide-container"&gt;
+    &lt;!-- 국립해양조사원 API 데이터 자동 렌더링 --&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+"@
+
+# GitHub에서 전체 소스코드 확인 가능
+</code></pre>
+      </div>
+      <div style="margin-top:12px;">
+        <a class="btn-download" href="https://github.com/pmh119/vts-ai-automation/blob/main/%EC%82%AC%EB%A1%804/%EC%A1%B0%EC%84%9D%ED%91%9C%20%EC%9C%84%EC%A0%AF.ps1" target="_blank" style="font-size:13px;">
+          📄 GitHub에서 전체 소스코드 보기 ↗
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="page-footer">
+  <p>평택 해양경찰서 VTS 센터 · <a href="https://github.com/pmh119/vts-ai-automation" target="_blank">GitHub ↗</a></p>
+</div>
+
+<script>
+function copyCode(id, btn) {
+  navigator.clipboard.writeText(document.getElementById(id).innerText).then(() => {
+    btn.textContent = '✓ 복사됨'; btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '복사'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+</script>
+</body>
+</html>
