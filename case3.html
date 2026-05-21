@@ -372,16 +372,15 @@ let running3 = false;
 function runDemo3() {
   if (running3) return;
   running3 = true;
-  const btn = document.getElementById('demo-btn-3');
-  btn.disabled = true; btn.textContent = '실행 중...';
+  
+  const btn = document.getElementById('vts-gui-btn');
+  btn.style.opacity = '0.6';
+  btn.textContent = '프로세스 실행 중...';
+  
   const terminal = document.getElementById('terminal-3');
   terminal.innerHTML = '';
   const steps = document.querySelectorAll('#timeline-3 .step-item');
   steps.forEach((s,i) => { s.classList.remove('active'); if(i===0) s.classList.add('active'); });
-
-  const btn = document.getElementById('vts-gui-btn');
-  btn.style.opacity = '0.6';
-  btn.textContent = '프로세스 실행 중...';
   
   const excelCells = [
     {id:'ex-val-1', val:'12'}, {id:'ex-val-2', val:'10'}, {id:'ex-val-3', val:'4'}, {id:'ex-val-4', val:'2'},
