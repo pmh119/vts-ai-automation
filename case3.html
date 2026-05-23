@@ -224,10 +224,10 @@
   <div class="section-card">
     <div class="section-header">
       <span class="section-step">ℹ️</span>
-      <span class="section-title">RPA 구동을 위한 WebView2 런타임 설치 가이드</span>
+      <span class="section-title">RPA 구동을 위한 WebView2 라이브러리 수집 및 설치 가이드</span>
     </div>
     <div class="section-body">
-      <p style="font-size:15px;color:#374151;margin-bottom:14px;font-weight:600;">🔒 내부망 및 폐쇄망 PC를 위한 WebView2 오프라인 설치 및 DLL 빌드 환경 구성법</p>
+      <p style="font-size:15px;color:#374151;margin-bottom:14px;font-weight:600;">🔒 내부망 및 폐쇄망 PC를 위한 WebView2 오프라인 라이브러리 구성 및 DLL 수집 환경 구축 가이드</p>
       
       <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:16px; margin-bottom:20px; font-size:13.5px; color:#475569; line-height:1.6;">
         💡 <strong>오프라인 DLL 배치가 필수인 이유:</strong><br>
@@ -236,17 +236,18 @@
 
       <ul style="list-style:none;display:flex;flex-direction:column;gap:18px;padding:0;font-size:14px;color:#4b5563;" class="no-bullet">
         <li style="padding-left: 0; margin-bottom: 0;">
-          <strong style="color:#2563eb;">1. 런타임(Standalone) 다운로드 및 보안망 이동</strong><br>
-          인터넷이 연결된 외부 PC에서 Microsoft 공식 WebView2 다운로드 페이지에 접속하여 <span style="background:#f3f4f6;padding:2px 6px;border-radius:4px;font-weight:bold;color:#0f172a;">Evergreen Standalone Installer (x64)</span> 버전을 다운로드한 뒤, 내부 승인 매체(보안 USB 등)를 통해 내부망 관제 PC로 파일(<span style="font-family:monospace;background:#f3f4f6;padding:2px 4px;border-radius:4px;">MicrosoftEdgeWebview2Setup.exe</span>)을 안전하게 복사합니다.
+          <strong style="color:#2563eb;">1. [실용 팁] 로컬 검색 프로그램 'Everything'을 이용한 필수 DLL 수집</strong><br>
+          외부 인터넷이나 정식 설치 프로그램 실행이 완전히 제한되는 내부망 관제 PC에서는, PC 내부의 타 소프트웨어(예: Microsoft Edge 브라우저 등) 폴더 내에 WebView2 관련 필수 DLL 파일들이 이미 존재하고 있는 경우가 대부분입니다.<br>
+          초고속 로컬 검색 프로그램인 <strong>Everything</strong>(혹은 Windows 기본 탐색기 검색 기능)을 실행하여 아래 핵심 DLL 파일들을 검색한 뒤, 한데 모아 <span style="font-family:monospace;background:#f3f4f6;padding:2px 4px;border-radius:4px;font-weight:bold;">C:\webview2</span> 폴더에 수동으로 직접 배치해야 스크립트가 정상 실행됩니다:
+          <ul style="list-style:disc; margin-left:20px; margin-top:6px; font-size:13px; color:#6b7280;">
+            <li><code>Microsoft.Web.WebView2.Core.dll</code></li>
+            <li><code>Microsoft.Web.WebView2.WinForms.dll</code></li>
+            <li><code>WebView2Loader.dll</code></li>
+          </ul>
         </li>
         <li style="padding-left: 0; margin-bottom: 0;">
-          <strong style="color:#2563eb;">2. 명령 프롬프트(CMD)를 통한 강제 오프라인 무소음 설치</strong><br>
-          관리자 권한으로 실행한 명령 프롬프트(CMD)에서 설치 파일 경로로 이동 후 아래 명령어를 입력하여 네트워크 통신 없이 로컬 디렉토리에 설치를 마무리합니다:
-          <pre style="background:#0f172a;color:#10b981;padding:12px;border-radius:6px;margin-top:8px;font-family:monospace;font-size:12.5px;">MicrosoftEdgeWebview2Setup.exe /silent /install</pre>
-        </li>
-        <li style="padding-left: 0; margin-bottom: 0;">
-          <strong style="color:#2563eb;">3. [핵심] C:\webview2\ 라이브러리 및 DLL 폴더 구조 수동 구성</strong><br>
-          관제 스크립트가 참조할 수 있도록 C드라이브 바로 밑에 <span style="font-family:monospace;background:#f3f4f6;padding:2px 4px;border-radius:4px;font-weight:bold;">C:\webview2</span> 폴더를 생성하고, 필수 작동 DLL들을 다음과 같이 완벽한 디렉토리 트리 구조로 배치해야 합니다:
+          <strong style="color:#2563eb;">2. C:\webview2\ 라이브러리 및 DLL 폴더 구조 수동 구성</strong><br>
+          Everything 검색을 통해 수집한 DLL 파일들을 C드라이브 바로 밑에 다음과 같이 완벽한 디렉토리 트리 구조로 배치해 줍니다:
           
           <pre style="background:#1e293b;color:#f8fafc;padding:14px;border-radius:6px;margin-top:8px;font-family:monospace;font-size:12.5px;line-height:1.5;border-left:4px solid #f59e0b;">
 C:\
@@ -258,11 +259,17 @@ C:\
             └── native\
                 └── WebView2Loader.dll   (x64 아키텍처 필수 로더)
           </pre>
-          <span style="font-size:12px;color:#6b7280;display:block;margin-top:4px;">※ 해당 DLL 파일들은 배포 패키지 내부 `사례3/` 폴더 내부에 사전 동봉되어 있으므로 그대로 지정 경로에 복사해 넣으시면 됩니다.</span>
+          <span style="font-size:12px;color:#6b7280;display:block;margin-top:4px;">※ 해당 DLL 파일들은 배포 패키지 내부 `사례3/` 폴더 내부에 사전 동봉되어 있으므로 그대로 지정 경로에 복사해 넣으셔도 무방합니다.</span>
         </li>
         <li style="padding-left: 0; margin-bottom: 0;">
-          <strong style="color:#2563eb;">4. 제어판을 통한 설치 완료 여부 크로스체크</strong><br>
-          설치 완료 후 <strong>[제어판] -> [프로그램 및 기능]</strong>에서 <span style="font-weight:bold;color:#0f172a;">Microsoft Edge WebView2 Runtime</span> 항목이 리스트에 존재하며, 버전 정보(예: 110.x.xxxx.xx 이상)가 정상 표출되는지 검증합니다.
+          <strong style="color:#2563eb;">3. [외부 인터넷] 정식 런타임 Standalone 설치 프로그램 다운로드</strong><br>
+          만약 PC 내부에 DLL 파일들이 없는 경우, 외부 인터넷PC에서 Microsoft 공식 페이지를 통해 오프라인 독립 실행형 설치 파일을 다운로드해야 합니다.
+          <div style="margin-top:8px; margin-bottom:8px;">
+            🔗 <a href="https://developer.microsoft.com/ko-kr/microsoft-edge/webview2/consumer/" target="_blank" style="font-weight:600; color:#2563eb; text-decoration:underline;">Microsoft 공식 WebView2 Standalone Runtime 다운로드 페이지 ↗</a>
+          </div>
+          <div style="background:#fef2f2; border:1px solid #fca5a5; border-radius:6px; padding:10px 14px; font-size:13px; color:#b91c1c; margin-top:8px;">
+            ⚠️ <strong>[주의 · 리마크]</strong> 다운로드한 정식 설치 프로그램(MicrosoftEdgeWebview2Setup.exe)은 공식 보안 승인(승인 매체 사용 등) 절차 없이 내부망으로 무단 전송 및 반입하는 것이 절대 불가능합니다.
+          </div>
         </li>
       </ul>
     </div>
