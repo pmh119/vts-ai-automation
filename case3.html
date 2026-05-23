@@ -347,18 +347,20 @@ const lines3 = [
   {cls:'t-ok',  txt:'[초기화] WebView2 엔진 로드 완료'},
   {cls:'t-ok',  txt:'[초기화] Excel COM Object 연결 완료'},
   {cls:'', txt:''},
-  {cls:'t-warn', txt:'[Step 1] PORT-MIS 자동 로그인 중...'},
-  {cls:'t-dim',  txt:'  → 세션 쿠키 획득 완료'},
-  {cls:'t-dim',  txt:'  → 선박입항 조회: 1섹터 12건, 2섹터 8건, 3섹터 5건'},
-  {cls:'t-dim',  txt:'  → 선박출항 조회: 1섹터 10건, 2섹터 7건, 3섹터 4건'},
-  {cls:'t-dim',  txt:'  → 이동·투묘 데이터 수집 완료'},
-  {cls:'t-ok',   txt:'[완료] PORT-MIS 데이터 크롤링 종료'},
+  {cls:'t-warn', txt:'[Step 1] PORT-MIS 자동 로그인 및 실시간 크롤링 중...'},
+  {cls:'t-dim',  txt:'  → 세션 쿠키 획득 및 연결 완료'},
+  {cls:'t-dim',  txt:'  → [1섹터] 입항 12건 · 출항 10건 · 이동 4건 · 투묘 2건 조회 완료'},
+  {cls:'t-dim',  txt:'    └> 엑셀 셀 수동 기입 중... (12, 10, 4, 2)'},
+  {cls:'t-dim',  txt:'  → [2섹터] 입항 8건 · 출항 7건 · 이동 3건 · 투묘 1건 조회 완료'},
+  {cls:'t-dim',  txt:'    └> 엑셀 셀 수동 기입 중... (8, 7, 3, 1)'},
+  {cls:'t-dim',  txt:'  → [3섹터] 입항 5건 · 출항 4건 · 이동 2건 · 투묘 0건 조회 완료'},
+  {cls:'t-dim',  txt:'    └> 엑셀 셀 수동 기입 중... (5, 4, 2, 0)'},
+  {cls:'t-ok',   txt:'[완료] PORT-MIS 크롤링 및 엑셀 수동 기입 완료'},
   {cls:'', txt:''},
-  {cls:'t-warn', txt:'[Step 2] 엑셀 자동 기입 중...'},
-  {cls:'t-dim',  txt:'  → 평택VTS 일일통계 계산표.xlsx 오픈'},
-  {cls:'t-dim',  txt:'  → D5:D20 섹터별 데이터 바인딩 완료'},
-  {cls:'t-dim',  txt:'  → 평택VTS 운영실적.xls 자동 저장'},
-  {cls:'t-ok',   txt:'[완료] 엑셀 자동 기입 및 저장 완료'},
+  {cls:'t-warn', txt:'[Step 2] 엑셀 통계 검증 및 최종 보관 중...'},
+  {cls:'t-dim',  txt:'  → 평택VTS 일일통계 계산표.xlsx 최종 연산 완료'},
+  {cls:'t-dim',  txt:'  → 평택VTS 운영실적.xls 연동 완료 및 저장'},
+  {cls:'t-ok',   txt:'[완료] 엑셀 데이터 동기화 및 최종 저장 완료'},
   {cls:'', txt:''},
   {cls:'t-warn', txt:'[Step 3] 현장업무포털 자동 전송 중...'},
   {cls:'t-dim',  txt:'  → hp.kcg.internal 자동 로그인'},
@@ -418,16 +420,16 @@ function runDemo3() {
     terminal.appendChild(document.createElement('br'));
     terminal.scrollTop = terminal.scrollHeight;
 
-    if (i === 9) steps[1].classList.add('active');
-    if (i === 15) steps[2].classList.add('active');
+    if (i === 14) steps[1].classList.add('active');
+    if (i === 19) steps[2].classList.add('active');
 
-    // 엑셀 기입
-    if (i === 11) {
-      document.getElementById('excel-status-label').textContent = '엑셀 기입 중...';
+    // 1섹터 기입
+    if (i === 7) {
+      document.getElementById('excel-status-label').textContent = '1섹터 수동 기입 중...';
       document.getElementById('excel-status-label').style.background = '#fffbeb';
       document.getElementById('excel-status-label').style.color = '#d97706';
       
-      excelCells.forEach((cell, idx) => {
+      excelCells.slice(0, 4).forEach((cell, idx) => {
         setTimeout(() => {
           const el = document.getElementById(cell.id);
           if(el) {
@@ -438,20 +440,60 @@ function runDemo3() {
               el.style.background = '#e6fffa';
             }, 300);
           }
-        }, idx * 100);
+        }, idx * 150);
       });
     }
 
-    if (i === 15) {
-      setTimeout(() => {
-        document.getElementById('excel-status-label').textContent = '동기화 완료 (저장됨)';
-        document.getElementById('excel-status-label').style.background = '#f0fdf4';
-        document.getElementById('excel-status-label').style.color = '#16a34a';
-      }, 1300);
+    // 2섹터 기입
+    if (i === 9) {
+      document.getElementById('excel-status-label').textContent = '2섹터 수동 기입 중...';
+      excelCells.slice(4, 8).forEach((cell, idx) => {
+        setTimeout(() => {
+          const el = document.getElementById(cell.id);
+          if(el) {
+            el.textContent = cell.val;
+            el.style.color = '#1a1d23';
+            el.style.background = '#fffbeb';
+            setTimeout(() => {
+              el.style.background = '#e6fffa';
+            }, 300);
+          }
+        }, idx * 150);
+      });
+    }
+
+    // 3섹터 기입
+    if (i === 11) {
+      document.getElementById('excel-status-label').textContent = '3섹터 수동 기입 중...';
+      excelCells.slice(8, 12).forEach((cell, idx) => {
+        setTimeout(() => {
+          const el = document.getElementById(cell.id);
+          if(el) {
+            el.textContent = cell.val;
+            el.style.color = '#1a1d23';
+            el.style.background = '#fffbeb';
+            setTimeout(() => {
+              el.style.background = '#e6fffa';
+            }, 300);
+          }
+        }, idx * 150);
+      });
+    }
+
+    if (i === 12) {
+      document.getElementById('excel-status-label').textContent = '수동 기입 완료 (저장 대기)';
+      document.getElementById('excel-status-label').style.background = '#e0f2fe';
+      document.getElementById('excel-status-label').style.color = '#0369a1';
+    }
+
+    if (i === 17) {
+      document.getElementById('excel-status-label').textContent = '동기화 완료 (저장됨)';
+      document.getElementById('excel-status-label').style.background = '#f0fdf4';
+      document.getElementById('excel-status-label').style.color = '#16a34a';
     }
 
     i++;
-    setTimeout(next, l.txt === '' ? 60 : 180);
+    setTimeout(next, l.txt === '' ? 60 : 350);
   }
   next();
 }
