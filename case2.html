@@ -140,7 +140,7 @@
       </div>
 
       <!-- 결과 위젯 미리보기 -->
-      <div id="widget-preview-2" style="display:none;margin-top:20px;padding:20px;background:#1a202c;border-radius:10px;font-family:'JetBrains Mono',monospace;color:#e2e8f0;">
+      <div id="widget-preview-2" style="display:none;margin-top:20px;padding:20px;background:#1a202c;border-radius:10px;font-family:'JetBrains Mono',monospace;color:#e2e8f0;width:fit-content;min-width:280px;box-shadow:0 10px 25px rgba(0,0,0,0.5);">
         <div style="font-size:11px;color:#718096;margin-bottom:8px;">📟 교신량 위젯 (미리보기)</div>
         <div style="font-size:22px;font-weight:700;line-height:1.6;">
           5월 20일 교신량: <span style="color:#68d391" id="count-prev">--</span>건<br>
@@ -347,7 +347,7 @@ function runDemo2() {
     animateFill('fill2-2','pct2-2',100, 1200, () => {
       steps[2].classList.add('active');
       animateFill('fill2-3','pct2-3',100, 1200, () => {
-        document.getElementById('widget-preview-2').style.display = 'block';
+        document.getElementById('widget-preview-2').style.display = 'inline-block';
         document.getElementById('count-prev').textContent = '127';
         document.getElementById('count-today').textContent = '43';
         let blink = false;
