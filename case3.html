@@ -159,10 +159,11 @@
               <thead>
                 <tr style="background:#f7fafc;font-weight:bold;border-bottom:2px solid #cbd5e1;">
                   <th style="padding:6px;border:1px solid #cbd5e1;">구분</th>
-                  <th style="padding:6px;border:1px solid #cbd5e1;color:#b91c1c;">입항 (선박수)</th>
-                  <th style="padding:6px;border:1px solid #cbd5e1;color:#15803d;">출항 (선박수)</th>
-                  <th style="padding:6px;border:1px solid #cbd5e1;color:#2563eb;">이동 (선박수)</th>
-                  <th style="padding:6px;border:1px solid #cbd5e1;color:#b45309;">투묘 (선박수)</th>
+                  <th style="padding:6px;border:1px solid #cbd5e1;color:#b91c1c;">진입</th>
+                  <th style="padding:6px;border:1px solid #cbd5e1;color:#15803d;">통과</th>
+                  <th style="padding:6px;border:1px solid #cbd5e1;color:#2563eb;">이동</th>
+                  <th style="padding:6px;border:1px solid #cbd5e1;color:#b45309;">출항</th>
+                  <th style="padding:6px;border:1px solid #cbd5e1;color:#6b21a8;">정보제공</th>
                 </tr>
               </thead>
               <tbody>
@@ -172,20 +173,23 @@
                   <td id="ex-val-2" style="font-weight:600;color:#cbd5e1;">--</td>
                   <td id="ex-val-3" style="font-weight:600;color:#cbd5e1;">--</td>
                   <td id="ex-val-4" style="font-weight:600;color:#cbd5e1;">--</td>
+                  <td id="ex-val-5" style="font-weight:600;color:#cbd5e1;">--</td>
                 </tr>
                 <tr style="border-bottom:1px solid #e2e8f0;background:#fcfcfc;">
                   <td style="padding:6px;border:1px solid #cbd5e1;background:#f7fafc;font-weight:bold;">2섹터</td>
-                  <td id="ex-val-5" style="font-weight:600;color:#cbd5e1;">--</td>
                   <td id="ex-val-6" style="font-weight:600;color:#cbd5e1;">--</td>
                   <td id="ex-val-7" style="font-weight:600;color:#cbd5e1;">--</td>
                   <td id="ex-val-8" style="font-weight:600;color:#cbd5e1;">--</td>
+                  <td id="ex-val-9" style="font-weight:600;color:#cbd5e1;">--</td>
+                  <td id="ex-val-10" style="font-weight:600;color:#cbd5e1;">--</td>
                 </tr>
                 <tr>
                   <td style="padding:6px;border:1px solid #cbd5e1;background:#f7fafc;font-weight:bold;">3섹터</td>
-                  <td id="ex-val-9" style="font-weight:600;color:#cbd5e1;">--</td>
-                  <td id="ex-val-10" style="font-weight:600;color:#cbd5e1;">--</td>
                   <td id="ex-val-11" style="font-weight:600;color:#cbd5e1;">--</td>
                   <td id="ex-val-12" style="font-weight:600;color:#cbd5e1;">--</td>
+                  <td id="ex-val-13" style="font-weight:600;color:#cbd5e1;">--</td>
+                  <td id="ex-val-14" style="font-weight:600;color:#cbd5e1;">--</td>
+                  <td id="ex-val-15" style="font-weight:600;color:#cbd5e1;">--</td>
                 </tr>
               </tbody>
             </table>
@@ -348,14 +352,12 @@ const lines3 = [
   {cls:'t-ok',  txt:'[초기화] Excel COM Object 연결 완료'},
   {cls:'', txt:''},
   {cls:'t-warn', txt:'[Step 1] PORT-MIS 자동 로그인 및 실시간 크롤링 중...'},
-  {cls:'t-dim',  txt:'  → 세션 쿠키 획득 및 연결 완료'},
-  {cls:'t-dim',  txt:'  → [1섹터] 입항 12건 · 출항 10건 · 이동 4건 · 투묘 2건 조회 완료'},
-  {cls:'t-dim',  txt:'    └> 엑셀 셀 수동 기입 중... (12, 10, 4, 2)'},
-  {cls:'t-dim',  txt:'  → [2섹터] 입항 8건 · 출항 7건 · 이동 3건 · 투묘 1건 조회 완료'},
-  {cls:'t-dim',  txt:'    └> 엑셀 셀 수동 기입 중... (8, 7, 3, 1)'},
-  {cls:'t-dim',  txt:'  → [3섹터] 입항 5건 · 출항 4건 · 이동 2건 · 투묘 0건 조회 완료'},
-  {cls:'t-dim',  txt:'    └> 엑셀 셀 수동 기입 중... (5, 4, 2, 0)'},
-  {cls:'t-ok',   txt:'[완료] PORT-MIS 크롤링 및 엑셀 수동 기입 완료'},
+  {cls:'t-dim',  txt:'→ 세션 쿠키 획득 및 연결 완료'},
+  {cls:'t-dim',  txt:'└> 관제일지 입력란 수동 기입 중... [1섹터] (12, 10, 4, 2)'},
+  {cls:'t-dim',  txt:'└> 관제일지 입력란 수동 기입 중... [2섹터](8, 7, 3, 1)'},
+  {cls:'t-dim',  txt:'└> 관제일지 입력란 수동 기입 중... [3섹터](5, 4, 2, 0)'},
+  {cls:'t-dim',  txt:'→ [PORT-MIS 조회 완료] 입항 29건 · 출항 30건 · 이동 18건 · 양묘 2건 · 전체 85건'},
+  {cls:'t-ok',   txt:'[완료] PORT-MIS 크롤링 및 엑셀 기입 완료'},
   {cls:'', txt:''},
   {cls:'t-warn', txt:'[Step 2] 엑셀 통계 검증 및 최종 보관 중...'},
   {cls:'t-dim',  txt:'  → 평택VTS 일일통계 계산표.xlsx 최종 연산 완료'},
@@ -365,7 +367,7 @@ const lines3 = [
   {cls:'t-warn', txt:'[Step 3] 현장업무포털 자동 전송 중...'},
   {cls:'t-dim',  txt:'  → hp.kcg.internal 자동 로그인'},
   {cls:'t-dim',  txt:'  → 관제일보 폼 데이터 매칭 및 입력'},
-  {cls:'t-dim',  txt:'  → 제출 버튼 자동 클릭'},
+  {cls:'t-dim',  txt:'  → 저장 버튼 자동 클릭'},
   {cls:'', txt:''},
   {cls:'t-ok',   txt:'✅ 모든 작업 완료 — 소요 시간: 00:01:02'},
 ];
@@ -385,9 +387,9 @@ function runDemo3() {
   steps.forEach((s,i) => { s.classList.remove('active'); if(i===0) s.classList.add('active'); });
   
   const excelCells = [
-    {id:'ex-val-1', val:'12'}, {id:'ex-val-2', val:'10'}, {id:'ex-val-3', val:'4'}, {id:'ex-val-4', val:'2'},
-    {id:'ex-val-5', val:'8'}, {id:'ex-val-6', val:'7'}, {id:'ex-val-7', val:'3'}, {id:'ex-val-8', val:'1'},
-    {id:'ex-val-9', val:'5'}, {id:'ex-val-10', val:'4'}, {id:'ex-val-11', val:'2'}, {id:'ex-val-12', val:'0'}
+    {id:'ex-val-1', val:'12'}, {id:'ex-val-2', val:'10'}, {id:'ex-val-3', val:'4'}, {id:'ex-val-4', val:'2'}, {id:'ex-val-5', val:'3'},
+    {id:'ex-val-6', val:'8'}, {id:'ex-val-7', val:'7'}, {id:'ex-val-8', val:'3'}, {id:'ex-val-9', val:'1'}, {id:'ex-val-10', val:'2'},
+    {id:'ex-val-11', val:'5'}, {id:'ex-val-12', val:'4'}, {id:'ex-val-13', val:'2'}, {id:'ex-val-14', val:'0'}, {id:'ex-val-15', val:'1'}
   ];
   excelCells.forEach(cell => {
     const el = document.getElementById(cell.id);
@@ -420,16 +422,16 @@ function runDemo3() {
     terminal.appendChild(document.createElement('br'));
     terminal.scrollTop = terminal.scrollHeight;
 
-    if (i === 14) steps[1].classList.add('active');
-    if (i === 19) steps[2].classList.add('active');
+    if (i === 12) steps[1].classList.add('active');
+    if (i === 17) steps[2].classList.add('active');
 
     // 1섹터 기입
-    if (i === 7) {
+    if (i === 6) {
       document.getElementById('excel-status-label').textContent = '1섹터 수동 기입 중...';
       document.getElementById('excel-status-label').style.background = '#fffbeb';
       document.getElementById('excel-status-label').style.color = '#d97706';
       
-      excelCells.slice(0, 4).forEach((cell, idx) => {
+      excelCells.slice(0, 5).forEach((cell, idx) => {
         setTimeout(() => {
           const el = document.getElementById(cell.id);
           if(el) {
@@ -445,9 +447,9 @@ function runDemo3() {
     }
 
     // 2섹터 기입
-    if (i === 9) {
+    if (i === 7) {
       document.getElementById('excel-status-label').textContent = '2섹터 수동 기입 중...';
-      excelCells.slice(4, 8).forEach((cell, idx) => {
+      excelCells.slice(5, 10).forEach((cell, idx) => {
         setTimeout(() => {
           const el = document.getElementById(cell.id);
           if(el) {
@@ -463,9 +465,9 @@ function runDemo3() {
     }
 
     // 3섹터 기입
-    if (i === 11) {
+    if (i === 8) {
       document.getElementById('excel-status-label').textContent = '3섹터 수동 기입 중...';
-      excelCells.slice(8, 12).forEach((cell, idx) => {
+      excelCells.slice(10, 15).forEach((cell, idx) => {
         setTimeout(() => {
           const el = document.getElementById(cell.id);
           if(el) {
@@ -480,13 +482,13 @@ function runDemo3() {
       });
     }
 
-    if (i === 12) {
+    if (i === 10) {
       document.getElementById('excel-status-label').textContent = '수동 기입 완료 (저장 대기)';
       document.getElementById('excel-status-label').style.background = '#e0f2fe';
       document.getElementById('excel-status-label').style.color = '#0369a1';
     }
 
-    if (i === 17) {
+    if (i === 15) {
       document.getElementById('excel-status-label').textContent = '동기화 완료 (저장됨)';
       document.getElementById('excel-status-label').style.background = '#f0fdf4';
       document.getElementById('excel-status-label').style.color = '#16a34a';
