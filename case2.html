@@ -334,19 +334,19 @@ function runDemo2() {
       const pEl = document.getElementById(pctId);
       let v = 0;
       const iv = setInterval(() => {
-        v = Math.min(v + 2, target);
+        v = Math.min(v + 1, target);
         el.style.width = v + '%';
         pEl.textContent = v + '%';
         if (v >= target) { clearInterval(iv); if(cb) cb(); }
-      }, 20);
+      }, 15);
     }, delay);
   }
 
-  animateFill('fill2-1','pct2-1',100, 300, () => {
+  animateFill('fill2-1','pct2-1',100, 800, () => {
     steps[1].classList.add('active');
-    animateFill('fill2-2','pct2-2',100, 200, () => {
+    animateFill('fill2-2','pct2-2',100, 1200, () => {
       steps[2].classList.add('active');
-      animateFill('fill2-3','pct2-3',100, 200, () => {
+      animateFill('fill2-3','pct2-3',100, 1200, () => {
         document.getElementById('widget-preview-2').style.display = 'block';
         document.getElementById('count-prev').textContent = '127';
         document.getElementById('count-today').textContent = '43';
