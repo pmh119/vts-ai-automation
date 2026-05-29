@@ -179,8 +179,11 @@
           
           <ul style="list-style:none;display:flex;flex-direction:column;gap:12px;padding:0;font-size:13px;color:#4b5563;margin-bottom:0;" class="no-bullet">
             <li style="padding-left: 0; margin-bottom: 0; line-height: 1.5;">
-              <strong style="color:#2563eb;">① WebView2 공식 런타임 설치:</strong> 
-              아래 Microsoft 공식 다운로드 페이지에서 <span style="background:#f3f4f6;padding:2px 6px;border-radius:4px;font-weight:bold;color:#0f172a;">Evergreen Bootstrapper</span> 또는 <span style="background:#f3f4f6;padding:2px 6px;border-radius:4px;font-weight:bold;color:#0f172a;">Standalone Installer</span>를 다운로드하여 실행하시면 자동으로 간편하게 설치됩니다.
+              <strong style="color:#2563eb;">① WebView2 공식 런타임(엔진) 설치:</strong> 
+              아래 Microsoft 공식 다운로드 페이지에서 <span style="background:#f3f4f6;padding:2px 6px;border-radius:4px;font-weight:bold;color:#0f172a;">Evergreen Bootstrapper</span> 또는 <span style="background:#f3f4f6;padding:2px 6px;border-radius:4px;font-weight:bold;color:#0f172a;">Standalone Installer</span>를 다운로드하여 실행하시면 자동으로 시스템에 Edge 브라우저 렌더링 엔진이 설치됩니다.
+              <div style="margin-top:6px;font-size:12px;color:#dc2626;font-weight:600;line-height:1.4;">
+                ⚠️ 중요 알림: 이 공식 설치 프로그램은 '순수 브라우저 엔진'을 윈도우에 깔아주는 것이므로, 개발용 연동 라이브러리인 3개의 DLL 파일은 원래 포함되어 있지 않습니다! (정상적인 동작입니다)
+              </div>
               <div style="margin-top:8px;">
                 <a href="https://developer.microsoft.com/ko-kr/microsoft-edge/webview2/#download-section" target="_blank" style="display:inline-block;background:#2563eb;color:#fff;padding:6px 12px;border-radius:4px;text-decoration:none;font-weight:bold;font-size:12px;box-shadow:0 2px 4px rgba(37,99,235,0.2);">
                   🔗 Microsoft 공식 WebView2 다운로드 페이지 이동 ↗
@@ -188,17 +191,23 @@
               </div>
             </li>
             <li style="padding-left: 0; margin-bottom: 0; line-height: 1.5; margin-top: 8px;">
-              <strong style="color:#2563eb;">② 라이브러리 및 DLL 파일 배치:</strong> 
-              스크립트 실행에 필요한 라이브러리 DLL들이 올바르게 로드될 수 있도록, <span style="font-family:monospace;background:#f3f4f6;padding:2px 4px;border-radius:4px;font-weight:bold;">C:\webview2</span> 폴더를 생성하고 다운로드 패키지 내부 `사례4/`에 포함된 파일들을 아래와 같이 배치해 주시기만 하면 완료됩니다.
-              <pre style="background:#1e293b;color:#f8fafc;padding:10px;border-radius:6px;margin-top:6px;font-family:monospace;font-size:11.5px;line-height:1.4;margin-bottom:0;">
+              <strong style="color:#2563eb;">② 라이브러리 및 DLL 파일 배치 (깃허브 저장소 동봉):</strong> 
+              스크립트 실행에 필요한 3개의 연동 DLL 파일은 <strong>이미 사용자님의 깃허브 저장소 `vts-ai-automation` 내 `사례4/` 폴더에 동봉</strong>되어 공유되고 있습니다!
+              <br>컴퓨터에 <span style="font-family:monospace;background:#f3f4f6;padding:2px 4px;border-radius:4px;font-weight:bold;">C:\webview2</span> 폴더를 직접 생성하신 후, 저장소에서 가져온 DLL 파일들을 아래 트리 구조에 맞게 그대로 복사해 배치해 주세요.
+              <div style="margin-top:8px;">
+                <a href="https://github.com/pmh119/vts-ai-automation/tree/main/%EC%82%AC%EB%A1%804" target="_blank" style="display:inline-block;background:#475569;color:#fff;padding:6px 12px;border-radius:4px;text-decoration:none;font-weight:bold;font-size:12px;box-shadow:0 2px 4px rgba(71,85,105,0.2);">
+                  📂 깃허브 저장소 [사례4] 폴더로 바로가기 (DLL 파일 다운로드) ↗
+                </a>
+              </div>
+              <pre style="background:#1e293b;color:#f8fafc;padding:10px;border-radius:6px;margin-top:10px;font-family:monospace;font-size:11.5px;line-height:1.4;margin-bottom:0;">
 C:\
 └── webview2\
-    ├── Microsoft.Web.WebView2.Core.dll
-    ├── Microsoft.Web.WebView2.WinForms.dll
+    ├── Microsoft.Web.WebView2.Core.dll       (저장소 [사례4/]에 동봉된 파일 복사)
+    ├── Microsoft.Web.WebView2.WinForms.dll   (저장소 [사례4/]에 동봉된 파일 복사)
     └── runtimes\
         └── win-x64\
             └── native\
-                └── WebView2Loader.dll
+                └── WebView2Loader.dll        (저장소 [사례4/runtimes/win-x64/native/]에 동봉된 파일 복사)
               </pre>
             </li>
           </ul>
