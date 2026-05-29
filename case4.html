@@ -210,6 +210,24 @@ C:\
                 └── WebView2Loader.dll        (저장소 [사례4/runtimes/win-x64/native/]에 동봉된 파일 복사)
               </pre>
             </li>
+            <!-- 💡 아키텍처 및 타 OS 사용자 안내 -->
+            <li style="padding-left: 0; margin-bottom: 0; margin-top: 16px;">
+              <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;font-size:12.5px;color:#475569;line-height:1.6;">
+                <div style="font-weight:700;color:#0f172a;margin-bottom:8px;display:flex;align-items:center;gap:6px;font-size:13.5px;">
+                  <span>💻</span> 아키텍처(32비트/64비트) 및 타 운영체제(OS) 사용자용 안내
+                </div>
+                <ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;list-style-type:disc;">
+                  <li style="padding-left:0;margin-bottom:0;">
+                    <strong>64비트(x64) 전용 라이브러리:</strong> 
+                    현재 저장소에 동봉된 연동 DLL 파일들은 현대 해상교통관제(VTS) 표준 환경에 맞추어 <strong>윈도우 64비트(win-x64)</strong> 아키텍처용으로 구성되어 있습니다. 만약 32비트(x86) 윈도우 운영체제를 사용 중이신 경우, 스크립트 실행 시 라이브러리 형식 불일치 에러(<code style="font-family:monospace;background:#f1f5f9;padding:1px 4px;border-radius:3px;">BadImageFormatException</code>)가 발생할 수 있습니다. 이 경우 Microsoft 공식 NuGet 등을 통해 x86용 <code style="font-family:monospace;background:#f1f5f9;padding:1px 4px;border-radius:3px;">WebView2Loader.dll</code> 파일을 다운로드하여 교체해 주셔야 정상 구동됩니다.
+                  </li>
+                  <li style="padding-left:0;margin-bottom:0;">
+                    <strong>윈도우(Windows) 이외의 운영체제:</strong> 
+                    본 조석 모니터링 위젯은 바탕화면/작업표시줄 상시 최상단 배치 및 테두리 없는 반투명 오버레이를 구현하기 위해 .NET Windows Forms 아키텍처와 Windows Win32 native API(ReleaseCapture, SendMessage 등) 하드웨어 제어 기술에 깊게 종속되어 있습니다. 따라서 macOS, Linux 등 <strong>윈도우 이외의 운영체제 환경에서는 스크립트를 통한 위젯 직접 구동이 불가능</strong>하므로, 웹 브라우저를 통한 시뮬레이션 및 국립해양조사원 관측 페이지 이용을 권장해 드립니다.
+                  </li>
+                </ul>
+              </div>
+            </li>
           </ul>
         </div>
       </div>
