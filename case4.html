@@ -101,6 +101,34 @@
     </div>
     <div class="section-body">
 
+      <!-- ⚓ 센터 선택 드롭다운 카드 (Rich Premium UI) -->
+      <div style="background: linear-gradient(135deg, #f8fafc, #f1f5f9); border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-bottom: 24px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 18px;">⚓</span>
+          <span style="font-size: 15px; font-weight: 700; color: #1e293b;">대상 VTS 및 관제 해역(조위 관측소) 선택</span>
+        </div>
+        <p style="font-size: 13px; color: #475569; margin: 0; line-height: 1.5;">
+          근무하시는 해상교통관제센터(VTS) 또는 표출을 원하시는 항만을 선택해 주세요. 
+          아래의 <strong>가상 시뮬레이터</strong> 및 <strong>소스코드 전문</strong>이 해당 해역의 데이터 코드로 실시간 자동 갱신됩니다!
+        </p>
+        <div style="position: relative; max-width: 320px; margin-top: 4px;">
+          <select id="center-selector" onchange="changeVtsCenter(this.value)" style="width: 100%; padding: 10px 16px; font-size: 14px; font-weight: 600; color: #0f172a; background: #ffffff; border: 2px solid #cbd5e1; border-radius: 8px; appearance: none; outline: none; cursor: pointer; transition: all 0.2s ease;">
+            <option value="pyeongtaek" selected>평택항 VTS (DT_0002)</option>
+            <option value="incheon">인천항 VTS (DT_0001)</option>
+            <option value="daesan">대산항 VTS (DT_0017)</option>
+            <option value="busan">부산항 VTS (DT_0005)</option>
+            <option value="ulsan">울산항 VTS (DT_0006)</option>
+            <option value="yeosu">여수항 VTS (DT_0007)</option>
+            <option value="mokpo">목포항 VTS (DT_0003)</option>
+            <option value="gunsan">군산항 VTS (DT_0016)</option>
+            <option value="pohang">포항항 VTS (DT_0013)</option>
+            <option value="masan">마산항 VTS (DT_0011)</option>
+            <option value="jeju">제주항 VTS (DT_0027)</option>
+          </select>
+          <div style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #64748b; font-size: 12px;">▼</div>
+        </div>
+      </div>
+
       <div class="btn-row" style="margin-bottom:24px;">
         <a class="btn-download"
            href="https://raw.githubusercontent.com/pmh119/vts-ai-automation/main/%EC%82%AC%EB%A1%804/%EC%A1%B0%EC%84%9D%ED%91%9C%20%EC%9C%84%EC%A0%AF.ps1"
@@ -130,7 +158,7 @@
         </div>
         <div class="manual-step">
           <span class="manual-step-num">4</span>
-          <span class="manual-step-text"><strong>상시 활용:</strong> 평택항 실시간 고조·저조 수위와 시간 정보가 화면에 상시 표출됩니다. 위치는 자동 저장됩니다.</span>
+          <span class="manual-step-text"><strong>상시 활용:</strong> <span class="dynamic-port-name">평택항</span> 실시간 고조·저조 수위와 시간 정보가 화면에 상시 표출됩니다. 위치는 자동 저장됩니다.</span>
         </div>
       </div>
 
@@ -190,21 +218,21 @@ C:\
                   <span class="mockup-dot-yellow"></span>
                   <span class="mockup-dot-green"></span>
                 </div>
-                <div class="mockup-address-bar">
-                  🔒 https://www.khoa.go.kr/swtc/main.do
+                <div class="mockup-address-bar" id="mockup-addr">
+                  🔒 https://www.khoa.go.kr/swtc/main.do?obsPostId=DT_0002
                 </div>
               </div>
               <div class="mockup-content" style="padding:0; background:#f4f6f9; display:flex; flex-direction:column; height: 100%;">
                 <!-- 스마트 조석예보 웹 헤더 -->
                 <div style="background:#1e293b; color:#fff; padding:10px 16px; display:flex; justify-content:space-between; align-items:center; font-size:12px; flex-shrink:0;">
                   <span style="font-weight:bold;">🌊 스마트 조석 예보 (스마트 물때)</span>
-                  <span style="background:#0284c7; padding:2px 6px; border-radius:4px; font-size:10px;">평택항 관측소</span>
+                  <span style="background:#0284c7; padding:2px 6px; border-radius:4px; font-size:10px;"><span class="dynamic-port-name">평택항</span> 관측소</span>
                 </div>
                 <!-- 조석 정보 가상 콘텐츠 -->
                 <div style="padding:16px; flex-grow:1; overflow-y:auto; font-size:11px;">
                   <div style="background:#fff; border:1px solid #e2e8f0; border-radius:6px; padding:12px; margin-bottom:12px;">
                     <div style="display:flex; justify-content:space-between; margin-bottom:8px; border-bottom:1px solid #f1f5f9; padding-bottom:6px; font-weight:bold;">
-                      <span>평택항 실시간 조석 예보표</span>
+                      <span><span class="dynamic-port-name">평택항</span> 실시간 조석 예보표</span>
                       <span style="color:#ef4444;" id="tide-today-label">05-21</span>
                     </div>
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; text-align:center;">
@@ -245,7 +273,7 @@ C:\
                         <!-- 실시간 조위 마커 빨간 점 -->
                         <circle cx="110" cy="46" r="4" fill="#ef4444" />
                       </svg>
-                      <span style="font-weight:bold; color:#0369a1; z-index:1; font-size:12px; text-shadow:0 1px 1px #fff;">평택항 해역 시뮬레이션</span>
+                      <span style="font-weight:bold; color:#0369a1; z-index:1; font-size:12px; text-shadow:0 1px 1px #fff;"><span class="dynamic-port-name">평택항</span> 해역 시뮬레이션</span>
                       <span style="font-size:9px; color:#0369a1; z-index:1; font-weight:bold; text-shadow:0 1px 1px #fff;">조위 기준선 대비 현재 수위: +374cm</span>
                     </div>
                   </div>
@@ -844,6 +872,48 @@ $form.Add_FormClosing({ $refreshTimer.Stop() })
     widget.addEventListener('touchend', onEnd);
   }
 })();
+
+// 1. 초기 로드 시 원본 파워쉘 소스코드 템플릿 보관
+const originalCodeTemplate = document.getElementById('code-4').textContent;
+
+// 2. VTS 센터 조위관측소 데이터 매핑 테이블
+const vtsCenterMap = {
+  'pyeongtaek': { name: '평택항', code: 'DT_0002' },
+  'incheon': { name: '인천항', code: 'DT_0001' },
+  'daesan': { name: '대산항', code: 'DT_0017' },
+  'busan': { name: '부산항', code: 'DT_0005' },
+  'ulsan': { name: '울산항', code: 'DT_0006' },
+  'yeosu': { name: '여수항', code: 'DT_0007' },
+  'mokpo': { name: '목포항', code: 'DT_0003' },
+  'gunsan': { name: '군산항', code: 'DT_0016' },
+  'pohang': { name: '포항항', code: 'DT_0013' },
+  'masan': { name: '마산항', code: 'DT_0011' },
+  'jeju': { name: '제주항', code: 'DT_0027' }
+};
+
+// 3. VTS 센터 체인지 함수
+function changeVtsCenter(key) {
+  const info = vtsCenterMap[key];
+  if (!info) return;
+
+  // A. 웹화면 내 포트 이름 치환
+  document.querySelectorAll('.dynamic-port-name').forEach(el => {
+    el.textContent = info.name;
+  });
+
+  // B. 시뮬레이터 주소창 갱신
+  const mockupAddr = document.getElementById('mockup-addr');
+  if (mockupAddr) {
+    mockupAddr.textContent = `🔒 https://www.khoa.go.kr/swtc/main.do?obsPostId=${info.code}`;
+  }
+
+  // C. 소스코드 텍스트 동적 치환 (코드 및 항명)
+  let newCode = originalCodeTemplate
+    .replace(/DT_0002/g, info.code)
+    .replace(/평택항/g, info.name);
+  
+  document.getElementById('code-4').textContent = newCode;
+}
 
 function copyCode(id, btn) {
   navigator.clipboard.writeText(document.getElementById(id).innerText).then(() => {
