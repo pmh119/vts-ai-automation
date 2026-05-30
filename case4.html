@@ -97,7 +97,7 @@
   <div class="section-card">
     <div class="section-header">
       <span class="section-step">3</span>
-      <span class="section-title">실제 시연 · 다운로드 및 사용법</span>
+      <span class="section-title">실제 시연 · 실시간 시뮬레이터</span>
     </div>
     <div class="section-body">
 
@@ -129,106 +129,6 @@
             <option value="donghae">동해항 VTS (DT_0057)</option>
           </select>
           <div style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #64748b; font-size: 12px;">▼</div>
-        </div>
-      </div>
-
-      <div class="btn-row" style="margin-bottom:24px;">
-        <a class="btn-download" id="vts-download-btn"
-           href="https://raw.githubusercontent.com/pmh119/vts-ai-automation/main/%EC%82%AC%EB%A1%804/%EC%A1%B0%EC%84%9D%ED%91%9C%20%EC%9C%84%EC%A0%AF.ps1"
-           download="조석표 위젯.ps1">
-          ⬇ 조석표 위젯.ps1 다운로드
-        </a>
-        <a class="btn-download"
-           href="https://github.com/pmh119/vts-ai-automation/blob/main/%EC%82%AC%EB%A1%804/%EC%A1%B0%EC%84%9D%ED%91%9C%20%EC%9C%84%EC%A0%AF.ps1"
-           target="_blank"
-           style="background:#374151;">
-          📄 GitHub에서 보기 ↗
-        </a>
-      </div>
-
-      <div class="manual-steps">
-        <div class="manual-step">
-          <span class="manual-step-num">1</span>
-          <span class="manual-step-text"><strong>사전 준비:</strong> Microsoft Edge WebView2 Runtime 및 필수 라이브러리 DLL 배치가 완료되어 있어야 합니다. (아래 <strong>상세 설치 가이드</strong> 참조)</span>
-        </div>
-        <div class="manual-step">
-          <span class="manual-step-num">2</span>
-          <span class="manual-step-text"><strong>스크립트 실행:</strong> 다운로드한 <code style="background:#f3f4f6;padding:1px 5px;border-radius:3px;font-size:12px;">조석표 위젯.ps1</code>을 우클릭 → <strong>"PowerShell에서 실행"</strong></span>
-        </div>
-        <div class="manual-step">
-          <span class="manual-step-num">3</span>
-          <span class="manual-step-text"><strong>위치 배치:</strong> 실행된 슬림 바를 마우스로 잡고 <strong>작업표시줄 바로 위</strong>에 드래그하여 배치</span>
-        </div>
-        <div class="manual-step">
-          <span class="manual-step-num">4</span>
-          <span class="manual-step-text"><strong>상시 활용:</strong> <span class="dynamic-port-name">평택항</span> 실시간 고조·저조 수위와 시간 정보가 화면에 상시 표출됩니다. 위치는 자동 저장됩니다.</span>
-        </div>
-      </div>
-
-      <!-- WebView2 설치 방법 상세 안내 -->
-      <div class="section-card" style="margin-top:20px; border:1px solid #e2e8f0; box-shadow:none;">
-        <div class="section-header" style="background:#f8fafc; border-bottom:1px solid #e2e8f0;">
-          <span class="section-step" style="background:#2563eb;">ℹ️</span>
-          <span class="section-title" style="font-size:13.5px; color:#334155;">위젯 구동을 위한 WebView2 런타임 설치 가이드 (외부망 전용)</span>
-        </div>
-        <div class="section-body" style="padding:16px;">
-          <p style="font-size:14px;color:#374151;margin-bottom:12px;font-weight:600;">🌐 외부망(인터넷 연결 환경) 전용 간편 설치 및 파일 배치법</p>
-          <p style="font-size:13px;color:#4b5563;line-height:1.6;margin-bottom:16px;">
-            조석표 위젯은 외부 인터넷망에서 직접 국립해양조사원 API를 호출하여 동작하는 도구입니다. 따라서 복잡한 내부망 반입 보안 절차 없이, 인터넷이 연결된 PC에서 공식 설치 프로그램을 직접 다운로드하여 1분 만에 설치 및 구동이 가능합니다.
-          </p>
-          
-          <ul style="list-style:none;display:flex;flex-direction:column;gap:12px;padding:0;font-size:13px;color:#4b5563;margin-bottom:0;" class="no-bullet">
-            <li style="padding-left: 0; margin-bottom: 0; line-height: 1.5;">
-              <strong style="color:#2563eb;">① WebView2 공식 런타임(엔진) 설치:</strong> 
-              아래 Microsoft 공식 다운로드 페이지에서 <span style="background:#f3f4f6;padding:2px 6px;border-radius:4px;font-weight:bold;color:#0f172a;">Evergreen Bootstrapper</span> 또는 <span style="background:#f3f4f6;padding:2px 6px;border-radius:4px;font-weight:bold;color:#0f172a;">Standalone Installer</span>를 다운로드하여 실행하시면 자동으로 시스템에 Edge 브라우저 렌더링 엔진이 설치됩니다.
-              <div style="margin-top:6px;font-size:12px;color:#dc2626;font-weight:600;line-height:1.4;">
-                ⚠️ 중요 알림: 이 공식 설치 프로그램은 '순수 브라우저 엔진'을 윈도우에 깔아주는 것이므로, 개발용 연동 라이브러리인 3개의 DLL 파일은 원래 포함되어 있지 않습니다! (정상적인 동작입니다)
-              </div>
-              <div style="margin-top:8px;">
-                <a href="https://developer.microsoft.com/ko-kr/microsoft-edge/webview2/#download-section" target="_blank" style="display:inline-block;background:#2563eb;color:#fff;padding:6px 12px;border-radius:4px;text-decoration:none;font-weight:bold;font-size:12px;box-shadow:0 2px 4px rgba(37,99,235,0.2);">
-                  🔗 Microsoft 공식 WebView2 다운로드 페이지 이동 ↗
-                </a>
-              </div>
-            </li>
-            <li style="padding-left: 0; margin-bottom: 0; line-height: 1.5; margin-top: 8px;">
-              <strong style="color:#2563eb;">② 라이브러리 및 DLL 파일 배치 (깃허브 저장소 동봉):</strong> 
-              스크립트 실행에 필요한 3개의 연동 DLL 파일은 <strong>이미 사용자님의 깃허브 저장소 `vts-ai-automation` 내 `사례4/` 폴더에 동봉</strong>되어 공유되고 있습니다!
-              <br>컴퓨터에 <span style="font-family:monospace;background:#f3f4f6;padding:2px 4px;border-radius:4px;font-weight:bold;">C:\webview2</span> 폴더를 직접 생성하신 후, 저장소에서 가져온 DLL 파일들을 아래 트리 구조에 맞게 그대로 복사해 배치해 주세요.
-              <div style="margin-top:8px;">
-                <a href="https://github.com/pmh119/vts-ai-automation/tree/main/%EC%82%AC%EB%A1%804" target="_blank" style="display:inline-block;background:#475569;color:#fff;padding:6px 12px;border-radius:4px;text-decoration:none;font-weight:bold;font-size:12px;box-shadow:0 2px 4px rgba(71,85,105,0.2);">
-                  📂 깃허브 저장소 [사례4] 폴더로 바로가기 (DLL 파일 다운로드) ↗
-                </a>
-              </div>
-              <pre style="background:#1e293b;color:#f8fafc;padding:10px;border-radius:6px;margin-top:10px;font-family:monospace;font-size:11.5px;line-height:1.4;margin-bottom:0;">
-C:\
-└── webview2\
-    ├── Microsoft.Web.WebView2.Core.dll       (저장소 [사례4/]에 동봉된 파일 복사)
-    ├── Microsoft.Web.WebView2.WinForms.dll   (저장소 [사례4/]에 동봉된 파일 복사)
-    └── runtimes\
-        └── win-x64\
-            └── native\
-                └── WebView2Loader.dll        (저장소 [사례4/runtimes/win-x64/native/]에 동봉된 파일 복사)
-              </pre>
-            </li>
-            <!-- 💡 아키텍처 및 타 OS 사용자 안내 -->
-            <li style="padding-left: 0; margin-bottom: 0; margin-top: 16px;">
-              <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;font-size:12.5px;color:#475569;line-height:1.6;">
-                <div style="font-weight:700;color:#0f172a;margin-bottom:8px;display:flex;align-items:center;gap:6px;font-size:13.5px;">
-                  <span>💻</span> 아키텍처(32비트/64비트) 및 타 운영체제(OS) 사용자용 안내
-                </div>
-                <ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;list-style-type:disc;">
-                  <li style="padding-left:0;margin-bottom:0;">
-                    <strong>64비트(x64) 전용 라이브러리:</strong> 
-                    현재 저장소에 동봉된 연동 DLL 파일들은 현대 해상교통관제(VTS) 표준 환경에 맞추어 <strong>윈도우 64비트(win-x64)</strong> 아키텍처용으로 구성되어 있습니다. 만약 32비트(x86) 윈도우 운영체제를 사용 중이신 경우, 스크립트 실행 시 라이브러리 형식 불일치 에러(<code style="font-family:monospace;background:#f1f5f9;padding:1px 4px;border-radius:3px;">BadImageFormatException</code>)가 발생할 수 있습니다. 이 경우 Microsoft 공식 NuGet 등을 통해 x86용 <code style="font-family:monospace;background:#f1f5f9;padding:1px 4px;border-radius:3px;">WebView2Loader.dll</code> 파일을 다운로드하여 교체해 주셔야 정상 구동됩니다.
-                  </li>
-                  <li style="padding-left:0;margin-bottom:0;">
-                    <strong>윈도우(Windows) 이외의 운영체제:</strong> 
-                    본 조석 모니터링 위젯은 바탕화면/작업표시줄 상시 최상단 배치 및 테두리 없는 반투명 오버레이를 구현하기 위해 .NET Windows Forms 아키텍처와 Windows Win32 native API(ReleaseCapture, SendMessage 등) 하드웨어 제어 기술에 깊게 종속되어 있습니다. 따라서 macOS, Linux 등 <strong>윈도우 이외의 운영체제 환경에서는 스크립트를 통한 위젯 직접 구동이 불가능</strong>하므로, 웹 브라우저를 통한 시뮬레이션 및 국립해양조사원 관측 페이지 이용을 권장해 드립니다.
-                  </li>
-                </ul>
-              </div>
-            </li>
-          </ul>
         </div>
       </div>
 
