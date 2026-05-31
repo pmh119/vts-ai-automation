@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>파워쉘 바로가기 생성 가이드 | VTS AI 포트폴리오</title>
+<meta name="description" content="PowerShell 스크립트를 더블클릭으로 즉시 실행하고, 검은 창을 숨기며 관리자 권한을 자동으로 획득하는 최적의 윈도우 바로가기 구성 가이드">
+<link rel="stylesheet" href="style.css">
+<style>
+  body { background: #f0f2f5; }
+  .code-block {
+    background: #1e293b;
+    color: #f8fafc;
+    padding: 14px 18px;
+    border-radius: 8px;
+    font-family: monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    overflow-x: auto;
+    margin: 12px 0;
+    position: relative;
+    text-align: left;
+  }
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <a class="nav-back" href="index.html">📁 메인 목록으로</a>
+  <span class="nav-title">가이드 · 파워쉘 바로가기 생성 및 최적화</span>
+</nav>
+
+<div class="hero" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: #fff;">
+  <span class="hero-label" style="background: #334155; color: #cbd5e1; border: 1px solid #475569;">💡 VTS 관제석 편의성 극대화</span>
+  <h1>PowerShell 스크립트<br>원클릭 바로가기 생성 가이드</h1>
+  <p>스크립트(.ps1) 파일을 더블클릭만으로 실행하고, 검은색 콘솔 창을 투명하게 숨기며,<br>필요한 관리자 권한까지 원클릭으로 획득하도록 설정하는 무결점 구축 가이드</p>
+</div>
+
+<div class="page-content">
+
+  <!-- 개요 설명 -->
+  <div class="section-card">
+    <div class="section-header">
+      <span class="section-step">ℹ️</span>
+      <span class="section-title">왜 바로가기를 만들어야 할까요?</span>
+    </div>
+    <div class="section-body">
+      <p style="font-size: 14px; color: #4b5563; line-height: 1.6; margin-bottom: 0;">
+        기본적으로 윈도우 보안 정책상 PowerShell 스크립트(<code>.ps1</code>) 파일은 더블클릭으로 바로 실행되지 않고 편집용 메모장으로 열립니다. 매번 마우스 우클릭 후 'PowerShell에서 실행'을 누르기 번거롭고, 실행 시 가독성이 떨어지는 <strong>검은색 콘솔 창이 화면을 가리는 현상</strong>이 발생하여 관제 가시성을 해칠 수 있습니다.<br><br>
+        아래의 3단계 가이드를 적용하면 <strong>마치 일반 응용프로그램처럼 더블클릭 한 번으로 백그라운드에서 투명하고 조용하게 실행</strong>되도록 구성할 수 있습니다.
+      </p>
+    </div>
+  </div>
+
+  <!-- 1단계: 바로가기 생성 -->
+  <div class="section-card">
+    <div class="section-header">
+      <span class="section-step">1</span>
+      <span class="section-title">기본 바로가기 생성 및 스크립트 연결</span>
+    </div>
+    <div class="section-body">
+      <div class="manual-steps">
+        <div class="manual-step">
+          <span class="manual-step-num">1</span>
+          <span class="manual-step-text">
+            <strong>바로가기 만들기 개시:</strong> 윈도우 바탕화면 또는 폴더 빈 곳 우클릭 → <strong>[새로 만들기(W)] → [바로 가기(S)]</strong>를 클릭합니다.
+          </span>
+        </div>
+        <div class="manual-step">
+          <span class="manual-step-num">2</span>
+          <span class="manual-step-text">
+            <strong>실행 대상 경로 입력:</strong> <em>'항목 위치 입력(T)'</em> 란에 아래의 명령어를 바탕으로 사용자 PC의 실제 ps1 경로에 맞추어 입력해 줍니다.
+            <div class="code-block">
+              powershell.exe -ExecutionPolicy Bypass -File "C:\webview2\창고정.ps1"
+            </div>
+            <span style="font-size:12px; color:#6b7280; display:block; margin-top:6px;">
+              ※ <code>-ExecutionPolicy Bypass</code> 옵션은 윈도우 기본 보안 정책인 스크립트 실행 불가 상태를 임시 해제하여, VTS 보안 환경 하에서도 스크립트가 온전히 정상 구동되도록 돕습니다.
+            </span>
+          </span>
+        </div>
+        <div class="manual-step">
+          <span class="manual-step-num">3</span>
+          <span class="manual-step-text">
+            <strong>이름 설정 및 마감:</strong> [다음] 버튼을 누른 뒤, 바로가기 이름(예: <code>창고정 실행</code> 등)을 알맞게 입력하고 <strong>[마침(F)]</strong>을 클릭하여 생성을 완료합니다.
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2단계: CMD/검은색 콘솔 창 숨기기 -->
+  <div class="section-card">
+    <div class="section-header">
+      <span class="section-step">2</span>
+      <span class="section-title">CMD/검은색 콘솔 창 숨기기 (무소음 구동)</span>
+    </div>
+    <div class="section-body">
+      <p style="font-size: 13.5px; color: #4b5563; line-height: 1.6; margin-bottom: 12px;">
+        관제 도구 특성상 실행 즉시 검은색 PowerShell 창이 나타나 시야를 가리는 현상은 치명적일 수 있습니다. 윈도우 내장 인수를 사용해 <strong>백그라운드에서 백스크린(투명) 상태로 은밀하게 실행</strong>되도록 구성합니다.
+      </p>
+
+      <div class="manual-steps">
+        <div class="manual-step">
+          <span class="manual-step-num">1</span>
+          <span class="manual-step-text">
+            <strong>바로가기 속성 열기:</strong> 앞선 1단계에서 생성한 <strong>바로가기 아이콘을 마우스 우클릭</strong>한 뒤 <strong>[속성(R)]</strong>을 선택합니다.
+          </span>
+        </div>
+        <div class="manual-step">
+          <span class="manual-step-num">2</span>
+          <span class="manual-step-text">
+            <strong>숨김 인수 주입:</strong> [바로 가기] 탭의 <strong>'대상(T)'</strong> 입력란 맨 앞에 <code>-WindowStyle Hidden</code> (또는 단축 인수 <code>-w hidden</code>) 옵션을 정밀 삽입합니다.
+            <div class="code-block">
+              powershell.exe -WindowStyle Hidden -ExecutionPolicy Bypass -File "C:\webview2\창고정.ps1"
+            </div>
+            <span style="font-size: 12px; color: #2563eb; display: block; margin-top: 6px; font-weight: 600;">
+              💡 이제 더블클릭 시 검은 콘솔창이 나타나지 않고, 백그라운드 환경에서 정숙하게 동작합니다.
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3단계: 관리자 권한 자동 획득 설정 -->
+  <div class="section-card">
+    <div class="section-header">
+      <span class="section-step">3</span>
+      <span class="section-title">관리자 권한(Administrator) 상시 자동 실행 구성</span>
+    </div>
+    <div class="section-body">
+      <p style="font-size: 13.5px; color: #4b5563; line-height: 1.6; margin-bottom: 16px;">
+        VTS 컴퓨터 내 특수한 Win32 API 제어나 네트워크 어댑터 모니터링 등 고도화된 스크립트 실행 시 **관리자 권한 상승**이 필수로 요구될 수 있습니다. 매번 우클릭을 하지 않고 자동으로 권한 상승을 요청하도록 셋팅하는 두 가지 방안을 제시합니다.
+      </p>
+
+      <!-- 방안 A -->
+      <div style="margin-bottom: 24px;">
+        <h4 style="font-size: 14.5px; font-weight: bold; color: #1e293b; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+          <span style="background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; font-size: 11px; padding: 2px 8px; border-radius: 4px;">방법 A</span>
+          윈도우 바로가기 설정을 통한 권한 상시화 (추천)
+        </h4>
+        <div class="manual-steps">
+          <div class="manual-step">
+            <span class="manual-step-num">1</span>
+            <span class="manual-step-text">
+              바로가기 아이콘 우클릭 → <strong>[속성(R)]</strong> 창을 활성화합니다.
+            </span>
+          </div>
+          <div class="manual-step">
+            <span class="manual-step-num">2</span>
+            <span class="manual-step-text">
+              [바로 가기] 탭 중앙 하단부에 위치한 <strong>[고급(D)...]</strong> 버튼을 클릭합니다.
+            </span>
+          </div>
+          <div class="manual-step">
+            <span class="manual-step-num">3</span>
+            <span class="manual-step-text">
+              <strong>[관리자 권한으로 실행(R)]</strong> 체크박스에 체크 표시를 한 뒤, [확인] 및 [적용] 버튼을 눌러 속성을 보관합니다.
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 방안 B -->
+      <div>
+        <h4 style="font-size: 14.5px; font-weight: bold; color: #1e293b; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+          <span style="background: #faf5ff; color: #9333ea; border: 1px solid #ebd5ff; font-size: 11px; padding: 2px 8px; border-radius: 4px;">방법 B</span>
+          PowerShell 스크립트 코드 자체에 자동 권한상승(Self-Elevating) 주입
+        </h4>
+        <p style="font-size: 13px; color: #4b5563; line-height: 1.5; margin-bottom: 8px;">
+          바로가기 셋팅을 생략하더라도, 스크립트 <strong>코드의 가장 첫 줄(최상단)</strong>에 아래의 3줄 명령어를 추가해 놓으면 구동될 때 스스로 사용자에게 관리자 권한 허용 팝업을 요청하며 권한이 자동 상승하여 재시작합니다.
+        </p>
+        <div class="code-block" style="font-size: 12px; line-height: 1.4;">
+if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+    Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs
+    Exit
+}</div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<div class="page-footer">
+  <p>평택항 해상교통관제센터 · <a href="https://github.com/pmh119/vts-ai-automation" target="_blank">GitHub ↗</a></p>
+</div>
+
+</body>
+</html>
