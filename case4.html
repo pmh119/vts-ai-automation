@@ -700,6 +700,66 @@ $form.Add_FormClosing({ $refreshTimer.Stop() })
     </div>
   </div>
 
+  <!-- 4단계: 사용 방법 가이드 -->
+  <div class="section-card">
+    <div class="section-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span class="section-step">4</span>
+        <span class="section-title">조석 위젯 사용 방법 가이드</span>
+      </div>
+      <a href="shortcut.html" style="display:inline-flex; align-items:center; gap:6px; background:#eff6ff; color:#2563eb; border:1px solid #bfdbfe; padding:6px 12px; border-radius:6px; font-size:12px; font-weight:bold; text-decoration:none; transition:all 0.2s;" onmouseover="this.style.background='#dbeafe'" onmouseout="this.style.background='#eff6ff'">
+        ⚡ 무소음 바로가기 생성법 가이드 바로가기 ↗
+      </a>
+    </div>
+    <div class="section-body">
+      <!-- 🔒 사례4 전용 중요 사전 준비사항 배지 고지 -->
+      <div style="background:#fff7ed; border:1px solid #ffedd5; border-radius:8px; padding:16px; color:#c2410c; font-size:13px; line-height:1.6; margin-bottom:20px; text-align:left;">
+        <span style="font-weight:bold; font-size:14px; display:block; margin-bottom:8px;">⚠️ [필독] 사례 4 구동을 위한 2가지 사전 필수 요구조건</span>
+        <ul style="margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px;">
+          <li style="padding-left: 0; margin-bottom: 0; line-height: 1.5;">
+            <strong>① WebView2 라이브러리 및 3개 DLL 확보 필수:</strong><br>
+            WinForms GUI 내부에서 Chromium 브라우저를 연동하기 위해서는 반드시 <strong>`C:\webview2`</strong> 폴더를 생성하고, 저장소 `사례3` 등에서 확보한 3개의 핵심 연동 DLL 파일(Microsoft.Web.WebView2.Core.dll 등)을 규격 경로에 맞게 정확히 다운로드 배치해 주셔야 합니다. (사례 3 페이지의 라이브러리 탑재 가이드와 완벽히 호환됩니다.)
+          </li>
+          <li style="padding-left: 0; margin-bottom: 0; line-height: 1.5; margin-top: 6px;">
+            <strong>② 인터넷 외부망 환경 필수:</strong><br>
+            국립해양조사원의 실시간 예보 정보를 WebView2 엔진을 통해 실시간 조회하므로, 스크립트가 구동되는 PC가 <strong>외부 웹 인터넷망에 상시 연결</strong>되어 있어야 합니다. 외부 통신이 원천 차단된 완전 폐쇄 내부망 PC에서는 작동하지 않습니다.
+          </li>
+        </ul>
+      </div>
+
+      <!-- ⚠️ 사용 방법 안내문 -->
+      <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:14px 16px; color:#475569; font-size:13px; line-height:1.6; margin-bottom:20px; text-align:left;">
+        <span style="font-weight:bold; font-size:14px; display:block; margin-bottom:6px; color:#1e293b;">💻 스크립트 수동 구축 요령</span>
+        본 도구는 보안 환경 하에서도 스크립트를 직접 입력하여 활용할 수 있도록 최적화되어 있습니다. 아래의 가이드에 따라 파일 생성 및 바로가기를 구축해 주세요.
+      </div>
+
+      <div class="manual-steps">
+        <div class="manual-step">
+          <span class="manual-step-num">1</span>
+          <span class="manual-step-text"><strong>소스코드 준비:</strong> 바로 위 '소스코드 전문 공개' 상자에서 원하는 관제 해역(드롭다운 변경)을 선택하고, 가공되어 나타난 <strong>소스코드를 직접 복사</strong>하거나 눈으로 대조 타이핑 준비를 합니다.</span>
+        </div>
+        <div class="manual-step">
+          <span class="manual-step-num">2</span>
+          <span class="manual-step-text"><strong>텍스트 문서 생성 및 타이핑:</strong> VTS PC 바탕화면 빈 곳 우클릭 → 새로 만들기 → <strong>텍스트 문서</strong>를 생성하고 메모장으로 열어, 소스코드 전체를 직접 붙여넣거나 타이핑하여 입력합니다.</span>
+        </div>
+        <div class="manual-step">
+          <span class="manual-step-num">3</span>
+          <span class="manual-step-text"><strong>파워쉘(.ps1) 및 인코딩 형식 저장:</strong> 메모장 좌상단 메뉴의 <strong>[파일] → [다른 이름으로 저장(A)...]</strong>을 클릭한 뒤, 아래 순서대로 정확히 설정하여 저장합니다.
+            <ul style="margin: 8px 0 0 18px; padding: 0; list-style-type: disc; display: flex; flex-direction: column; gap: 4px; color: #475569; font-size: 12px;">
+              <li><strong>파일 형식:</strong> 반드시 <strong>`모든 파일 (*.*)`</strong>로 변경</li>
+              <li><strong>파일 이름:</strong> <strong>`조석표 위젯.ps1`</strong> 이라고 직접 확장자까지 정확하게 입력</li>
+              <li><strong>인코딩:</strong> 한글 깨짐으로 인한 파워쉘 실행 오류를 원천 차단하기 위해 반드시 <strong>`UTF-8(BOM)`</strong>을 선택 후 저장</li>
+            </ul>
+          </span>
+        </div>
+        <div class="manual-step">
+          <span class="manual-step-num">4</span>
+          <span class="manual-step-text"><strong>바로가기 생성 및 실행:</strong> VTS PC 보안 정책에 의해 단순 우클릭 실행이 차단되는 현상을 우회하기 위해, 우측 상단의 <strong>[⚡ 무소음 바로가기 생성법 가이드]</strong>를 참고하여 우회/숨김 명령어가 내장된 <strong>바로가기를 바탕화면에 생성해 안전하게 더블클릭 실행</strong>하시는 것을 강력히 권장합니다.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <div class="page-footer">
