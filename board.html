@@ -453,6 +453,14 @@ function loadPosts() {
   } else {
     // 2. 데모 모드 로드 (LocalStorage 병합)
     let localPosts = JSON.parse(localStorage.getItem(LOCAL_POSTS_KEY)) || [];
+    
+    // 기존 브라우저 캐시(LocalStorage)에 남아있던 샘플 데모글(demo-1, demo-2) 강제 필터링
+    const originalLength = localPosts.length;
+    localPosts = localPosts.filter(p => p && p.id && !p.id.startsWith("demo-"));
+    if (localPosts.length !== originalLength) {
+      localStorage.setItem(LOCAL_POSTS_KEY, JSON.stringify(localPosts));
+    }
+    
     // 임시 더미 데이터가 로컬 스토리지에 없는 경우 초기화
     if (localStorage.getItem(LOCAL_POSTS_KEY) === null) {
       localStorage.setItem(LOCAL_POSTS_KEY, JSON.stringify(defaultDemoPosts));
