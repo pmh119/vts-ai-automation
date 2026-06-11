@@ -386,9 +386,15 @@ let activeDeleteId = null;
 window.onload = function() {
   // 1. 연동 URL 로드 (최초 실행 또는 구버전 캐시 감지 시 새로 배포한 웹앱 URL로 자동 업데이트)
   currentGasUrl = localStorage.getItem(GAS_URL_KEY);
-  const oldUrl = "https://script.google.com/macros/s/AKfycbwKqhgFQHvMiohJkQq6xDkoNJ_FpRmH_DbmQLfZPczs1XkrmF1sdJmU12lo-IwsD_wKLg/exec";
-  const newUrl = "https://script.google.com/macros/s/AKfycbwrP24WpwAflgMMxLDqbf0Kb23pSTtRls0YcEOcYCRd2s9uFj6obkxCJo_MdI40toPzlA/exec";
-  if (!currentGasUrl || currentGasUrl === oldUrl) {
+  const newUrl = "https://script.google.com/macros/s/AKfycbysXw8R0fn9v_5cB2cumZFqJVICOtzkYiwUoBJ0GNuJqWeafmiNsW1RAVToS0pucbyF5g/exec";
+  
+  // 이전 구버전 웹앱 주소들 목록
+  const oldUrls = [
+    "https://script.google.com/macros/s/AKfycbwKqhgFQHvMiohJkQq6xDkoNJ_FpRmH_DbmQLfZPczs1XkrmF1sdJmU12lo-IwsD_wKLg/exec",
+    "https://script.google.com/macros/s/AKfycbwrP24WpwAflgMMxLDqbf0Kb23pSTtRls0YcEOcYCRd2s9uFj6obkxCJo_MdI40toPzlA/exec"
+  ];
+  
+  if (!currentGasUrl || oldUrls.includes(currentGasUrl)) {
     currentGasUrl = newUrl;
     localStorage.setItem(GAS_URL_KEY, currentGasUrl);
   }
