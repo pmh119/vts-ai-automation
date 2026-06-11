@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VTS 자동화 소통 자유게시판 | VTS AI 포트폴리오</title>
+<meta name="description" content="전국 해양경찰 VTS 관제사들이 업무 자동화 소감, 피드백, 꿀팁을 자유롭게 나누는 공유 게시판">
+<link rel="stylesheet" href="style.css">
+<style>
+  body { background: #f0f2f5; }
+  
+  .board-header {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-sm);
+  }
+  
+  /* DB 설정 패널 */
+  .db-settings-panel {
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-top: 14px;
+    font-size: 13px;
+  }
+  .db-settings-toggle {
+    font-size: 13px;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    text-decoration: underline;
+  }
+  .db-settings-toggle:hover { color: var(--accent); }
+  
+  .input-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 8px;
+  }
+  .input-text {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    outline: none;
+  }
+  .input-text:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(37,99,235,0.1); }
+  
+  .btn-save-setting {
+    padding: 8px 16px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 13px;
+  }
+  .btn-save-setting:hover { background: var(--accent-hover); }
+
+  /* 게시판 레이아웃 */
+  .board-layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 24px;
+  }
+  @media (max-width: 900px) {
+    .board-layout { grid-template-columns: 1fr; }
+  }
+
+  /* 글 목록 */
+  .post-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .post-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .post-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+  .post-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 8px;
+  }
+  .post-author {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .post-author-icon {
+    width: 20px;
+    height: 20px;
+    background: #e2e8f0;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+  }
+  .post-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text);
+    margin-top: 4px;
+  }
+  .post-body {
+    font-size: 14.5px;
+    color: #374151;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+  .btn-delete-post {
+    padding: 4px 8px;
+    background: #fee2e2;
+    color: #ef4444;
+    border: 1px solid #fca5a5;
+    border-radius: 4px;
+    font-size: 11px;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  .btn-delete-post:hover { background: #fecaca; }
+
+  /* 글 쓰기 폼 */
+  .write-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow-sm);
+    position: sticky;
+    top: 90px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .write-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 10px;
+  }
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .form-group label {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  .form-input {
+    padding: 10px 12px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    font-size: 13.5px;
+    outline: none;
+    font-family: var(--font);
+  }
+  .form-input:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(37,99,235,0.1); }
+  .form-textarea {
+    resize: none;
+    height: 140px;
+  }
+  .btn-submit-post {
+    padding: 12px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.15s;
+    text-align: center;
+  }
+  .btn-submit-post:hover { background: var(--accent-hover); }
+
+  /* 비밀번호 입력 모달 */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+  .modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .modal-box {
+    background: white;
+    border-radius: var(--radius);
+    padding: 24px;
+    width: 100%;
+    max-width: 340px;
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    transform: scale(0.9);
+    transition: transform 0.2s ease;
+  }
+  .modal-overlay.active .modal-box {
+    transform: scale(1);
+  }
+  .modal-title { font-size: 15px; font-weight: 700; color: var(--text); }
+  .modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 4px;
+  }
+  .btn-modal {
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid var(--border-strong);
+  }
+  .btn-modal.confirm { background: #ef4444; color: white; border-color: #ef4444; }
+  .btn-modal.confirm:hover { background: #dc2626; }
+  .btn-modal.cancel { background: #f1f5f9; color: var(--text-muted); }
+  .btn-modal.cancel:hover { background: #e2e8f0; }
+
+  /* 안내 배지 */
+  .status-badge {
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 12.5px;
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <a class="nav-back" href="index.html">📁 메인 목록으로</a>
+  <span class="nav-title">VTS 업무 자동화 자유게시판</span>
+</nav>
+
+<div class="hero" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: #ffffff; padding: 50px 24px; border-radius: 16px; margin: 32px auto 20px; max-width: 1100px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
+  <span class="hero-label" style="background: #334155; color: #cbd5e1; border: 1px solid #475569; margin-bottom: 16px;">💬 소통 & 노하우 공유</span>
+  <h1 style="color: #ffffff;">VTS 자유 소통 게시판</h1>
+  <p style="color: #cbd5e1; max-width: 700px;">전국 VTS 관제사들이 업무 자동화에 대한 소감, 개량 제안, 신규 아이디어를 자유롭게 공유하는 공간입니다. 구글 스프레드시트와 연동하여 실시간 데이터베이스로 작동할 수 있습니다.</p>
+</div>
+
+<div class="page-content" style="max-width: 1100px;">
+
+  <!-- DB 연결 상태 배지 및 설정 -->
+  <div class="board-header">
+    <div id="connection-status-badge" class="status-badge" style="background: #eff6ff; border: 1px solid #bfdbfe; color: #1d4ed8;">
+      ℹ️ <strong>데모 모드:</strong> 현재 로컬 웹 브라우저 캐시(LocalStorage)에 저장되어 임시 작동 중입니다. 다른 PC와 연동하여 실제 공유 게시판으로 사용하려면 <strong>[구글 스프레드시트 데이터베이스 설정]</strong>을 완료해 주세요.
+    </div>
+    
+    <span class="db-settings-toggle" onclick="toggleSettingsPanel()">⚙️ 구글 스프레드시트(GAS) 연동 설정 열기/닫기</span>
+    
+    <div id="db-settings-panel" class="db-settings-panel" style="display: none;">
+      <p style="line-height: 1.6; color: #475569; margin-bottom: 8px;">
+        <strong>🔗 스프레드시트 연동 방법:</strong><br>
+        1. 구글 스프레드시트를 생성한 뒤 <strong>[확장 프로그램] ➡️ [Apps Script]</strong>로 진입합니다.<br>
+        2. 로컬 폴더 <a href="./사례6/Google Sheets 게시판 백엔드 스크립트.txt" target="_blank" style="color:var(--accent); font-weight:bold;">[Google Sheets 게시판 백엔드 스크립트.txt]</a>의 코드를 복사하여 붙여넣고 저장합니다.<br>
+        3. 우측 상단 <strong>[배포] ➡️ [새 배포]</strong>를 누르고 유형을 <strong>웹앱(Web App)</strong>으로 선택한 뒤, 액세스 권한을 <strong>[모든 사람(Anyone)]</strong>으로 설정해 배포합니다.<br>
+        4. 발급된 <strong>웹앱 URL</strong>을 복사하여 아래에 입력하고 저장해 주세요.
+      </p>
+      <div class="input-row">
+        <input type="text" id="gas-url-input" class="input-text" placeholder="https://script.google.com/macros/s/.../exec">
+        <button class="btn-save-setting" onclick="saveSettings()">연동 정보 저장</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="board-layout">
+    
+    <!-- 왼쪽: 게시글 목록 -->
+    <div>
+      <div class="post-list" id="post-list-container">
+        <!-- 동적 렌더링 -->
+      </div>
+    </div>
+
+    <!-- 오른쪽: 글쓰기 폼 -->
+    <div>
+      <div class="write-card">
+        <div class="write-title">
+          <span>📝 새 글 남기기</span>
+        </div>
+        <p style="font-size: 11px; color:#9ca3af; margin-top:-8px;">* 망 안전을 위해 파일 업로드는 비활성화되어 있으며, 텍스트 글만 작성이 가능합니다.</p>
+        
+        <div class="form-group">
+          <label for="post-author-input">작성자 (관제실/성명)</label>
+          <input type="text" id="post-author-input" class="form-input" placeholder="예: 평택VTS 홍길동">
+        </div>
+        
+        <div class="form-group">
+          <label for="post-pw-input">글 비밀번호 (삭제용)</label>
+          <input type="password" id="post-pw-input" class="form-input" placeholder="4자리 숫자 권장">
+        </div>
+        
+        <div class="form-group">
+          <label for="post-title-input">제목</label>
+          <input type="text" id="post-title-input" class="form-input" placeholder="글 제목을 작성해 주세요.">
+        </div>
+        
+        <div class="form-group">
+          <label for="post-content-input">내용</label>
+          <textarea id="post-content-input" class="form-input form-textarea" placeholder="업무 자동화 활용기, 불편 사항, 버그 보고 등 자유롭게 남겨 주세요."></textarea>
+        </div>
+        
+        <button class="btn-submit-post" onclick="submitPost()">게시물 등록</button>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- 삭제용 비밀번호 확인 모달 -->
+<div class="modal-overlay" id="delete-modal">
+  <div class="modal-box">
+    <div class="modal-title">🔐 글 삭제 비밀번호 확인</div>
+    <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5;">글을 작성할 때 지정한 비밀번호를 입력해 주세요.</p>
+    <input type="password" id="delete-pw-input" class="form-input" placeholder="비밀번호 입력">
+    <div class="modal-buttons">
+      <button class="btn-modal cancel" onclick="closeDeleteModal()">취소</button>
+      <button class="btn-modal confirm" onclick="confirmDeletePost()">삭제하기</button>
+    </div>
+  </div>
+</div>
+
+<div class="page-footer" style="margin-top: 60px;">
+  <p>평택항 해상교통관제센터 · <a href="https://github.com/pmh119/vts-ai-automation" target="_blank">GitHub ↗</a></p>
+</div>
+
+<script>
+// 데모(임시) 모드용 더미 포스트 배열
+const defaultDemoPosts = [
+  {
+    id: "demo-1",
+    author: "평택VTS 박경위",
+    title: "사례 5 도선표 강조 북마크릿 정말 대만족입니다!",
+    content: "그동안 빽빽한 도선표에서 지금 바로 관제해야 하는 다음 선박 일정을 찾느라 매번 스크롤하고 눈알이 아팠는데, 북마크 클릭 한 번으로 바로 녹색 강조가 되고 화면이 움직이니까 세상 편하네요. 야간 근무 때 눈 피로가 확실히 덜합니다. 강추합니다!",
+    date: "2026-06-10",
+    hasPassword: true
+  },
+  {
+    id: "demo-2",
+    author: "대산VTS 김주무관",
+    title: "윈도우 최상단 고정(사례 1) 타 센터 배포 가이드 있나요?",
+    content: "도선표 강조 북마크도 좋지만 오토핫키나 파워쉘로 브라우저 최상단 고정해두는 기능(사례 1)을 대산센터 모니터에도 적용해보고 싶습니다. 창 고정 스크립트를 대산 레이아웃에 맞춰 일부 수정하려는데 팁 부탁드립니다.",
+    date: "2026-06-11",
+    hasPassword: true
+  }
+];
+
+// 로컬 스토리지 키 정의
+const GAS_URL_KEY = "vts_board_gas_url";
+const LOCAL_POSTS_KEY = "vts_board_local_posts";
+
+let currentGasUrl = "";
+let activeDeleteId = null;
+
+// 초기화
+window.onload = function() {
+  // 1. 연동 URL 로드
+  currentGasUrl = localStorage.getItem(GAS_URL_KEY) || "";
+  document.getElementById("gas-url-input").value = currentGasUrl;
+  
+  updateBadgeStatus();
+  loadPosts();
+};
+
+function toggleSettingsPanel() {
+  const panel = document.getElementById("db-settings-panel");
+  panel.style.display = panel.style.display === "none" ? "block" : "none";
+}
+
+// 상태 배지 갱신
+function updateBadgeStatus() {
+  const badge = document.getElementById("connection-status-badge");
+  if (currentGasUrl) {
+    badge.className = "status-badge";
+    badge.style.background = "#f0fdf4";
+    badge.style.border = "1px solid #bbf7d0";
+    badge.style.color = "#15803d";
+    badge.innerHTML = `🟢 <strong>연동 성공:</strong> 구글 스프레드시트 데이터베이스와 실시간 동기화 중입니다. 모든 VTS 관제사들이 실시간으로 의견을 공유하고 있습니다.`;
+  } else {
+    badge.className = "status-badge";
+    badge.style.background = "#eff6ff";
+    badge.style.border = "1px solid #bfdbfe";
+    badge.style.color = "#1d4ed8";
+    badge.innerHTML = `ℹ️ <strong>데모 모드:</strong> 현재 로컬 브라우저 캐시(LocalStorage)에 저장되어 임시 작동 중입니다. 다른 PC와 연동하여 실제 공유 게시판으로 사용하려면 <strong>[구글 스프레드시트 데이터베이스 설정]</strong>을 완료해 주세요.`;
+  }
+}
+
+// 연동 설정 저장
+function saveSettings() {
+  const urlInput = document.getElementById("gas-url-input").value.trim();
+  if (urlInput && !urlInput.startsWith("http")) {
+    alert("올바른 HTTP/HTTPS Web App URL을 입력해 주세요.");
+    return;
+  }
+  
+  localStorage.setItem(GAS_URL_KEY, urlInput);
+  currentGasUrl = urlInput;
+  updateBadgeStatus();
+  loadPosts();
+  toggleSettingsPanel();
+  alert("연동 설정이 완료되었습니다!");
+}
+
+// 글 불러오기
+function loadPosts() {
+  const container = document.getElementById("post-list-container");
+  container.innerHTML = `<p style="text-align:center; color:#9ca3af; padding:40px 0;">게시글을 불러오는 중입니다...</p>`;
+  
+  if (currentGasUrl) {
+    // 1. 구글 스프레드시트(GAS) 연동 로드
+    fetch(currentGasUrl)
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && data.posts) {
+          renderPosts(data.posts);
+        } else {
+          showError("데이터를 가져오는 중 오류가 발생했습니다: " + (data.error || "알 수 없는 에러"));
+        }
+      })
+      .catch(err => {
+        showError("구글 스프레드시트 서버 통신 실패. URL 확인 또는 CORS 허용 여부를 검토하세요.<br>오류내용: " + err.message);
+      });
+  } else {
+    // 2. 데모 모드 로드 (LocalStorage 병합)
+    let localPosts = JSON.parse(localStorage.getItem(LOCAL_POSTS_KEY)) || [];
+    // 임시 더미 데이터가 로컬 스토리지에 없는 경우 초기화
+    if (localStorage.getItem(LOCAL_POSTS_KEY) === null) {
+      localStorage.setItem(LOCAL_POSTS_KEY, JSON.stringify(defaultDemoPosts));
+      localPosts = defaultDemoPosts;
+    }
+    renderPosts(localPosts);
+  }
+}
+
+function showError(msg) {
+  const container = document.getElementById("post-list-container");
+  container.innerHTML = `
+    <div style="background:#fef2f2; border:1px solid #fca5a5; padding:16px; border-radius:8px; color:#991b1b; font-size:13px; line-height:1.6;">
+      ❌ <strong>연동 실패:</strong> ${msg}
+    </div>
+  `;
+}
+
+// 게시글 화면에 그리기
+function renderPosts(posts) {
+  const container = document.getElementById("post-list-container");
+  container.innerHTML = "";
+  
+  if (posts.length === 0) {
+    container.innerHTML = `<p style="text-align:center; color:#9ca3af; padding:80px 0; font-size:14px;">등록된 게시글이 없습니다. 첫 의견을 남겨보세요!</p>`;
+    return;
+  }
+  
+  posts.forEach(post => {
+    const card = document.createElement("div");
+    card.className = "post-card";
+    
+    // 이니셜 아이콘 구문
+    const initial = post.author ? post.author.substring(0, 1) : "👤";
+    
+    card.innerHTML = `
+      <div class="post-meta">
+        <span class="post-author">
+          <span class="post-author-icon">${initial}</span>
+          ${escapeHtml(post.author)}
+        </span>
+        <div style="display:flex; align-items:center; gap:12px;">
+          <span>📅 ${post.date}</span>
+          <button class="btn-delete-post" onclick="openDeleteModal('${post.id}')">삭제</button>
+        </div>
+      </div>
+      <h3 class="post-title">${escapeHtml(post.title)}</h3>
+      <div class="post-body">${escapeHtml(post.content)}</div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+// 글 등록하기
+function submitPost() {
+  const author = document.getElementById("post-author-input").value.trim();
+  const password = document.getElementById("post-pw-input").value.trim();
+  const title = document.getElementById("post-title-input").value.trim();
+  const content = document.getElementById("post-content-input").value.trim();
+  
+  if (!author || !password || !title || !content) {
+    alert("작성자, 비밀번호, 제목, 내용을 빠짐없이 입력해 주세요.");
+    return;
+  }
+  
+  if (currentGasUrl) {
+    // 1. 구글 스프레드시트 전송
+    const payload = {
+      action: "add",
+      author: author,
+      password: password,
+      title: title,
+      content: content
+    };
+    
+    fetch(currentGasUrl, {
+      method: "POST",
+      body: JSON.stringify(payload)
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          clearForm();
+          loadPosts();
+          alert("글이 성공적으로 등록되었습니다!");
+        } else {
+          alert("글 등록 오류: " + data.error);
+        }
+      })
+      .catch(err => {
+        alert("서버 전송 실패: " + err.message);
+      });
+  } else {
+    // 2. 로컬 스토리지 추가 (데모)
+    const today = new Date();
+    const formatDate = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + String(today.getDate()).padStart(2,'0');
+    
+    const newPost = {
+      id: "local-" + today.getTime(),
+      author: author,
+      title: title,
+      content: content,
+      date: formatDate,
+      password: password, // 데모 삭제 확인용
+      hasPassword: true
+    };
+    
+    let localPosts = JSON.parse(localStorage.getItem(LOCAL_POSTS_KEY)) || [];
+    localPosts.unshift(newPost); // 최신 글 맨 앞으로
+    localStorage.setItem(LOCAL_POSTS_KEY, JSON.stringify(localPosts));
+    
+    clearForm();
+    loadPosts();
+    alert("임시 데모 등록이 완료되었습니다! (연동 완료 시 다른 PC에도 노출됩니다)");
+  }
+}
+
+function clearForm() {
+  document.getElementById("post-author-input").value = "";
+  document.getElementById("post-pw-input").value = "";
+  document.getElementById("post-title-input").value = "";
+  document.getElementById("post-content-input").value = "";
+}
+
+// 글 삭제 관련
+function openDeleteModal(postId) {
+  activeDeleteId = postId;
+  document.getElementById("delete-pw-input").value = "";
+  document.getElementById("delete-modal").classList.add("active");
+  document.getElementById("delete-pw-input").focus();
+}
+
+function closeDeleteModal() {
+  document.getElementById("delete-modal").classList.remove("active");
+  activeDeleteId = null;
+}
+
+function confirmDeletePost() {
+  const password = document.getElementById("delete-pw-input").value.trim();
+  if (!password) {
+    alert("비밀번호를 입력해 주세요.");
+    return;
+  }
+  
+  if (currentGasUrl) {
+    // 1. 구글 스프레드시트 삭제 요청
+    const payload = {
+      action: "delete",
+      id: activeDeleteId,
+      password: password
+    };
+    
+    fetch(currentGasUrl, {
+      method: "POST",
+      body: JSON.stringify(payload)
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          closeDeleteModal();
+          loadPosts();
+          alert("성공적으로 삭제되었습니다.");
+        } else {
+          alert("삭제 오류: " + data.error);
+        }
+      })
+      .catch(err => {
+        alert("삭제 서버 요청 실패: " + err.message);
+      });
+  } else {
+    // 2. 로컬 스토리지 삭제 (데모)
+    let localPosts = JSON.parse(localStorage.getItem(LOCAL_POSTS_KEY)) || [];
+    const targetPost = localPosts.find(p => p.id === activeDeleteId);
+    
+    if (targetPost) {
+      // 데모 생성 글이거나 비밀번호 매칭 시 삭제 지원
+      if (!targetPost.password || targetPost.password.toString() === password) {
+        localPosts = localPosts.filter(p => p.id !== activeDeleteId);
+        localStorage.setItem(LOCAL_POSTS_KEY, JSON.stringify(localPosts));
+        closeDeleteModal();
+        loadPosts();
+        alert("삭제되었습니다.");
+      } else {
+        alert("비밀번호가 일치하지 않습니다. (샘플 글 삭제용 기본 패스워드: 1234)");
+      }
+    } else {
+      closeDeleteModal();
+    }
+  }
+}
+
+// XSS 방어 문자 필터링
+function escapeHtml(str) {
+  if (!str) return "";
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+</script>
+</body>
+</html>
