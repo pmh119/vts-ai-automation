@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 활용 자동화 코드 제작 가이드 | VTS AI 포트폴리오</title>
+<meta name="description" content="코딩 초보자도 브라우저 개발자 도구(F12)와 AI를 사용하여 현장 시스템의 오류를 진단하고 자동화 코드를 고도화해 나가는 4단계 실무 가이드">
+<link rel="stylesheet" href="style.css">
+<style>
+  body { background: #f0f2f5; }
+  .process-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin: 20px 0;
+  }
+  .process-step {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-left: 4px solid var(--accent);
+    border-radius: 8px;
+    padding: 18px 20px;
+    box-shadow: var(--shadow-sm);
+  }
+  .process-step h4 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1a1d23;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .process-step p {
+    font-size: 13.5px;
+    color: #4b5563;
+    line-height: 1.6;
+  }
+  .code-block {
+    background: #0d1117;
+    color: #c9d1d9;
+    padding: 16px 20px;
+    border-radius: 8px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.6;
+    overflow-x: auto;
+    margin: 16px 0;
+    border: 1px solid #30363d;
+    text-align: left;
+  }
+  .diagnostic-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 16px;
+  }
+  .diag-item {
+    font-size: 13px;
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+  .diag-label {
+    font-weight: 700;
+    color: #0f172a;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .tip-alert {
+    background: #f0fdfa;
+    border: 1px solid #99f6e4;
+    border-radius: 8px;
+    padding: 14px 18px;
+    color: #0d9488;
+    font-size: 13.5px;
+    line-height: 1.6;
+    margin-top: 16px;
+  }
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <a class="nav-back" href="index.html">📁 메인 목록으로</a>
+  <span class="nav-title">가이드 · AI 활용 자동화 코드 제작법</span>
+</nav>
+
+<div class="hero" style="background: linear-gradient(135deg, #0d9488 0%, #115e59 100%); color: #ffffff; padding: 60px 24px; border-radius: 16px; margin: 32px auto 20px; max-width: 1000px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
+  <span class="hero-label" style="background: #14b8a6; color: #ffffff; border: 1px solid #2dd4bf; margin-bottom: 20px;">💡 초보자를 위한 팁</span>
+  <h1 style="color: #ffffff; margin-bottom: 16px;">AI와 함께하는<br>현장 업무 자동화 가이드</h1>
+  <p style="color: #ccfbf1; max-width: 700px;">개발 지식이 전혀 없는 관제사도 괜찮습니다.<br>브라우저 개발자 도구(F12)와 AI를 콤비로 활용하여 실무 화면의 복잡한 버그를 진단하고 나만의 자동화 툴을 튜닝하는 실전 프로세스를 전수합니다.</p>
+</div>
+
+<div class="page-content">
+
+  <!-- 1단계: 협업 플로우 -->
+  <div class="section-card">
+    <div class="section-header">
+      <span class="section-step">🧭</span>
+      <span class="section-title">AI 협동 자동화 개발 4단계 플로우</span>
+    </div>
+    <div class="section-body">
+      <p style="font-size: 14px; color: #4b5563; line-height: 1.6;">
+        이번 PORT-MIS 선박명 탭 동기화 북마크릿을 만들 때 관제사와 AI가 나눈 대화를 바탕으로 구성한 표준 개발 프로세스입니다. 이 흐름을 따라가면 어떤 사이트든 자동화할 수 있습니다.
+      </p>
+
+      <div class="process-timeline">
+        <div class="process-step" style="border-left-color: #3b82f6;">
+          <h4>1단계. 요구사항 설명 및 1차 코드 생성</h4>
+          <p>
+            내 머릿속에 있는 아이디어를 AI에게 편안하게 한국어로 말합니다. <br>
+            <em>"포트미스 관제 입력창에 탭이 여러 개 열릴 때, 탭 이름을 입력된 선박명으로 자동으로 바꿔주는 한 줄짜리 북마크릿 자바스크립트를 만들어줘."</em> <br>
+            그럼 AI가 브라우저 북마크에 바로 등록할 수 있는 압축된 <code>javascript:(function(){...})()</code> 코드를 즉시 작성해 줍니다.
+          </p>
+        </div>
+
+        <div class="process-step" style="border-left-color: #f59e0b;">
+          <h4>2단계. 실제 현장 대조 및 문제 발견 (버그 확인)</h4>
+          <p>
+            AI가 준 코드를 직접 시스템 콘솔이나 북마크에 등록하여 테스트해 봅니다. 이 과정에서 예기치 못한 에러를 발견합니다. <br>
+            <em>"탭을 4개 열어놓고 작동시켰는데, 3개는 선박명이 일치하지만 특정 PC의 1개 탭만 엉뚱한 이전 선박명을 띄우는 오작동이 반복되네? 어떻게 테스트해보지?"</em>
+          </p>
+        </div>
+
+        <div class="process-step" style="border-left-color: #10b981;">
+          <h4>3단계. 브라우저 개발자 도구(F12) 콘솔을 활용한 정밀 진단</h4>
+          <p>
+            버그 원인을 AI가 추측하게 하지 않고, 화면 내부 상태를 들여다볼 수 있는 <strong>[진단 코드]</strong>를 AI에게 만들어달라고 합니다. <br>
+            F12를 눌러 브라우저 콘솔창에 진단 코드를 복사·붙여넣기한 뒤 엔터를 치면, 화면 뒤에 좀비처럼 숨어있는 HTML 요소들의 개수와 매칭 로그가 콘솔창에 나타납니다.
+          </p>
+        </div>
+
+        <div class="process-step" style="border-left-color: #8b5cf6;">
+          <h4>4단계. 진단 결과 제보 및 최종 마감</h4>
+          <p>
+            출력된 진단 데이터(예: <em>"실제 탭 1개 / 메모리 상의 창 6개로 유령 좀비 탭이 존재함"</em>)를 AI에게 그대로 복사해서 보냅니다. <br>
+            AI는 이 객관적인 수치를 바탕으로 숨어있던 유령 탭과 하위 중복 ID들을 완벽히 걸러내는 <strong>"정밀 조준형 최종 완성본"</strong> 코드를 다시 완성해 줍니다.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2단계: 실전 디버깅 케이스 스터디 -->
+  <div class="section-card">
+    <div class="section-header">
+      <span class="section-step">🔍</span>
+      <span class="section-title">실전 케이스 스터디: PORT-MIS 탭 불일치 진단 사례</span>
+    </div>
+    <div class="section-body">
+      <p style="font-size: 14.5px; color: #374151; line-height: 1.6; font-weight: 600;">
+        "어떤 PC에서는 탭이 꼬이고 작동을 안 해요!"에 대처했던 정밀 분석기법
+      </p>
+      
+      <p style="font-size: 13.5px; color: #4b5563; line-height: 1.6; margin-top: 8px;">
+        당시 AI가 관제사에게 건네주어 원인을 밝혀냈던 <strong>F12 콘솔용 진단 스크립트</strong>입니다. 브라우저가 화면을 그릴 때 내부적으로 탭과 창을 어떻게 맵핑하고 있는지 정확히 스캔해 줍니다.
+      </p>
+
+      <div class="code-block">
+(function(){
+    console.clear();
+    console.log("🚀 [평택VTS 특정 PC 오작동 환경 분석 시작]");
+    
+    var host = document.getElementById('mf_tacMain_tabhost') || document.querySelector('.w2tabcontrol_tabs');
+    if(!host) {
+        console.error("❌ 오류: 탭 호스트(mf_tacMain_tabhost)를 찾을 수 없습니다.");
+        return;
+    }
+
+    var anchors = host.querySelectorAll('a[id*="tabHTML"]') || host.querySelectorAll('a');
+    var contents = document.querySelectorAll('.w2tabcontrol_contents');
+    
+    console.log(`📌 현재 눈에 보이는 실제 탭 개수: ${anchors.length}개`);
+    console.log(`📌 메모리(DOM)에 남아있는 컨텐츠 창 개수: ${contents.length}개`);
+    
+    if(contents.length > anchors.length) {
+        console.warn(`⚠️ 경고: 실제 탭보다 컨텐츠 창이 ${contents.length - anchors.length}개 더 많습니다. (유령 좀비 탭 발생 PC 확인)`);
+    }
+    // ... 이하 탭별 1:1 세부 매칭 분석 ...
+})();</div>
+
+      <div class="diagnostic-box">
+        <span class="diag-label">💻 특정 오작동 PC에서 튀어나온 충격적인 진단 로그:</span>
+        <div style="font-family: monospace; font-size: 12.5px; background: #ffffff; padding: 12px; border: 1px dashed #cbd5e1; border-radius: 6px; line-height: 1.6; color: #1e293b;">
+          🚀 [평택VTS 특정 PC 오작동 환경 분석 시작]<br>
+          📌 현재 눈에 보이는 실제 탭 개수: 1개<br>
+          📌 메모리(DOM)에 남아있는 컨텐츠 창 개수: 6개<br>
+          ⚠️ 경고: 실제 탭보다 컨텐츠 창이 5개 더 많습니다. (유령 좀비 탭 발생)<br>
+          🚨 위험: 고유키 [M4049_290]를 포함하는 좀비 창이 3개 중복 존재합니다!
+        </div>
+      </div>
+
+      <div style="margin-top: 16px;">
+        <h5 style="font-size: 14px; font-weight: 700; color: #1e293b; margin-bottom: 8px;">💡 진단으로 알게 된 2가지 오작동 원인과 극복과정</h5>
+        <ul style="font-size: 13.5px; color: #4b5563; line-height: 1.7; padding-left: 20px;">
+          <li>
+            <strong>1. 유령 좀비 탭의 방해:</strong> 
+            웹스퀘어 엔진은 사용자가 탭을 닫아도 화면에서만 가리고 메모리상에는 div 영역을 그대로 남겨둡니다. 기존 코드는 탭을 순회하다가 과거에 이미 닫아버린 유령 창을 먼저 가져와 탭 이름을 덮어쓰는 실수를 저질렀습니다.
+          </li>
+          <li>
+            <strong>2. 하위 탭 컨트롤러의 간섭 (이름 불일치 유발):</strong> 
+            관제창 안에 또 다른 하위 서브 메뉴 탭 시스템이 중첩되어 설계된 경우, 탭 ID를 <code>includes()</code>로 검사하면 하위 영역까지 싹 다 매칭(1개 탭에 3개 중복 잡힘)되는 버그가 확인되었습니다.
+          </li>
+        </ul>
+      </div>
+
+      <div class="tip-alert">
+        <strong>⚙️ 최적의 해결책 도출:</strong><br>
+        유령 탭을 무시하기 위해 도입했던 <code>offsetParent !== null</code>(눈에 보이는 것만 타격) 필터는 사용자가 탭을 오고 갈 때 비활성화된 진짜 탭의 연동을 풀어버리는 부작용이 있었습니다. <br>
+        결국, <strong>"진짜 탭에 맵핑된 최상위 고유 ID 규칙(<code>'mf_tacMain_contents_' + k</code>)"과 100% 글자 하나 안 틀리고 동일(<code>===</code>)한 단 하나의 부모 컨테이너만 직접 저격(<code>getElementById</code>)</strong>하게 함으로써, 전국 어느 VTS PC에서도 오류가 생길 수 없는 '무결점 감시 엔진'을 확보했습니다.
+      </div>
+    </div>
+  </div>
+
+  <!-- 3단계: AI 협업의 올바른 태도 -->
+  <div class="section-card">
+    <div class="section-header">
+      <span class="section-step">💬</span>
+      <span class="section-title">AI에게 설명하고 피드백을 주는 올바른 노하우</span>
+    </div>
+    <div class="section-body">
+      <p style="font-size: 13.5px; color: #4b5563; line-height: 1.6; margin-bottom: 16px;">
+        AI는 훌륭한 비서이지만, 현재 작동 중인 웹 화면을 직접 볼 수 없습니다. 따라서 추측성 불평보다는 **객관적인 현상과 데이터를 캡처해 전달**하는 것이 빠른 코드 개선의 비결입니다.
+      </p>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 16px; color: #991b1b;">
+          <strong style="display:block; font-size:14px; margin-bottom:8px;">❌ 오답: 해결이 안 되는 피드백</strong>
+          <span style="font-size:13px; line-height: 1.6;">
+            "코드를 등록해봤는데 여전히 똑같이 선박명이 꼬이네요. 코드 다시 만들어 주세요."<br>
+            <span style="display:block; margin-top:8px; color: #ef4444; font-size:12px;">→ AI는 화면을 볼 수 없어 무엇 때문에 꼬이는지 알지 못해 다시 추측으로만 코드를 짭니다.</span>
+          </span>
+        </div>
+        
+        <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 16px; color: #166534;">
+          <strong style="display:block; font-size:14px; margin-bottom:8px;">✅ 정답: 10분 만에 끝내는 피드백</strong>
+          <span style="font-size:13px; line-height: 1.6;">
+            "콘솔에 분석 코드를 넣어보니 '눈에 보이는 실제 탭 개수: 1개, 컨텐츠 창 개수: 6개'라고 뜹니다. ID에 같은 키가 들어가서 좀비 창이 3개 매칭된다고 경고가 뜨는데 이 하위 요소를 제외해 주세요."<br>
+            <span style="display:block; margin-top:8px; color: #22c55e; font-size:12px;">→ AI가 구조 문제를 1초 만에 인지하고 정교한 셀렉터(ID 매칭식)로 바로 고쳐줍니다.</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="page-footer">
+  <p>평택항 해상교통관제센터 · <a href="https://github.com/pmh119/vts-ai-automation" target="_blank">GitHub ↗</a></p>
+</div>
+
+</body>
+</html>
