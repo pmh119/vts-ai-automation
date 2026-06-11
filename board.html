@@ -384,8 +384,12 @@ let activeDeleteId = null;
 
 // 초기화
 window.onload = function() {
-  // 1. 연동 URL 로드
-  currentGasUrl = localStorage.getItem(GAS_URL_KEY) || "";
+  // 1. 연동 URL 로드 (최초 실행 시 새로 배포한 웹앱 URL을 기본값으로 자동 연동)
+  currentGasUrl = localStorage.getItem(GAS_URL_KEY);
+  if (!currentGasUrl) {
+    currentGasUrl = "https://script.google.com/macros/s/AKfycbwKqhgFQHvMiohJkQq6xDkoNJ_FpRmH_DbmQLfZPczs1XkrmF1sdJmU12lo-IwsD_wKLg/exec";
+    localStorage.setItem(GAS_URL_KEY, currentGasUrl);
+  }
   document.getElementById("gas-url-input").value = currentGasUrl;
   
   updateBadgeStatus();
