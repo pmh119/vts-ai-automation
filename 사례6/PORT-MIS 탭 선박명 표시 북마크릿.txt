@@ -1,0 +1,60 @@
+javascript:(function(){
+  // 중복 실행 시 기존 Observer가 존재하면 감시를 중단하고 새로 시작
+  if(window.vtsObserver){
+    window.vtsObserver.disconnect();
+  }
+  
+  // PORT-MIS 탭 및 입력 폼의 선박 한글명을 확인하여 탭 이름 동기화
+  function syncTabs(){
+    var tabContainer = document.getElementById('mf_tacMain_tabhost') || document.querySelector('.w2tabcontrol_tabs');
+    if(!tabContainer) return;
+    
+    // WebSquare5 기반 탭 요소들 검색
+    var tabLinks = tabContainer.querySelectorAll('a[id*="tabHTML"]') || tabContainer.querySelectorAll('a');
+    for(var i = 0; i < tabLinks.length; i++){
+      var tab = tabLinks[i];
+      if(!tab.id) continue;
+      
+      // 탭의 고유 ID 키값 추출
+      var tabKey = tab.id.replace('mf_tacMain_tab_', '').replace('_tabHTML', '');
+      var contentId = 'mf_tacMain_contents_' + tabKey;
+      var contentArea = document.getElementById(contentId);
+      
+      if(contentArea){
+        // 폼 내부의 선박 한글명 입력란(vsslKorNmD) 요소 검색
+        var vesselInput = contentArea.querySelector('input[id*="vsslKorNmD"]');
+        if(vesselInput && vesselInput.value.trim() !== ''){
+          var vesselName = vesselInput.value.trim();
+          // 현재 탭 텍스트가 선박명과 다른 경우 변경 처리
+          if(tab.innerText !== vesselName){
+            tab.innerText = vesselName;
+            tab.title = vesselName;
+            
+            // 탭 내부의 하위 텍스트 레이블(span, label)도 일치화
+            var childLabels = tab.querySelectorAll('span,label');
+            for(var d = 0; d < childLabels.length; d++){
+              childLabels[d].innerText = vesselName;
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  // PORT-MIS 메인 컨텐츠 영역 감시 기동
+  var target = document.getElementById('mf_tacMain') || document.body;
+  window.vtsObserver = new MutationObserver(function(mutations){
+    syncTabs();
+  });
+  
+  // 탭 생성, 폼 로딩 및 입력값 변화 감시
+  window.vtsObserver.observe(target, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: ['value', 'style']
+  });
+  
+  // 초기 즉시 실행
+  syncTabs();
+})();
