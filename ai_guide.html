@@ -51,8 +51,7 @@
     user-select: none;
   }
   .chat-bubble {
-    display: flex;
-    flex-direction: column;
+    display: block !important;
     max-width: 85%;
     padding: 10px 14px;
     border-radius: 12px;
@@ -77,9 +76,10 @@
     box-shadow: 0 2px 4px rgba(0,0,0,0.02);
   }
   .chat-sender {
+    display: block !important;
     font-size: 17px;
     font-weight: 700;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
     letter-spacing: 0.02em;
   }
   .chat-bubble.user .chat-sender {
