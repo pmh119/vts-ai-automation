@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>사례 4 · 실시간 조석 모니터링 위젯 | VTS AI 포트폴리오</title>
+<meta name="description" content="평택항 실시간 조석 정보를 작업표시줄 위에 상시 표출하는 초경량 오버레이 위젯. PowerShell + WebView2.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="top-nav">
+  <a class="nav-back" href="index.html">📁 메인 목록으로</a>
+  <span class="nav-title">사례 4 · 실시간 조석 모니터링 위젯</span>
+</nav>
+
+<div class="hero">
+  <span class="hero-label">사례 4 · PowerShell · WebView2 · 공개 API</span>
+  <span class="hero-label" style="background:#fff7ed;color:#c2410c;border:1px solid #fdba74;margin-left:8px;">💡 센터별 특성에 따라 수정 후 사용가능</span>
+  <h1>실시간 조석(물때) 정보<br>상시 모니터링 데스크바 위젯</h1>
+  <p>평택항 고조·저조 시간과 수위를 작업표시줄 위에 콤팩트한 띠 형태로 실시간 상시 표출. 브라우저 접속 없이 항상 한눈에.</p>
+</div>
+
+<div class="page-content">
+
+  <!-- 실제 시연 배지 -->
+  <div class="internal-badge" style="background:#f0fdf4;border-color:#86efac;">
+    <span class="internal-badge-icon">🟢</span>
+    <span class="internal-badge-text" style="color:#16a34a;">실제 시연 가능 · 아래에서 스크립트를 직접 다운로드하여 테스트할 수 있습니다</span>
+  </div>
+
+  <!-- 1단계 -->
+  <div class="section-card">
+    <div class="section-header">
+      <span class="section-step">1</span>
+      <span class="section-title">프로젝트 핵심 요약</span>
+    </div>
+    <div class="section-body">
+      <div class="summary-grid">
+        <div class="summary-item">
+          <span class="summary-label">🎯 개발 목적</span>
+          <span class="summary-text">조석 정보도 상시 파악하고 있어야 하지만 외부망 PC 및 모니터가 1개이므로 도선표 및 기상정보 등과 함께 모니터링 해야하는 제약때문에 불필요한 행정력 소모</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">⚙️ 주요 기능</span>
+          <span class="summary-text">고조·저조 시간 및 조위 상시 표출 · 드래그 위치 조정<br>· JSON 위치 자동 저장/복원</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">🛠️ 기술 스택</span>
+          <span class="summary-text">PowerShell · Microsoft WebView2 · HTML5/CSS3/JS · Win32 API</span>
+          <div class="tech-tags">
+            <span class="tech-tag">WebView2</span>
+            <span class="tech-tag">PowerShell</span>
+            <span class="tech-tag">HTML/CSS</span>
+            <span class="tech-tag">JSON</span>
+          </div>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">✅ 기대 효과</span>
+          <span class="summary-text">조석 확인 대기 시간 → 0초 (상시 표출) · 다른 정보들과 동시 모니터링 가능</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2단계 -->
+  <div class="section-card">
+    <div class="section-header">
+      <span class="section-step">2</span>
+      <span class="section-title">도입 전 / 후 비교</span>
+    </div>
+    <div class="ba-grid">
+      <div class="ba-col before">
+        <div class="ba-badge before">⚠️ Before · 기존 방식</div>
+        <ul class="ba-list">
+          <li>매번 브라우저 열기 → 국립해양조사원 사이트 접속</li>
+          <li>평택항 검색 → 복잡한 조석 그래프 확인</li>
+          <li>기상 악화·긴박한 상황에서 브라우저 로딩 대기 발생</li>
+          <li>시선 분산으로 관제 집중도 저하</li>
+        </ul>
+        <div class="ba-stat">평균 1분 이상 대기 + 시선 분산</div>
+      </div>
+      <div class="ba-col after">
+        <div class="ba-badge after">✅ After · 자동화 후</div>
+        <ul class="ba-list">
+          <li>작업표시줄 위 슬림 바에 항상 조석 정보 표출</li>
+          <li>고조·저조 시간 및 조위를 즉시 확인</li>
+          <li>드래그로 원하는 위치에 배치 · 재부팅 후에도 위치 유지</li>
+          <li>최상단 배치로 다른 브라우저 사용중에도 언제나 확인가능</li>
+        </ul>
+        <div class="ba-stat">🌊 조석 확인 시간 → 0초 (상시 표출)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3단계: 실제 시연 -->
+  <div class="section-card">
+    <div class="section-header">
+      <span class="section-step">3</span>
+      <span class="section-title">실제 시연 · 실시간 시뮬레이터</span>
+    </div>
+    <div class="section-body">
+
+      <!-- ⚓ 센터 선택 드롭다운 카드 (Rich Premium UI) -->
+      <div style="background: linear-gradient(135deg, #f8fafc, #f1f5f9); border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-bottom: 24px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 18px;">⚓</span>
+          <span style="font-size: 15px; font-weight: 700; color: #1e293b;">대상 VTS 및 관제 해역(조위 관측소) 선택</span>
+        </div>
+        <p style="font-size: 13px; color: #475569; margin: 0; line-height: 1.5;">
+          근무하시는 해상교통관제센터(VTS) 또는 표출을 원하시는 항만을 선택해 주세요. 
+          아래의 <strong>가상 시뮬레이터</strong> 및 <strong>소스코드 전문</strong>이 해당 해역의 데이터 코드로 실시간 자동 갱신됩니다!
+        </p>
+        <div style="position: relative; max-width: 320px; margin-top: 4px;">
+          <select id="center-selector" onchange="changeVtsCenter(this.value)" style="width: 100%; padding: 10px 16px; font-size: 14px; font-weight: 600; color: #0f172a; background: #ffffff; border: 2px solid #cbd5e1; border-radius: 8px; appearance: none; outline: none; cursor: pointer; transition: all 0.2s ease;">
+            <option value="pyeongtaek" selected>평택항 VTS (DT_0002)</option>
+            <option value="incheon">인천항 VTS (DT_0001)</option>
+            <option value="daesan">대산항 VTS (DT_0017)</option>
+            <option value="busan">부산항 VTS (DT_0005)</option>
+            <option value="busan_new">부산항신항 VTS (DT_0056)</option>
+            <option value="ulsan">울산항 VTS (DT_0020)</option>
+            <option value="yeosu">여수항 VTS (DT_0016)</option>
+            <option value="mokpo">목포항 VTS (DT_0007)</option>
+            <option value="gunsan">군산항 VTS (DT_0018)</option>
+            <option value="pohang">포항항 VTS (DT_0091)</option>
+            <option value="masan">마산항 VTS (DT_0062)</option>
+            <option value="jeju">제주항 VTS (DT_0004)</option>
+            <option value="tongyeong">통영연안 VTS (DT_0014)</option>
+            <option value="donghae">동해항 VTS (DT_0057)</option>
+          </select>
+          <div style="position: absolute; right: 14px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #64748b; font-size: 12px;">▼</div>
+        </div>
+      </div>
+
+      <!-- 대화형 시뮬레이터 영역 -->
+      <div style="margin-top:32px;">
+        <h4 style="font-size:15px;font-weight:600;margin-bottom:16px;color:#1f2937;">🎮 가상 비교 시뮬레이터 (마우스 드래그 및 지도 확인 가능)</h4>
+        
+        <div class="emulator-grid">
+          
+          <!-- 왼쪽: Before (기존 방식) -->
+          <div>
+            <p style="font-size:12px;color:#ef4444;font-weight:600;margin-bottom:8px;">⚠️ Before · 국립해양조사원 웹페이지 접속 및 조회</p>
+            <div class="mockup-browser">
+              <div class="mockup-header">
+                <div class="mockup-dots">
+                  <span class="mockup-dot-red"></span>
+                  <span class="mockup-dot-yellow"></span>
+                  <span class="mockup-dot-green"></span>
+                </div>
+                <div class="mockup-address-bar" id="mockup-addr">
+                  🔒 https://www.khoa.go.kr/swtc/main.do?obsPostId=DT_0002
+                </div>
+              </div>
+              <div class="mockup-content" style="padding:0; background:#f4f6f9; display:flex; flex-direction:column; height: 100%;">
+                <!-- 스마트 조석예보 웹 헤더 -->
+                <div style="background:#1e293b; color:#fff; padding:10px 16px; display:flex; justify-content:space-between; align-items:center; font-size:12px; flex-shrink:0;">
+                  <span style="font-weight:bold;">🌊 스마트 조석 예보 (스마트 물때)</span>
+                  <span style="background:#0284c7; padding:2px 6px; border-radius:4px; font-size:10px;"><span class="dynamic-port-name">평택항</span> 관측소</span>
+                </div>
+                <!-- 조석 정보 가상 콘텐츠 -->
+                <div style="padding:16px; flex-grow:1; overflow-y:auto; font-size:11px;">
+                  <div style="background:#fff; border:1px solid #e2e8f0; border-radius:6px; padding:12px; margin-bottom:12px;">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:8px; border-bottom:1px solid #f1f5f9; padding-bottom:6px; font-weight:bold;">
+                      <span><span class="dynamic-port-name">평택항</span> 실시간 조석 예보표</span>
+                      <span style="color:#ef4444;" id="tide-today-label">05-21</span>
+                    </div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; text-align:center;">
+                      <div style="background:#eff6ff; padding:6px; border-radius:4px; border:1px solid #bfdbfe;">
+                        <span style="color:#1d4ed8; font-weight:bold; display:block; font-size:10px;">저조 (물빠짐)</span>
+                        <span style="font-size:12px; font-weight:bold; color:#1e293b; display:block; margin:2px 0;" id="before-low-1">02:34</span>
+                        <span style="color:#64748b; font-size:10px;" id="before-low-h-1">42cm</span>
+                      </div>
+                      <div style="background:#ecfdf5; padding:6px; border-radius:4px; border:1px solid #a7f3d0;">
+                        <span style="color:#047857; font-weight:bold; display:block; font-size:10px;">고조 (물참)</span>
+                        <span style="font-size:12px; font-weight:bold; color:#1e293b; display:block; margin:2px 0;" id="before-high-1">08:51</span>
+                        <span style="color:#64748b; font-size:10px;" id="before-high-h-1">821cm</span>
+                      </div>
+                      <div style="background:#eff6ff; padding:6px; border-radius:4px; border:1px solid #bfdbfe;">
+                        <span style="color:#1d4ed8; font-weight:bold; display:block; font-size:10px;">저조 (물빠짐)</span>
+                        <span style="font-size:12px; font-weight:bold; color:#1e293b; display:block; margin:2px 0;" id="before-low-2">15:12</span>
+                        <span style="color:#64748b; font-size:10px;" id="before-low-h-2">38cm</span>
+                      </div>
+                      <div style="background:#ecfdf5; padding:6px; border-radius:4px; border:1px solid #a7f3d0;">
+                        <span style="color:#047857; font-weight:bold; display:block; font-size:10px;">고조 (물참)</span>
+                        <span style="font-size:12px; font-weight:bold; color:#1e293b; display:block; margin:2px 0;" id="before-high-2">21:28</span>
+                        <span style="color:#64748b; font-size:10px;" id="before-high-h-2">835cm</span>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- 가상 지도/인포그래픽 -->
+                  <div style="background:#fff; border:1px solid #e2e8f0; border-radius:6px; padding:10px; text-align:center;">
+                    <p style="font-weight:600; color:#334155; margin-bottom:6px; font-size:11px;">조위 분포 및 실시간 흐름 예측</p>
+                    <div style="height:120px; background:#e0f2fe; border-radius:4px; border:1px dashed #0284c7; display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; overflow:hidden;">
+                      <!-- 수려한 반응형 Sine 조석 예측 그래프 SVG -->
+                      <svg width="100%" height="100%" viewBox="0 0 300 100" preserveAspectRatio="none" style="position:absolute; bottom:0; left:0; z-index:0;">
+                        <!-- 곡선 채우기 -->
+                        <path d="M 0 100 L 0 70 C 50 30, 100 30, 150 70 C 200 110, 250 110, 300 70 L 300 100 Z" fill="rgba(14,165,233,0.15)" />
+                        <!-- 조석 곡선 -->
+                        <path d="M 0 70 C 50 30, 100 30, 150 70 C 200 110, 250 110, 300 70" fill="none" stroke="#0284c7" stroke-width="2" />
+                        <!-- 실시간 관측 위치 세로 점선 (374cm 지점) -->
+                        <line x1="110" y1="100" x2="110" y2="46" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3" />
+                        <!-- 실시간 조위 마커 빨간 점 -->
+                        <circle cx="110" cy="46" r="4" fill="#ef4444" />
+                      </svg>
+                      <span style="font-weight:bold; color:#0369a1; z-index:1; font-size:12px; text-shadow:0 1px 1px #fff;"><span class="dynamic-port-name">평택항</span> 해역 시뮬레이션</span>
+                      <span style="font-size:9px; color:#0369a1; z-index:1; font-weight:bold; text-shadow:0 1px 1px #fff;">조위 기준선 대비 현재 수위: +374cm</span>
+                    </div>
+                  </div>
+                  <p style="font-size:10px; color:#94a3b8; text-align:center; margin-top:8px;">* 매번 웹 브라우저를 띄워 수십 번의 검색과 스크롤을 거쳐야만 얻을 수 있는 정보입니다.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 오른쪽: After (자동화 후) -->
+          <div>
+            <p style="font-size:12px;color:#10b981;font-weight:600;margin-bottom:8px;">✅ After · 실시간 데스크바 위젯 오버레이 (위젯 드래그해 보세요! 👆)</p>
+            <!-- 윈도우 바탕화면 목업 -->
+            <div class="window-mockup" id="desktop-simulator">
+              
+              <!-- 바탕화면 아이콘 -->
+              <div class="desktop-icons">
+                <div class="desktop-icon">
+                  <div class="desktop-icon-img">🖥️</div>
+                  <span>내 PC</span>
+                </div>
+                <div class="desktop-icon">
+                  <div class="desktop-icon-img">🛰️</div>
+                  <span>VTS 시스템</span>
+                </div>
+                <div class="desktop-icon">
+                  <div class="desktop-icon-img">🗑️</div>
+                  <span>휴지통</span>
+                </div>
+              </div>
+
+              <!-- ⚓ 드래그 가능한 실제 조석 위젯 -->
+              <div class="widget-overlay" id="drag-widget" style="left: 20px; bottom: 65px;">
+                <span class="widget-drag-handle">⋮⋮</span>
+                <div style="display:flex; align-items:center; gap:16px;">
+                  <div style="display:flex; flex-direction:column; align-items:center;">
+                    <span style="font-size:7px; color:#90a0b0; line-height:1;">현재 예측조위</span>
+                    <span style="font-size:11px; font-weight:700; color:#eab308; margin-top:2px;">374cm</span>
+                  </div>
+                  <div style="width:1px; height:20px; background:#3d5060;"></div>
+                  <div style="display:flex; gap:10px; font-size:9px;">
+                    <div style="text-align:center;">
+                      <div style="font-size:7px; color:#90a0b0; line-height:1;">저조</div>
+                      <div style="font-weight:700; color:#60a5fa; margin-top:2px;" id="widget-low-1">02:34</div>
+                      <div style="font-size:7px; color:#90a0b0;" id="widget-low-h-1">42cm</div>
+                    </div>
+                    <div style="text-align:center;">
+                      <div style="font-size:7px; color:#90a0b0; line-height:1;">고조</div>
+                      <div style="font-weight:700; color:#34d399; margin-top:2px;" id="widget-high-1">08:51</div>
+                      <div style="font-size:7px; color:#90a0b0;" id="widget-high-h-1">821cm</div>
+                    </div>
+                    <div style="text-align:center;">
+                      <div style="font-size:7px; color:#90a0b0; line-height:1;">저조</div>
+                      <div style="font-weight:700; color:#60a5fa; margin-top:2px;" id="widget-low-2">15:12</div>
+                      <div style="font-size:7px; color:#90a0b0;" id="widget-low-h-2">38cm</div>
+                    </div>
+                    <div style="text-align:center;">
+                      <div style="font-size:7px; color:#90a0b0; line-height:1;">고조</div>
+                      <div style="font-weight:700; color:#34d399; margin-top:2px;" id="widget-high-2">21:28</div>
+                      <div style="font-size:7px; color:#90a0b0;" id="widget-high-h-2">835cm</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 가상 윈도우 작업표시줄 -->
+              <div class="taskbar-mockup">
+                <div class="taskbar-start">
+                  <div class="taskbar-btn">🪟</div>
+                  <div class="taskbar-btn">🔍</div>
+                  <div class="taskbar-btn">📂</div>
+                  <div class="taskbar-btn">🌐</div>
+                </div>
+                <div class="taskbar-clock">
+                  <div style="font-weight:bold; font-size:11px;" id="taskbar-time">12:30 PM</div>
+                  <div style="font-size:9px; color:#cbd5e1; margin-top:1px;" id="taskbar-date">2026-05-21</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="result-badges" style="margin-top:20px;">
+        <div class="result-badge">
+          <span class="result-badge-num">0초</span>
+          <span class="result-badge-label">조석 정보 확인 대기</span>
+        </div>
+        <div class="result-badge">
+          <span class="result-badge-num">상시</span>
+          <span class="result-badge-label">실시간 자동 갱신</span>
+        </div>
+        <div class="result-badge">
+          <span class="result-badge-num">공개 API</span>
+          <span class="result-badge-label">국립해양조사원</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 소스코드 -->
+  <div class="section-card">
+    <div class="section-header">
+      <span class="section-step">+</span>
+      <span class="section-title">소스코드 전문 공개</span>
+    </div>
+    <div class="section-body">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:16px;">
+        <p style="font-size:13px;color:#6b7280;margin:0;">실제 구동되는 스크립트 소스코드 원본입니다.</p>
+        <div style="position:relative; width:200px;">
+          <select id="center-selector-code" onchange="changeVtsCenter(this.value)" style="width: 100%; padding: 6px 12px; font-size: 12.5px; font-weight: 600; color: #475569; background: #ffffff; border: 1.5px solid #cbd5e1; border-radius: 6px; appearance: none; outline: none; cursor: pointer; transition: all 0.2s ease;">
+            <option value="pyeongtaek" selected>평택항 VTS (DT_0002)</option>
+            <option value="incheon">인천항 VTS (DT_0001)</option>
+            <option value="daesan">대산항 VTS (DT_0017)</option>
+            <option value="busan">부산항 VTS (DT_0005)</option>
+            <option value="busan_new">부산항신항 VTS (DT_0056)</option>
+            <option value="ulsan">울산항 VTS (DT_0020)</option>
+            <option value="yeosu">여수항 VTS (DT_0016)</option>
+            <option value="mokpo">목포항 VTS (DT_0007)</option>
+            <option value="gunsan">군산항 VTS (DT_0018)</option>
+            <option value="pohang">포항항 VTS (DT_0091)</option>
+            <option value="masan">마산항 VTS (DT_0062)</option>
+            <option value="jeju">제주항 VTS (DT_0004)</option>
+            <option value="tongyeong">통영연안 VTS (DT_0014)</option>
+            <option value="donghae">동해항 VTS (DT_0057)</option>
+          </select>
+          <div style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; color: #64748b; font-size: 10px;">▼</div>
+        </div>
+      </div>
+      <div class="code-wrap">
+        <div class="code-header">
+          <span class="code-filename">조석표 위젯.ps1</span>
+          <div class="btn-row">
+            <button class="code-copy-btn" onclick="copyCode('code-4', this)">복사</button>
+            <a class="code-copy-btn" href="https://raw.githubusercontent.com/pmh119/vts-ai-automation/main/%EC%82%AC%EB%A1%804/%EC%A1%B0%EC%84%9D%ED%91%9C%20%EC%9C%84%EC%A0%AF.ps1" target="_blank" style="text-decoration:none">⬇ 다운로드</a>
+          </div>
+        </div>
+        <pre class="code-pre"><code id="code-4">Add-Type -AssemblyName System.Windows.Forms
+
+Add-Type -AssemblyName System.Drawing
+
+# WebView2 DLL 로드
+
+Add-Type -Path "C:\webview2\Microsoft.Web.WebView2.WinForms.dll"
+
+$ConfigPath = "$env:LOCALAPPDATA\TideWidget_pos.json"
+
+try {
+
+    Add-Type -TypeDefinition @"
+
+    using System;
+
+    using System.Runtime.InteropServices;
+
+    public class Win32 {
+
+        [DllImport("user32.dll")]
+
+        public static extern bool ReleaseCapture();
+
+        [DllImport("user32.dll")]
+
+        public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+
+    }
+
+"@
+
+} catch { }
+
+# -----------------------------
+
+# 1. HTML 정의 (전체 너비 910px -> 895px로 축소)
+
+# -----------------------------
+
+$HtmlContent = @"
+
+&lt;!DOCTYPE html&gt;
+
+&lt;html&gt;
+
+&lt;head&gt;
+
+&lt;meta charset="utf-8"&gt;
+
+&lt;style&gt;
+
+    html, body {
+
+        margin: 0; padding: 0; overflow: hidden;
+
+        /* 전체 너비 15px 축소 */
+
+        width: 895px; height: 81px;
+
+        display: flex; background: #2b3b4d;
+
+        user-select: none;
+
+        transition: opacity 0.3s ease;
+
+    }
+
+    
+
+    #drag-overlay {
+
+        position: absolute; top: 0; left: 0;
+
+        width: 100%; height: 100%;
+
+        z-index: 9999;
+
+        cursor: move;
+
+        box-sizing: border-box;
+
+        border: 2px solid transparent;
+
+        transition: border 0.2s ease;
+
+    }
+
+    #drag-overlay:hover {
+
+        border: 2px solid #00d4ff;
+
+    }
+
+    #left-wrapper { width: 320px; height: 81px; overflow: hidden; position: relative; }
+
+    #left-wrapper iframe {
+
+        position: absolute; top: -1529px; left: -95px; 
+
+        width: 1300px; height: 3000px; border: none;
+
+        transform: scale(0.8); transform-origin: 0 0; display: block;
+
+    }
+
+    /* 오른쪽 영역 너비 590px -> 575px로 변경하여 전체 비율 통일 */
+
+    #right-wrapper { width: 575px; height: 81px; overflow: hidden; position: relative; }
+
+    #right-wrapper iframe {
+
+        position: absolute; 
+
+        top: -2354px; 
+
+        left: -850px; 
+
+        width: 1300px; height: 3000px; border: none;
+
+        transform: scale(1.2); transform-origin: 0 0; display: block;
+
+    }
+
+&lt;/style&gt;
+
+&lt;/head&gt;
+
+&lt;body oncontextmenu="return false;"&gt;
+
+    &lt;div id="drag-overlay"&gt;&lt;/div&gt;
+
+    &lt;div id="left-wrapper"&gt;&lt;iframe src="https://www.khoa.go.kr/swtc/main.do?obsPostId=DT_0002" scrolling="no" tabindex="-1"&gt;&lt;/iframe&gt;&lt;/div&gt;
+
+    &lt;div id="right-wrapper"&gt;&lt;iframe src="https://www.khoa.go.kr/swtc/main.do?obsPostId=DT_0002" scrolling="no" tabindex="-1"&gt;&lt;/iframe&gt;&lt;/div&gt;
+
+    &lt;script&gt;
+
+        const overlay = document.getElementById('drag-overlay');
+
+        
+
+        overlay.addEventListener('mousedown', function(e) {
+
+            if(e.button === 0) window.chrome.webview.postMessage('down');
+
+        });
+
+        overlay.addEventListener('contextmenu', function(e) {
+
+            e.preventDefault();
+
+            window.chrome.webview.postMessage('right_click');
+
+        });
+
+        overlay.addEventListener('mouseenter', () => window.chrome.webview.postMessage('hover_on'));
+
+        overlay.addEventListener('mouseleave', () => window.chrome.webview.postMessage('hover_off'));
+
+    &lt;/script&gt;
+
+&lt;/body&gt;
+
+&lt;/html&gt;
+
+"@
+
+# -----------------------------
+
+# 2. 마우스 우클릭 컨텍스트 메뉴 정의
+
+# -----------------------------
+
+$form = New-Object Windows.Forms.Form
+
+$form.FormBorderStyle = 'None'
+
+$form.TopMost = $true
+
+$form.BackColor = [System.Drawing.Color]::FromArgb(43,59,77)
+
+$form.StartPosition = "Manual"
+
+$form.ShowInTaskbar = $true 
+
+$form.Opacity = 0.85 
+
+# 실제 클라이언트 크기도 895px로 반영
+
+$form.ClientSize = New-Object System.Drawing.Size(895, 81)
+
+$contextMenu = New-Object Windows.Forms.ContextMenuStrip
+
+$exitMenu = $contextMenu.Items.Add("종료 (&X)")
+
+$exitMenu.add_Click({ $form.Close() })
+
+# -----------------------------
+
+# 3. 위치 로드
+
+# -----------------------------
+
+if (Test-Path $ConfigPath) {
+
+    try {
+
+        $pos = Get-Content $ConfigPath | ConvertFrom-Json
+
+        $form.Left = $pos.X
+
+        $form.Top  = $pos.Y
+
+    } catch {
+
+        $wa = [System.Windows.Forms.Screen]::PrimaryScreen.WorkingArea
+
+        $form.Left = $wa.Right - $form.Width
+
+        $form.Top  = $wa.Bottom - $form.Height
+
+    }
+
+} else {
+
+    $wa = [System.Windows.Forms.Screen]::PrimaryScreen.WorkingArea
+
+    $form.Left = $wa.Right - $form.Width
+
+    $form.Top  = $wa.Bottom - $form.Height
+
+}
+
+# -----------------------------
+
+# 4. WebView2 초기화 및 메시지 처리
+
+# -----------------------------
+
+$webView = New-Object Microsoft.Web.WebView2.WinForms.WebView2
+
+$webView.Dock = "Fill"
+
+$webView.DefaultBackgroundColor = [System.Drawing.Color]::FromArgb(43,59,77)
+
+$form.Controls.Add($webView)
+
+$webView.add_WebMessageReceived({
+
+    param($sender, $e)
+
+    $msg = $e.TryGetWebMessageAsString()
+
+    
+
+    switch ($msg) {
+
+        "down" {
+
+            [Win32]::ReleaseCapture()
+
+            [Win32]::SendMessage($form.Handle, 0xA1, 2, 0)
+
+            @{ X = $form.Left; Y = $form.Top } | ConvertTo-Json | Set-Content $ConfigPath
+
+        }
+
+        "right_click" {
+
+            $contextMenu.Show([System.Windows.Forms.Control]::MousePosition)
+
+        }
+
+        "hover_on" {
+
+            $form.Opacity = 1.0 
+
+        }
+
+        "hover_off" {
+
+            $form.Opacity = 0.85 
+
+        }
+
+    }
+
+})
+
+# -----------------------------
+
+# 5. 로드 시 브라우저 옵션
+
+# -----------------------------
+
+$form.Add_Shown({
+
+    $userData = "$env:LOCALAPPDATA\TideWidget_WV2"
+
+    $options = New-Object Microsoft.Web.WebView2.Core.CoreWebView2EnvironmentOptions
+
+    $options.AdditionalBrowserArguments = "--hide-scrollbars"
+
+    $envWV2 = [Microsoft.Web.WebView2.Core.CoreWebView2Environment]::CreateAsync($null, $userData, $options).GetAwaiter().GetResult()
+
+    $webView.EnsureCoreWebView2Async($envWV2)
+
+})
+
+$webView.Add_CoreWebView2InitializationCompleted({
+
+    param($s, $e)
+
+    if ($e.IsSuccess) {
+
+        $s.CoreWebView2.Settings.AreDefaultContextMenusEnabled = $false
+
+        $s.CoreWebView2.Settings.IsZoomControlEnabled = $false
+
+        $s.CoreWebView2.NavigateToString($HtmlContent)
+
+    }
+
+})
+
+# -----------------------------
+
+# 6. 자동 새로고침 타이머
+
+# -----------------------------
+
+$refreshTimer = New-Object System.Windows.Forms.Timer
+
+$refreshTimer.Interval = 600000 
+
+$refreshTimer.add_Tick({
+
+    if ($webView.CoreWebView2) {
+
+        $webView.CoreWebView2.NavigateToString($HtmlContent)
+
+    }
+
+})
+
+$refreshTimer.Start()
+
+$form.Add_FormClosing({ $refreshTimer.Stop() })
+
+[void]$form.ShowDialog()
+</code></pre>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 4단계: 사용 방법 가이드 -->
+  <div class="section-card">
+    <div class="section-header">
+      <span class="section-step">4</span>
+      <span class="section-title">조석 위젯 사용 방법 가이드</span>
+    </div>
+    <div class="section-body">
+      <!-- 🔒 사례4 전용 중요 사전 준비사항 배지 고지 -->
+      <div style="background:#fff7ed; border:1px solid #ffedd5; border-radius:8px; padding:16px; color:#c2410c; font-size:13px; line-height:1.6; margin-bottom:20px; text-align:left;">
+        <span style="font-weight:bold; font-size:14px; display:block; margin-bottom:8px;">⚠️ [필독] 사례 4 구동을 위한 2가지 사전 필수 요구조건</span>
+        <ul style="margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px;">
+          <li style="padding-left: 0; margin-bottom: 0; line-height: 1.5;">
+            <strong>① WebView2 라이브러리 및 3개 DLL 확보 필수:</strong><br>
+            WinForms GUI 내부에서 Chromium 브라우저를 연동하기 위해서는 반드시 <strong>`C:\webview2`</strong> 폴더를 생성하고, 저장소 `사례3` 등에서 확보한 3개의 핵심 연동 DLL 파일(Microsoft.Web.WebView2.Core.dll 등)을 규격 경로에 맞게 정확히 다운로드 배치해 주셔야 합니다. (사례 3 페이지의 라이브러리 탑재 가이드와 완벽히 호환됩니다.)
+          </li>
+          <li style="padding-left: 0; margin-bottom: 0; line-height: 1.5; margin-top: 6px;">
+            <strong>② 인터넷 외부망 환경 필수:</strong><br>
+            국립해양조사원의 실시간 예보 정보를 WebView2 엔진을 통해 실시간 조회하므로, 스크립트가 구동되는 PC가 <strong>외부 웹 인터넷망에 상시 연결</strong>되어 있어야 합니다. 외부 통신이 원천 차단된 완전 폐쇄 내부망 PC에서는 작동하지 않습니다.
+          </li>
+        </ul>
+      </div>
+
+      <!-- ⚠️ 사용 방법 안내문 -->
+      <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:14px 16px; color:#475569; font-size:13px; line-height:1.6; margin-bottom:20px; text-align:left;">
+        <span style="font-weight:bold; font-size:14px; display:block; margin-bottom:6px; color:#1e293b;">💻 스크립트 수동 구축 요령</span>
+        본 도구는 보안 환경 하에서도 스크립트를 직접 입력하여 활용할 수 있도록 최적화되어 있습니다. 아래의 가이드에 따라 파일 생성 및 바로가기를 구축해 주세요.
+      </div>
+
+      <div class="manual-steps">
+        <div class="manual-step">
+          <span class="manual-step-num">1</span>
+          <span class="manual-step-text"><strong>소스코드 준비:</strong> 바로 위 '소스코드 전문 공개' 상자에서 원하는 관제 해역(드롭다운 변경)을 선택하고, 가공되어 나타난 <strong>전체 소스코드</strong>를 내외부망 파일전송시스템의 클립보드 전송 기능을 활용하여 복사합니다.</span>
+        </div>
+        <div class="manual-step">
+          <span class="manual-step-num">2</span>
+          <span class="manual-step-text"><strong>텍스트 문서 생성 및 코드 반입:</strong> VTS PC 바탕화면 빈 곳 우클릭 → 새로 만들기 → <strong>텍스트 문서</strong>를 생성하고 메모장으로 열어, 복사한 코드를 붙여넣기 합니다.</span>
+        </div>
+        <div class="manual-step">
+          <span class="manual-step-num">3</span>
+          <span class="manual-step-text"><strong>파워쉘(.ps1) 및 인코딩 형식 저장:</strong> 메모장 좌상단 메뉴의 <strong>[파일] → [다른 이름으로 저장(A)...]</strong>을 클릭한 뒤, 아래 순서대로 정확히 설정하여 저장합니다.
+            <ul style="margin: 8px 0 0 18px; padding: 0; list-style-type: disc; display: flex; flex-direction: column; gap: 4px; color: #475569; font-size: 12px;">
+              <li><strong>파일 형식:</strong> 반드시 <strong>`모든 파일 (*.*)`</strong>로 변경</li>
+              <li><strong>파일 이름:</strong> <strong>`조석표 위젯.ps1`</strong> 이라고 직접 확장자까지 정확하게 입력</li>
+              <li><strong>인코딩:</strong> 한글 깨짐으로 인한 파워쉘 실행 오류를 원천 차단하기 위해 반드시 <strong>`UTF-8(BOM)`</strong>을 선택 후 저장</li>
+            </ul>
+          </span>
+        </div>
+        <div class="manual-step">
+          <span class="manual-step-num">4</span>
+          <span class="manual-step-text"><strong>바로가기 생성 및 실행:</strong> VTS PC 보안 정책에 의해 단순 우클릭 실행이 차단되는 현상을 우회하기 위해, 하단의 <strong>[⚡ 무소음 바로가기 생성법 가이드]</strong>를 참고하여 우회/숨김 명령어가 내장된 <strong>바로가기를 바탕화면에 생성해 안전하게 더블클릭 실행</strong>하시는 것을 강력히 권장합니다.</span>
+        </div>
+      </div>
+      <div style="text-align: right; margin-top: 20px;">
+        <a href="shortcut.html" style="display:inline-flex; align-items:center; gap:6px; background:#eff6ff; color:#2563eb; border:1px solid #bfdbfe; padding:8px 16px; border-radius:8px; font-size:13px; font-weight:bold; text-decoration:none; transition:all 0.2s; box-shadow:0 2px 4px rgba(37,99,235,0.06);" onmouseover="this.style.background='#dbeafe'" onmouseout="this.style.background='#eff6ff'">
+          ⚡ 무소음 바로가기 생성법 가이드 바로가기 ↗
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="page-footer">
+  <p>평택항 해상교통관제센터 · <a href="https://github.com/pmh119/vts-ai-automation" target="_blank">GitHub ↗</a></p>
+</div>
+
+<script>
+// 실시간 날짜/시계 동적 세팅 및 위젯 드래그 앤 드롭 기능 구현
+(function(){
+  const now = new Date();
+  
+  // 1. 날짜 정보 세팅
+  const yyyy = now.getFullYear();
+  const m = String(now.getMonth()+1).padStart(2,'0');
+  const d = String(now.getDate()).padStart(2,'0');
+  const todayStr = `${m}-${d}`;
+  const todayFullStr = `${yyyy}-${m}-${d}`;
+  
+  if (document.getElementById('tide-today-label')) document.getElementById('tide-today-label').textContent = todayStr;
+  if (document.getElementById('taskbar-date')) document.getElementById('taskbar-date').textContent = todayFullStr;
+
+  // 2. 가상 윈도우 작업표시줄 시계 실시간 업데이트
+  const updateClock = () => {
+    const timeNow = new Date();
+    let hours = timeNow.getHours();
+    const minutes = String(timeNow.getMinutes()).padStart(2,'0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // 0시는 12시로 표시
+    const hoursStr = String(hours).padStart(2,'0');
+    
+    const timeEl = document.getElementById('taskbar-time');
+    if (timeEl) {
+      timeEl.textContent = `${hoursStr}:${minutes} ${ampm}`;
+    }
+  };
+  setInterval(updateClock, 1000);
+  updateClock();
+
+  // 3. 위젯 드래그 앤 드롭 기능 (마우스 & 터치 완벽 대응, 경계선 이탈 방지)
+  const widget = document.getElementById('drag-widget');
+  const desktop = document.getElementById('desktop-simulator');
+  
+  if (widget && desktop) {
+    let isDragging = false;
+    let startX = 0, startY = 0;
+    let initialLeft = 0, initialTop = 0;
+
+    const onStart = (clientX, clientY) => {
+      isDragging = true;
+      startX = clientX;
+      startY = clientY;
+      
+      // 드래그 시작 시 위젯의 절대 위치값 캡처
+      const rect = widget.getBoundingClientRect();
+      const desktopRect = desktop.getBoundingClientRect();
+      
+      initialLeft = rect.left - desktopRect.left;
+      initialTop = rect.top - desktopRect.top;
+      
+      // bottom 기반 배치를 top/left 기반으로 전환하여 드래그가 끊김 없이 처리되도록 함
+      widget.style.bottom = 'auto';
+      widget.style.top = `${initialTop}px`;
+      widget.style.left = `${initialLeft}px`;
+      
+      widget.style.transition = 'none'; // 드래그 중에는 애니메이션 무효화
+    };
+
+    const onMove = (clientX, clientY) => {
+      if (!isDragging) return;
+      
+      const dx = clientX - startX;
+      const dy = clientY - startY;
+      
+      let newLeft = initialLeft + dx;
+      let newTop = initialTop + dy;
+      
+      // 경계면 제약 조건 (바탕화면 영역 밖으로 이탈 방지)
+      const desktopRect = desktop.getBoundingClientRect();
+      const widgetRect = widget.getBoundingClientRect();
+      
+      const maxLeft = desktopRect.width - widgetRect.width;
+      const maxTop = desktopRect.height - widgetRect.height - 48; // 작업표시줄 높이(48px)만큼 위로 제한
+      
+      newLeft = Math.max(0, Math.min(newLeft, maxLeft));
+      newTop = Math.max(0, Math.min(newTop, maxTop));
+      
+      widget.style.left = `${newLeft}px`;
+      widget.style.top = `${newTop}px`;
+    };
+
+    const onEnd = () => {
+      isDragging = false;
+    };
+
+    // 마우스 이벤트
+    widget.addEventListener('mousedown', (e) => {
+      onStart(e.clientX, e.clientY);
+      e.preventDefault(); // 드래그 시 텍스트 블록 지정 방지
+    });
+    document.addEventListener('mousemove', (e) => {
+      onMove(e.clientX, e.clientY);
+    });
+    document.addEventListener('mouseup', onEnd);
+
+    // 모바일 터치 이벤트
+    widget.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 1) {
+        onStart(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    });
+    widget.addEventListener('touchmove', (e) => {
+      if (isDragging && e.touches.length === 1) {
+        onMove(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    });
+    widget.addEventListener('touchend', onEnd);
+  }
+})();
+
+// 1. 초기 로드 시 원본 파워쉘 소스코드 템플릿 보관
+const originalCodeTemplate = document.getElementById('code-4').textContent;
+
+// 2. VTS 센터 조위관측소 데이터 매핑 테이블
+const vtsCenterMap = {
+  'pyeongtaek': { name: '평택항', code: 'DT_0002' },
+  'incheon': { name: '인천항', code: 'DT_0001' },
+  'daesan': { name: '대산항', code: 'DT_0017' },
+  'busan': { name: '부산항', code: 'DT_0005' },
+  'busan_new': { name: '부산항신항', code: 'DT_0056' },
+  'ulsan': { name: '울산항', code: 'DT_0020' },
+  'yeosu': { name: '여수항', code: 'DT_0016' },
+  'mokpo': { name: '목포항', code: 'DT_0007' },
+  'gunsan': { name: '군산항', code: 'DT_0018' },
+  'pohang': { name: '포항항', code: 'DT_0091' },
+  'masan': { name: '마산항', code: 'DT_0062' },
+  'jeju': { name: '제주항', code: 'DT_0004' },
+  'tongyeong': { name: '통영항', code: 'DT_0014' },
+  'donghae': { name: '동해항', code: 'DT_0057' }
+};
+
+// 3. VTS 센터 체인지 함수
+function changeVtsCenter(key) {
+  const info = vtsCenterMap[key];
+  if (!info) return;
+
+  // 두 드롭다운의 선택값 양방향 동기화 연동
+  const sel1 = document.getElementById('center-selector');
+  const sel2 = document.getElementById('center-selector-code');
+  if (sel1 && sel1.value !== key) sel1.value = key;
+  if (sel2 && sel2.value !== key) sel2.value = key;
+
+  // A. 웹화면 내 포트 이름 치환
+  document.querySelectorAll('.dynamic-port-name').forEach(el => {
+    el.textContent = info.name;
+  });
+
+  // B. 시뮬레이터 주소창 갱신
+  const mockupAddr = document.getElementById('mockup-addr');
+  if (mockupAddr) {
+    mockupAddr.textContent = `🔒 https://www.khoa.go.kr/swtc/main.do?obsPostId=${info.code}`;
+  }
+
+  // C. 소스코드 텍스트 동적 치환 (코드 및 항명)
+  let newCode = originalCodeTemplate
+    .replace(/DT_0002/g, info.code)
+    .replace(/평택항/g, info.name);
+  
+  document.getElementById('code-4').textContent = newCode;
+
+  // D. 맞춤형 파워쉘 스크립트 즉석 생성 (UTF-8 with BOM 적용하여 다운로드)
+  const fileName = `조석표 위젯(${info.name}).ps1`;
+  updateDownloadBlob(newCode, fileName);
+}
+
+// 4. UTF-8 BOM 인코딩 강제 주입형 메모리 Blob 다운로드 연동 함수
+function updateDownloadBlob(codeContent, fileName) {
+  const downloadBtn = document.getElementById('vts-download-btn');
+  if (!downloadBtn) return;
+
+  // 메모리 누수 방지용 기존 URL 해제
+  if (downloadBtn.dataset.blobUrl) {
+    URL.revokeObjectURL(downloadBtn.dataset.blobUrl);
+  }
+
+  // 윈도우 파워쉘 실행 시 한글 깨짐 원천 차단용 UTF-8 BOM (EF BB BF) 주입
+  const bom = new Uint8Array([0xEF, 0xBB, 0xBF]);
+  const encoder = new TextEncoder();
+  const codeBytes = encoder.encode(codeContent);
+
+  const mergedBytes = new Uint8Array(bom.length + codeBytes.length);
+  mergedBytes.set(bom, 0);
+  mergedBytes.set(codeBytes, bom.length);
+
+  const blob = new Blob([mergedBytes], { type: 'application/octet-stream;charset=utf-8' });
+  const blobUrl = URL.createObjectURL(blob);
+
+  downloadBtn.href = blobUrl;
+  downloadBtn.download = fileName;
+  downloadBtn.dataset.blobUrl = blobUrl;
+  
+  // 다운로드 버튼 텍스트 동적 갱신
+  downloadBtn.innerHTML = `⬇ 조석표 위젯(${fileName.replace('.ps1', '')}).ps1 다운로드`;
+}
+
+// 5. 초기 로드 시 평택항 기준으로 자동 연동 초기화
+changeVtsCenter('pyeongtaek');
+
+function copyCode(id, btn) {
+  navigator.clipboard.writeText(document.getElementById(id).innerText).then(() => {
+    btn.textContent = '✓ 복사됨'; btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '복사'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+</script>
+</body>
+</html>
