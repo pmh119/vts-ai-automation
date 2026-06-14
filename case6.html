@@ -343,7 +343,7 @@
             <div class="btn-row" style="margin-left:48px; margin-top:4px; display:flex; gap:10px; flex-wrap:wrap;">
               <a class="bookmarklet-drag"
                  id="bookmarklet-btn"
-                 href="javascript:(function(){if(window.vtsObserver){window.vtsObserver.disconnect();}function syncTabs(){var h=document.getElementById('mf_tacMain_tabhost')||document.querySelector('.w2tabcontrol_tabs');if(!h)return;var a=h.querySelectorAll('a[id*="tabHTML"]')||h.querySelectorAll('a');for(var i=0;i<a.length;i++){var n=a[i];if(!n.id)continue;var k=n.id.replace('mf_tacMain_tab_','').replace('_tabHTML','');var targetId='mf_tacMain_contents_'+k;var r=document.getElementById(targetId);if(r){var p=r.querySelector('input[id*="vsslKorNmD"]');if(p&&p.value.trim()!==''){var s=p.value.trim();if(n.innerText!==s){n.innerText=s;n.title=s;var m=n.querySelectorAll('span,label');for(var d=0;d<m.length;d++){m[d].innerText=s;}}}}}}var target=document.getElementById('mf_tacMain')||document.body;window.vtsObserver=new MutationObserver(function(mutations){syncTabs();});window.vtsObserver.observe(target,{childList:true,subtree:true,attributes:true,attributeFilter:['value','style']});syncTabs();})();"
+                 href="javascript:(function(){if(window.vtsObserver){window.vtsObserver.disconnect();}function fixLayout(){var mask=document.getElementById('mf_tacMain_mask');var scroll=document.getElementById('mf_tacMain_scroll');var tabhost=document.getElementById('mf_tacMain_tabhost');var container=document.getElementById('mf_tacMain_container');var btnL=document.getElementById('mf_tacMain_btn_scrollLeft');var btnR=document.getElementById('mf_tacMain_btn_scrollRight');if(!mask||!scroll||!tabhost||!container)return;scroll.style.setProperty('width','100%','important');scroll.style.setProperty('max-width','100%','important');scroll.style.setProperty('left','0px','important');scroll.style.setProperty('position','relative','important');tabhost.style.setProperty('flex-wrap','wrap','important');tabhost.style.setProperty('width','100%','important');tabhost.style.setProperty('height','auto','important');tabhost.querySelectorAll('li').forEach(function(li){li.style.setProperty('float','none','important');li.style.setProperty('display','inline-flex','important');li.style.setProperty('height','29px','important');li.style.setProperty('margin-bottom','2px','important');});if(btnL)btnL.style.setProperty('display','none','important');if(btnR)btnR.style.setProperty('display','none','important');mask.style.setProperty('overflow','visible','important');mask.style.setProperty('height','auto','important');var tabH=tabhost.offsetHeight;var originalTabH=30;var extra=tabH-originalTabH;container.style.setProperty('top',(originalTabH+extra)+'px','important');var tacMain=document.getElementById('mf_tacMain');if(tacMain){var totalH=tacMain.offsetHeight;if(totalH>0){container.style.setProperty('height',(totalH-tabH)+'px','important');}}}function syncTabs(){var h=document.getElementById('mf_tacMain_tabhost')||document.querySelector('.w2tabcontrol_tabs');if(!h)return;var a=h.querySelectorAll('a[id*="tabHTML"]')||h.querySelectorAll('a');for(var i=0;i<a.length;i++){var n=a[i];if(!n.id)continue;var k=n.id.replace('mf_tacMain_tab_','').replace('_tabHTML','');var targetId='mf_tacMain_contents_'+k;var r=document.getElementById(targetId);if(r){var p=r.querySelector('input[id*="vsslKorNmD"]');if(p&&p.value.trim()!==''){var s=p.value.trim();if(n.innerText!==s){n.innerText=s;n.title=s;var m=n.querySelectorAll('span,label');for(var d=0;d<m.length;d++){m[d].innerText=s;}}}}}}var target=document.getElementById('mf_tacMain')||document.body;window.vtsObserver=new MutationObserver(function(){syncTabs();fixLayout();});window.vtsObserver.observe(target,{childList:true,subtree:true,attributes:true,attributeFilter:['value','style']});syncTabs();fixLayout();console.log('평택VTS 탭 동기화+두줄모드 기동 완료!');})();"
                  title="PORT-MIS 선박명 탭 동기화 — 즐겨찾기 바로 드래그하세요"
                  style="margin:0; padding:10px 18px; font-size:13px;">
                 🔖 PORT-MIS 탭 선박명 표시 (드래그하여 즐겨찾기에 추가!)
@@ -411,7 +411,58 @@
   if(window.vtsObserver){
     window.vtsObserver.disconnect();
   }
-  
+
+  // 탭 가림 현상을 해결하기 위해 플렉스 랩(두줄 모드) 및 높이 보정 레이아웃 설정
+  function fixLayout(){
+    var mask = document.getElementById('mf_tacMain_mask');
+    var scroll = document.getElementById('mf_tacMain_scroll');
+    var tabhost = document.getElementById('mf_tacMain_tabhost');
+    var container = document.getElementById('mf_tacMain_container');
+    var btnL = document.getElementById('mf_tacMain_btn_scrollLeft');
+    var btnR = document.getElementById('mf_tacMain_btn_scrollRight');
+    
+    if(!mask || !scroll || !tabhost || !container) return;
+    
+    // 스크롤 영역을 100% 넓혀 모든 탭을 감싸도록 설정
+    scroll.style.setProperty('width', '100%', 'important');
+    scroll.style.setProperty('max-width', '100%', 'important');
+    scroll.style.setProperty('left', '0px', 'important');
+    scroll.style.setProperty('position', 'relative', 'important');
+    
+    // 탭바가 랩핑되어 줄바꿈 되도록 flex-wrap 설정
+    tabhost.style.setProperty('flex-wrap', 'wrap', 'important');
+    tabhost.style.setProperty('width', '100%', 'important');
+    tabhost.style.setProperty('height', 'auto', 'important');
+    
+    tabhost.querySelectorAll('li').forEach(function(li){
+      li.style.setProperty('float', 'none', 'important');
+      li.style.setProperty('display', 'inline-flex', 'important');
+      li.style.setProperty('height', '29px', 'important');
+      li.style.setProperty('margin-bottom', '2px', 'important');
+    });
+    
+    // 탭 이동 좌우 화살표 버튼 숨김 처리
+    if(btnL) btnL.style.setProperty('display', 'none', 'important');
+    if(btnR) btnR.style.setProperty('display', 'none', 'important');
+    
+    mask.style.setProperty('overflow', 'visible', 'important');
+    mask.style.setProperty('height', 'auto', 'important');
+    
+    // 늘어난 탭 높이만큼 콘텐츠 컨테이너 시작 높이(Top) 및 전체 높이 보정
+    var tabH = tabhost.offsetHeight;
+    var originalTabH = 30;
+    var extra = tabH - originalTabH;
+    container.style.setProperty('top', (originalTabH + extra) + 'px', 'important');
+    
+    var tacMain = document.getElementById('mf_tacMain');
+    if(tacMain){
+      var totalH = tacMain.offsetHeight;
+      if(totalH > 0){
+        container.style.setProperty('height', (totalH - tabH) + 'px', 'important');
+      }
+    }
+  }
+
   // PORT-MIS 탭 및 입력 폼의 선박 한글명을 확인하여 탭 이름 동기화
   function syncTabs(){
     var tabContainer = document.getElementById('mf_tacMain_tabhost') || document.querySelector('.w2tabcontrol_tabs');
@@ -448,14 +499,15 @@
       }
     }
   }
-  
-  // PORT-MIS 메인 컨텐츠 영역 감시 기동
+
+  // MutationObserver를 통한 실시간 동적 레이아웃 및 탭 동기화 감시
   var target = document.getElementById('mf_tacMain') || document.body;
-  window.vtsObserver = new MutationObserver(function(mutations){
+  window.vtsObserver = new MutationObserver(function(){
     syncTabs();
+    fixLayout();
   });
   
-  // 탭 생성, 폼 로딩 및 입력값 변화 감시
+  // 탭 생성, 폼 로딩 및 입력값/레이아웃 변화 감시
   window.vtsObserver.observe(target, {
     childList: true,
     subtree: true,
@@ -465,6 +517,8 @@
   
   // 초기 즉시 실행
   syncTabs();
+  fixLayout();
+  console.log('평택VTS 탭 동기화+두줄모드 기동 완료!');
 })();</code></pre>
       </div>
       <div style="margin-top:12px; padding:10px 14px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; color:#475569; font-size:12.5px; line-height:1.5; text-align:left;">
@@ -583,7 +637,7 @@ function onVirtualInput(index, value) {
 
 // 클립보드 복사 함수들
 function copyBookmarklet() {
-  const code = `javascript:(function(){if(window.vtsObserver){window.vtsObserver.disconnect();}function syncTabs(){var h=document.getElementById('mf_tacMain_tabhost')||document.querySelector('.w2tabcontrol_tabs');if(!h)return;var a=h.querySelectorAll('a[id*="tabHTML"]')||h.querySelectorAll('a');for(var i=0;i<a.length;i++){var n=a[i];if(!n.id)continue;var k=n.id.replace('mf_tacMain_tab_','').replace('_tabHTML','');var targetId='mf_tacMain_contents_'+k;var r=document.getElementById(targetId);if(r){var p=r.querySelector('input[id*="vsslKorNmD"]');if(p&&p.value.trim()!==''){var s=p.value.trim();if(n.innerText!==s){n.innerText=s;n.title=s;var m=n.querySelectorAll('span,label');for(var d=0;d<m.length;d++){m[d].innerText=s;}}}}}}var target=document.getElementById('mf_tacMain')||document.body;window.vtsObserver=new MutationObserver(function(mutations){syncTabs();});window.vtsObserver.observe(target,{childList:true,subtree:true,attributes:true,attributeFilter:['value','style']});syncTabs();})();`;
+  const code = `javascript:(function(){if(window.vtsObserver){window.vtsObserver.disconnect();}function fixLayout(){var mask=document.getElementById('mf_tacMain_mask');var scroll=document.getElementById('mf_tacMain_scroll');var tabhost=document.getElementById('mf_tacMain_tabhost');var container=document.getElementById('mf_tacMain_container');var btnL=document.getElementById('mf_tacMain_btn_scrollLeft');var btnR=document.getElementById('mf_tacMain_btn_scrollRight');if(!mask||!scroll||!tabhost||!container)return;scroll.style.setProperty('width','100%','important');scroll.style.setProperty('max-width','100%','important');scroll.style.setProperty('left','0px','important');scroll.style.setProperty('position','relative','important');tabhost.style.setProperty('flex-wrap','wrap','important');tabhost.style.setProperty('width','100%','important');tabhost.style.setProperty('height','auto','important');tabhost.querySelectorAll('li').forEach(function(li){li.style.setProperty('float','none','important');li.style.setProperty('display','inline-flex','important');li.style.setProperty('height','29px','important');li.style.setProperty('margin-bottom','2px','important');});if(btnL)btnL.style.setProperty('display','none','important');if(btnR)btnR.style.setProperty('display','none','important');mask.style.setProperty('overflow','visible','important');mask.style.setProperty('height','auto','important');var tabH=tabhost.offsetHeight;var originalTabH=30;var extra=tabH-originalTabH;container.style.setProperty('top',(originalTabH+extra)+'px','important');var tacMain=document.getElementById('mf_tacMain');if(tacMain){var totalH=tacMain.offsetHeight;if(totalH>0){container.style.setProperty('height',(totalH-tabH)+'px','important');}}}function syncTabs(){var h=document.getElementById('mf_tacMain_tabhost')||document.querySelector('.w2tabcontrol_tabs');if(!h)return;var a=h.querySelectorAll('a[id*="tabHTML"]')||h.querySelectorAll('a');for(var i=0;i<a.length;i++){var n=a[i];if(!n.id)continue;var k=n.id.replace('mf_tacMain_tab_','').replace('_tabHTML','');var targetId='mf_tacMain_contents_'+k;var r=document.getElementById(targetId);if(r){var p=r.querySelector('input[id*="vsslKorNmD"]');if(p&&p.value.trim()!==''){var s=p.value.trim();if(n.innerText!==s){n.innerText=s;n.title=s;var m=n.querySelectorAll('span,label');for(var d=0;d<m.length;d++){m[d].innerText=s;}}}}}}var target=document.getElementById('mf_tacMain')||document.body;window.vtsObserver=new MutationObserver(function(){syncTabs();fixLayout();});window.vtsObserver.observe(target,{childList:true,subtree:true,attributes:true,attributeFilter:['value','style']});syncTabs();fixLayout();})();`;
   navigator.clipboard.writeText(code).then(() => {
     const btn = document.getElementById('copy-bookmarklet-btn');
     btn.textContent = '✓ 복사됨!';
