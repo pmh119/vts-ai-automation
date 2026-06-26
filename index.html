@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VTS AI 자동화 포트폴리오 | 평택VTS 센터</title>
-<meta name="description" content="해양경찰 평택VTS 센터의 AI 활용 업무 자동화 혁신 사례 5건. 경진대회 출품 포트폴리오.">
+<meta name="description" content="해양경찰 평택VTS 센터의 AI 활용 업무 자동화 혁신 사례 6건. 경진대회 출품 포트폴리오.">
 <link rel="stylesheet" href="style.css">
 <style>
   body { background: #f0f2f5; }
@@ -48,17 +48,11 @@
 
   .index-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 18px;
-    max-width: 1000px;
+    max-width: 1100px;
     margin: 0 auto;
     padding: 0 24px 80px;
-  }
-  @media (max-width: 860px) {
-    .index-grid { grid-template-columns: repeat(3, 1fr); }
-  }
-  @media (max-width: 560px) {
-    .index-grid { grid-template-columns: repeat(2, 1fr); }
   }
 
   .folder-card {
@@ -122,10 +116,10 @@
 <div class="index-hero">
   <div class="org-label">⚓ 평택항 해상교통관제센터</div>
   <h1>AI 활용 업무자동화<br><span>혁신 사례 포트폴리오</span></h1>
-  <p class="subtitle">반복 행정업무를 자동화하여 관제 집중도를 높인 5가지 현장 적용 사례</p>
+  <p class="subtitle">반복 행정업무를 자동화하여 관제 집중도를 높인 6가지 현장 적용 사례</p>
 </div>
 
-<div class="index-grid">
+<div class="index-grid" style="padding-bottom: 32px;">
 
   <!-- 사례 1 -->
   <a class="folder-card" href="case1.html" id="folder-1">
@@ -192,9 +186,30 @@
     <span class="folder-badge type-a">🟢 실제 시연</span>
   </a>
 
+  <!-- 사례 6 -->
+  <a class="folder-card" href="case6.html" id="folder-6">
+    <span class="folder-num">사례 6</span>
+    <svg class="folder-svg" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="4" y="14" width="48" height="34" rx="5" fill="#ccfbf1" stroke="#5eead4" stroke-width="1.5"/>
+      <rect x="4" y="14" width="22" height="8" rx="4" fill="#5eead4"/>
+      <rect x="8" y="22" width="40" height="22" rx="4" fill="#f0fdfa" stroke="#99f6e4" stroke-width="1"/>
+      <text x="28" y="37" font-size="14" text-anchor="middle" fill="#0d9488" font-family="serif">🚢</text>
+    </svg>
+    <span class="folder-name">PORT-MIS 탭<br>선박명 표시</span>
+    <span class="folder-badge type-a">🟢 실제 시연</span>
+  </a>
+
+</div>
+
+<h3 style="text-align: center; margin: 24px auto 20px; font-size: 15px; font-weight: 700; color: #475569; border-top: 1px solid #e2e8f0; padding-top: 32px; max-width: 800px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+  <span>💡 VTS 시스템 설정 & AI 활용 개발 가이드</span>
+</h3>
+
+<div class="index-grid" style="padding-top: 0; padding-bottom: 80px; max-width: 780px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+
   <!-- 바로가기 꿀팁 가이드 -->
-  <a class="folder-card" href="shortcut.html" id="folder-6">
-    <span class="folder-num">가이드</span>
+  <a class="folder-card" href="shortcut.html" id="folder-guide">
+    <span class="folder-num">설정 가이드</span>
     <svg class="folder-svg" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect x="4" y="14" width="48" height="34" rx="5" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.5"/>
       <rect x="4" y="14" width="22" height="8" rx="4" fill="#cbd5e1"/>
@@ -202,7 +217,33 @@
       <text x="28" y="37" font-size="14" text-anchor="middle" fill="#475569" font-family="serif">⚡</text>
     </svg>
     <span class="folder-name">파워쉘<br>바로가기 생성</span>
-    <span class="folder-badge" style="background:#f1f5f9; color:#475569; border:1px solid #cbd5e1; font-size:10px; padding:2px 8px; border-radius:100px; font-weight:600;">💡 꿀팁 가이드</span>
+    <span class="folder-badge" style="background:#f1f5f9; color:#475569; border:1px solid #cbd5e1; font-size:10px; padding:2px 8px; border-radius:100px; font-weight:600;">💻 편의 셋팅</span>
+  </a>
+
+  <!-- AI 활용 개발 가이드 -->
+  <a class="folder-card" href="ai_guide.html" id="folder-ai-guide">
+    <span class="folder-num">개발 가이드</span>
+    <svg class="folder-svg" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="4" y="14" width="48" height="34" rx="5" fill="#f0fdfa" stroke="#99f6e4" stroke-width="1.5"/>
+      <rect x="4" y="14" width="22" height="8" rx="4" fill="#99f6e4"/>
+      <rect x="8" y="22" width="40" height="22" rx="4" fill="#f2fdfb" stroke="#a7f3d0" stroke-width="1"/>
+      <text x="28" y="37" font-size="14" text-anchor="middle" fill="#0d9488" font-family="serif">🤖</text>
+    </svg>
+    <span class="folder-name">AI로 코드<br>만들기 가이드</span>
+    <span class="folder-badge" style="background:#f0fdf4; color:#14b8a6; border:1px solid #99f6e4; font-size:10px; padding:2px 8px; border-radius:100px; font-weight:600;">🎓 초보자용</span>
+  </a>
+
+  <!-- 소통 자유게시판 -->
+  <a class="folder-card" href="board.html" id="folder-board">
+    <span class="folder-num">소통 공간</span>
+    <svg class="folder-svg" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="4" y="14" width="48" height="34" rx="5" fill="#eef2ff" stroke="#c7d2fe" stroke-width="1.5"/>
+      <rect x="4" y="14" width="22" height="8" rx="4" fill="#c7d2fe"/>
+      <rect x="8" y="22" width="40" height="22" rx="4" fill="#f5f7ff" stroke="#e0e7ff" stroke-width="1"/>
+      <text x="28" y="37" font-size="14" text-anchor="middle" fill="#4f46e5" font-family="serif">💬</text>
+    </svg>
+    <span class="folder-name">자유 게시판<br>(노하우 공유)</span>
+    <span class="folder-badge" style="background:#eef2ff; color:#4f46e5; border:1px solid #c7d2fe; font-size:10px; padding:2px 8px; border-radius:100px; font-weight:600;">👥 VTS 소통</span>
   </a>
 
 </div>
