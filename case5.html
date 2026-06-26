@@ -17,7 +17,7 @@
 <div class="hero">
   <span class="hero-label">사례 5 · JavaScript · Bookmarklet · 브라우저 직접 테스트 가능</span>
   <span class="hero-label" style="background:#fff7ed;color:#c2410c;border:1px solid #fdba74;margin-left:8px;">💡 센터별 특성에 따라 수정 후 사용가능</span>
-  <span class="hero-label" id="ver-badge" style="background:#e0f2fe;color:#0369a1;border:1px solid #bae6fd;margin-left:8px;">버전: v1.2.2 (최근 업데이트: 16:25)</span>
+  <span class="hero-label" id="ver-badge" style="background:#e0f2fe;color:#0369a1;border:1px solid #bae6fd;margin-left:8px;">버전: v1.3.1 (최근 업데이트: 16:35)</span>
   <h1>실시간 도선 정보 시인성 극대화<br>북마크릿</h1>
   <p>설치 없이 즐겨찾기 클릭 하나로.<br>도선 스케줄 목록에서 지금 당장 중요한 일정을 자동 탐색하여 녹색으로 하이라이트.</p>
 </div>
@@ -265,29 +265,37 @@
             </thead>
             <tbody>
               <tr style="border-bottom:1px solid #f3f4f6;">
-                <td style="padding:8px 12px;">STAR PHOENIX</td><td style="padding:8px 12px;">입항</td><td style="padding:8px 12px;">2항로</td><td style="padding:8px 12px;" id="prev-date">05-20</td><td style="padding:8px 12px;">07:30</td>
+                <td style="padding:8px 12px;">STAR PHOENIX</td><td style="padding:8px 12px;">입항</td><td style="padding:8px 12px;">2항로</td><td style="padding:8px 12px;" id="prev-date">05-20</td><td style="padding:8px 12px;">07:00</td>
               </tr>
               <tr style="border-bottom:1px solid #f3f4f6;">
-                <td style="padding:8px 12px;">OCEAN BRAVE</td><td style="padding:8px 12px;">출항</td><td style="padding:8px 12px;">1항로</td><td style="padding:8px 12px;" id="prev-date2">05-20</td><td style="padding:8px 12px;">09:15</td>
+                <td style="padding:8px 12px;">OCEAN BRAVE</td><td style="padding:8px 12px;">출항</td><td style="padding:8px 12px;">1항로</td><td style="padding:8px 12px;" id="prev-date2">05-20</td><td style="padding:8px 12px;">09:00</td>
               </tr>
-              <!-- 하이라이트된 행 -->
+              <!-- 하이라이트된 행 1: 도선사 대기 (주황색) -->
+              <tr style="background:#fff3e0;border-top:2px solid #ff9800;border-bottom:2px solid #ff9800;">
+                <td style="padding:8px 12px;font-weight:bold;color:#b45309;">KOREA PILOT</td>
+                <td style="padding:8px 12px;font-weight:bold;color:#b45309;">입항</td>
+                <td style="padding:8px 12px;font-weight:bold;color:#b45309;">3항로</td>
+                <td style="padding:8px 12px;font-weight:bold;color:#b45309;" id="today-date">05-21</td>
+                <td style="padding:8px 12px;font-weight:bold;color:#b45309;" id="nearby-time">--:--</td>
+              </tr>
+              <!-- 하이라이트된 행 2: 도선사 배정 (녹색) -->
               <tr style="background:#e8f5e9;border-top:2px solid #4caf50;border-bottom:2px solid #4caf50;">
-                <td style="padding:8px 12px;font-weight:bold;color:#1b5e20;" id="today-date-ship">KOREA PILOT</td>
-                <td style="padding:8px 12px;font-weight:bold;color:#1b5e20;">입항</td>
+                <td style="padding:8px 12px;font-weight:bold;color:#1b5e20;">SHAO YUN</td>
+                <td style="padding:8px 12px;font-weight:bold;color:#1b5e20;">대기</td>
                 <td style="padding:8px 12px;font-weight:bold;color:#1b5e20;">3항로</td>
-                <td style="padding:8px 12px;font-weight:bold;color:#1b5e20;" id="today-date">05-21</td>
-                <td style="padding:8px 12px;font-weight:bold;color:#1b5e20;" id="nearby-time">--:--</td>
+                <td style="padding:8px 12px;font-weight:bold;color:#1b5e20;" id="today-date-green">05-21</td>
+                <td style="padding:8px 12px;font-weight:bold;color:#1b5e20;" id="nearby-time-green">--:--</td>
               </tr>
               <tr style="border-bottom:1px solid #f3f4f6;">
-                <td style="padding:8px 12px;">SAEBOM</td><td style="padding:8px 12px;">출항</td><td style="padding:8px 12px;">1항로</td><td style="padding:8px 12px;" id="next-date">05-21</td><td style="padding:8px 12px;">15:00</td>
+                <td style="padding:8px 12px;">SAEBOM</td><td style="padding:8px 12px;">출항</td><td style="padding:8px 12px;">1항로</td><td style="padding:8px 12px;" id="next-date">05-21</td><td style="padding:8px 12px;">19:00</td>
               </tr>
               <tr>
-                <td style="padding:8px 12px;">GRAND PEACE</td><td style="padding:8px 12px;">입항</td><td style="padding:8px 12px;">2항로</td><td style="padding:8px 12px;" id="next-date2">05-21</td><td style="padding:8px 12px;">18:30</td>
+                <td style="padding:8px 12px;">GRAND PEACE</td><td style="padding:8px 12px;">입항</td><td style="padding:8px 12px;">2항로</td><td style="padding:8px 12px;" id="next-date2">05-21</td><td style="padding:8px 12px;">21:00</td>
               </tr>
             </tbody>
           </table>
         </div>
-        <p style="font-size:11px;color:#9ca3af;margin-top:6px;">↑ 녹색 행이 현재 시각 기준 가장 임박한 도선 일정으로 자동 선택됩니다</p>
+        <p style="font-size:11px;color:#9ca3af;margin-top:6px;">↑ 녹색(도선사 지정) 및 주황색(도선사 대기) 행이 현재 시각 기준 가장 임박한 도선 일정으로 자동 선택됩니다</p>
       </div>
 
       <div class="result-badges" style="margin-top:20px;">
@@ -409,6 +417,7 @@
 // 오늘/내일 날짜 동적 표시 및 가상 테이블 데이터 실시간 생성
 (function(){
   const now = new Date();
+  window.mockNow = now; // 가상 시연 시간 고정을 위해 전역 저장
   
   // 1. 단일 변수/텍스트 세팅 (미리보기 표 등)
   const m = String(now.getMonth()+1).padStart(2,'0');
@@ -420,16 +429,16 @@
   const todayStr = `${m}-${d}`;
   const tomStr = `${tm}-${td}`;
   
-  const soon = new Date(now.getTime() + 40*60000);
-  const hh = String(soon.getHours()).padStart(2,'0');
-  const mm = String(soon.getMinutes()).padStart(2,'0');
-  
-  if (document.getElementById('nearby-time')) document.getElementById('nearby-time').textContent = `${hh}:${mm}`;
-  if (document.getElementById('today-date')) document.getElementById('today-date').textContent = todayStr;
-  if (document.getElementById('next-date')) document.getElementById('next-date').textContent = tomStr;
-  if (document.getElementById('next-date2')) document.getElementById('next-date2').textContent = tomStr;
+  // 기준 시각을 정각으로 설정
+  const baseTime = new Date(now);
+  baseTime.setMinutes(0, 0, 0);
 
-  // 2. 가상 에뮬레이터 비교 테이블 데이터 동적 채우기
+  const tMinus3h = new Date(baseTime.getTime() - 180 * 60000);
+  const tMinus1h = new Date(baseTime.getTime() - 60 * 60000);
+  const tPlus1h = new Date(baseTime.getTime() + 60 * 60000); // 🎯 핵심 타겟 (1시간 이내 임박 - 동시간대 2대)
+  const tPlus3h = new Date(baseTime.getTime() + 180 * 60000);
+  const tTomorrow = new Date(baseTime.getTime() + 24 * 60 * 60000 + 120 * 60000); // 내일
+
   const formatTime = (date) => {
     const h = String(date.getHours()).padStart(2,'0');
     const min = String(date.getMinutes()).padStart(2,'0');
@@ -442,20 +451,12 @@
     return `${mo}-${da}`;
   };
 
-  // 현재 시각 기준 전후 일정 생성
-  const tMinus3h = new Date(now.getTime() - 180 * 60000);
-  const tMinus1_5h = new Date(now.getTime() - 90 * 60000);
-  const tPlus40m = new Date(now.getTime() + 40 * 60000); // 🎯 핵심 타겟 (1시간 이내 임박)
-  const tPlus3h = new Date(now.getTime() + 180 * 60000);
-  const tPlus5_5h = new Date(now.getTime() + 330 * 60000);
-  const tTomorrow = new Date(now.getTime() + 24 * 60 * 60000 + 120 * 60000); // 내일
-
   const mockShips = [
     { no: 1, status: '완료', pilot: 'YH HS', date: formatDateStr(tMinus3h), time: formatTime(tMinus3h), name: 'ARUNIKA JAYA', zone: 'JANG LNG1' },
-    { no: 2, status: '완료', pilot: 'JO SD', date: formatDateStr(tMinus1_5h), time: formatTime(tMinus1_5h), name: 'SILVER SKY', zone: 'E3 E4' },
-    { no: 3, status: '대기', pilot: '', date: formatDateStr(tPlus40m), time: formatTime(tPlus40m), name: 'KOREA PILOT', zone: 'E4 E1' }, // 🎯 타겟 (대기/도선 미지정)
-    { no: 4, status: '대기', pilot: 'JY SH', date: formatDateStr(tPlus3h), time: formatTime(tPlus3h), name: 'SHAO YUN', zone: 'E6 IPA' },
-    { no: 5, status: '대기', pilot: 'KG KH', date: formatDateStr(tPlus5_5h), time: formatTime(tPlus5_5h), name: 'TONG CHENG', zone: 'SGM SGM' },
+    { no: 2, status: '완료', pilot: 'JO SD', date: formatDateStr(tMinus1h), time: formatTime(tMinus1h), name: 'SILVER SKY', zone: 'E3 E4' },
+    { no: 3, status: '대기', pilot: '', date: formatDateStr(tPlus1h), time: formatTime(tPlus1h), name: 'KOREA PILOT', zone: 'E4 E1' }, // 🎯 타겟 1 (대기/도선 미지정 -> 주황색)
+    { no: 4, status: '대기', pilot: 'JY SH', date: formatDateStr(tPlus1h), time: formatTime(tPlus1h), name: 'SHAO YUN', zone: 'E6 IPA' }, // 🎯 타겟 2 (대기/도선 지정 -> 녹색)
+    { no: 5, status: '대기', pilot: 'KG KH', date: formatDateStr(tPlus3h), time: formatTime(tPlus3h), name: 'TONG CHENG', zone: 'SGM SGM' },
     { no: 6, status: '대기', pilot: 'CS PC', date: formatDateStr(tTomorrow), time: formatTime(tTomorrow), name: 'PACIFIC STAR', zone: 'IPA E6' }
   ];
 
@@ -486,6 +487,17 @@
   drawTable('before-table-body');
   drawTable('after-table-body');
 
+  // 오늘/내일 날짜 및 시각 텍스트 세팅
+  const soon = new Date(baseTime.getTime() + 60*60000); // 1시간 정각 뒤
+  const hh = String(soon.getHours()).padStart(2,'0');
+  const mm = String(soon.getMinutes()).padStart(2,'0');
+  
+  if (document.getElementById('nearby-time')) document.getElementById('nearby-time').textContent = `${hh}:${mm}`;
+  if (document.getElementById('nearby-time-green')) document.getElementById('nearby-time-green').textContent = `${hh}:${mm}`;
+  if (document.getElementById('today-date')) document.getElementById('today-date').textContent = todayStr;
+  if (document.getElementById('today-date-green')) document.getElementById('today-date-green').textContent = todayStr;
+  if (document.getElementById('next-date')) document.getElementById('next-date').textContent = tomStr;
+  if (document.getElementById('next-date2')) document.getElementById('next-date2').textContent = tomStr;
 })();
 
 // 오른쪽 가상 브라우저에서 실제 북마크릿 스크립트 구동 시뮬레이션
@@ -502,7 +514,7 @@ function triggerVirtualBookmarklet(btn) {
   }
 
   // 2. 실제 북마크릿 자바스크립트 비교/탐색 핵심 메커니즘 실행
-  const now = new Date();
+  const now = window.mockNow || new Date();
   const yr = now.getFullYear();
   const hiList = [];
   let nxList = [];
