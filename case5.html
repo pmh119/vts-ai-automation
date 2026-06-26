@@ -43,7 +43,7 @@
         </div>
         <div class="summary-item">
           <span class="summary-label">⚙️ 주요 기능</span>
-          <span class="summary-text">1시간 이내 스케줄 자동 탐색 · 녹색 하이라이트 · 화면 중앙 자동 스크롤 · 3분 주기 자동 갱신</span>
+          <span class="summary-text">1시간 이내 스케줄 자동 탐색 · 상태별 하이라이트 (승인: 녹색, 대기: 주황) · 화면 중앙 자동 스크롤 · 3분 주기 자동 갱신</span>
         </div>
         <div class="summary-item">
           <span class="summary-label">🛠️ 기술 스택</span>
@@ -85,7 +85,7 @@
         <ul class="ba-list">
           <li>북마크릿 클릭 한 번으로 즉시 실행</li>
           <li>현재 시각 기준 가장 임박한 도선 일정 자동 탐색</li>
-          <li>녹색 테두리 하이라이트 + 화면 중앙 자동 스크롤</li>
+          <li>상태별 입체적 하이라이트 (승인: 녹색, 대기: 주황) + 화면 중앙 자동 스크롤</li>
           <li>3분마다 자동 갱신 — 계속 클릭 불필요</li>
         </ul>
         <div class="ba-stat">🎯 핵심 정보 인지 시간 → 0.2초 이하</div>
@@ -213,7 +213,7 @@
             <div class="btn-row" style="margin-left:48px; margin-top:4px; display:flex; gap:10px; flex-wrap:wrap;">
               <a class="bookmarklet-drag"
                  id="bookmarklet-btn"
-                 href="javascript:(function(){if(window.ptT)clearInterval(window.ptT);if(window.scT)clearInterval(window.scT);function h(){var n=new Date(),y=n.getFullYear(),m=String(n.getMonth()+1).padStart(2,'0'),d=String(n.getDate()).padStart(2,'0'),tm=new Date(n);tm.setDate(n.getDate()+1);var ty=tm.getFullYear(),tM=String(tm.getMonth()+1).padStart(2,'0'),td=String(tm.getDate()).padStart(2,'0'),d2=m+'-'+d,t2=tM+'-'+td,nx=null,mD=Infinity,fC=0;if(!document.getElementById('ps_s')){var s=document.createElement('style');s.id='ps_s';s.innerHTML='.t-hi td{background:#e8f5e9!important;border-top:2px solid #4caf50!important;border-bottom:2px solid #4caf50!important;font-weight:bold!important;color:#1b5e20!important;transition:all 0.3s;}';document.head.appendChild(s);}document.querySelectorAll('tr').forEach(function(r){r.classList.remove('t-hi');var tds=r.querySelectorAll('td');if(tds.length&lt;5)return;var dt=tds[3].innerText.trim(),tt=tds[4].innerText.trim(),iT=dt.includes(d2),iN=dt.includes(t2);if(iT||iN){var mt=tt.match(/(\d{2}):(\d{2})/);if(mt){var st=new Date(n);if(iN)st.setDate(n.getDate()+1);st.setHours(parseInt(mt[1]),parseInt(mt[2]),0,0);var df=st-n;if(iT&amp;&amp;df&gt;=0&amp;&amp;df&lt;=3600000){r.classList.add('t-hi');fC=1;}else if(!fC&amp;&amp;df&gt;0&amp;&amp;df&lt;mD){mD=df;nx=r;}}}});if(!fC&amp;&amp;nx)nx.classList.add('t-hi');}function sC(){var t=document.querySelector('.t-hi');if(t)t.scrollIntoView({behavior:'smooth',block:'center'});}h();setTimeout(sC,100);window.ptT=setInterval(h,180000);window.scT=setInterval(sC,180000);})();"
+                 href="javascript:(function(){if(window.ptT)clearInterval(window.ptT);if(window.scT)clearInterval(window.scT);var old=document.getElementById('ps_s');if(old)old.remove();var s=document.createElement('style');s.id='ps_s';s.innerHTML='.t-hi td{background:#e8f5e9!important;border-top:2px solid #4caf50!important;border-bottom:2px solid #4caf50!important;font-weight:bold!important;color:#1b5e20!important;transition:all 0.3s;}.t-hi-pending td{box-shadow:inset 0 3px 0 0 #ff9800,inset 0 -3px 0 0 #ff9800!important;font-weight:bold!important;transition:all 0.3s;}';document.head.appendChild(s);function h(){var now=new Date(),yr=now.getFullYear(),hiList=[],nxList=[],mD=Infinity;document.querySelectorAll('tr').forEach(function(r){r.classList.remove('t-hi');r.classList.remove('t-hi-pending');var tds=r.querySelectorAll('td');if(tds.length&lt;5)return;var dt=tds[3].innerText.trim(),tt=tds[4].innerText.trim();if(!dt||!tt)return;if(!dt.match(/^\d{2}-\d{2}$/)||!tt.match(/^\d{2}:\d{2}$/))return;var shipTime=new Date(yr+'-'+dt+' '+tt),df=shipTime-now;if(df&gt;=0&amp;&amp;df&lt;=3600000){hiList.push(r);}else if(df&gt;0){if(df&lt;mD-60000){mD=df;nxList=[r];}else if(df&lt;=mD+60000){if(df&lt;mD)mD=df;nxList.push(r);}}});var targets=hiList.length?hiList:nxList;targets.forEach(function(r){var tds=r.querySelectorAll('td');var pilot=tds[2].innerText.trim();if(pilot){r.classList.add('t-hi');}else{r.classList.add('t-hi-pending');}});}function sC(){var t=document.querySelector('.t-hi,.t-hi-pending');if(t)t.scrollIntoView({behavior:'smooth',block:'center'});}h();setTimeout(sC,100);window.ptT=setInterval(h,180000);window.scT=setInterval(sC,180000);})();"
                  title="도선표 하이라이트 — 즐겨찾기 바로 드래그하세요"
                  style="margin:0; padding:10px 18px; font-size:13px;">
                 🔖 도선표 하이라이트 (즐겨찾기 바로 드래그!)
@@ -239,7 +239,7 @@
           
           <div class="manual-step">
             <span class="manual-step-num">3</span>
-            <span class="manual-step-text">즐겨찾기 바의 <strong>"도선표 하이라이트"</strong> 버튼 클릭<br>→ 현재 시각 기준 가장 가까운 도선 일정 행이 <span style="color:#16a34a;font-weight:600;">녹색으로 강조</span>되며 화면 중앙으로 이동</span>
+            <span class="manual-step-text">즐겨찾기 바의 <strong>"도선표 하이라이트"</strong> 버튼 클릭<br>→ 현재 시각 기준 가장 가까운 도선 일정 행이 상태에 따라 <span style="color:#16a34a;font-weight:600;">녹색(도선사 지정)</span> 또는 <span style="color:#d97706;font-weight:600;">주황색(도선사 대기)</span>으로 강조되며 화면 중앙으로 이동</span>
           </div>
           <div class="manual-step">
             <span class="manual-step-num">4</span>
@@ -446,7 +446,7 @@
   const mockShips = [
     { no: 1, status: '완료', pilot: 'YH HS', date: formatDateStr(tMinus3h), time: formatTime(tMinus3h), name: 'ARUNIKA JAYA', zone: 'JANG LNG1' },
     { no: 2, status: '완료', pilot: 'JO SD', date: formatDateStr(tMinus1_5h), time: formatTime(tMinus1_5h), name: 'SILVER SKY', zone: 'E3 E4' },
-    { no: 3, status: '승인', pilot: 'LS PC', date: formatDateStr(tPlus40m), time: formatTime(tPlus40m), name: 'KOREA PILOT', zone: 'E4 E1' }, // 🎯 타겟
+    { no: 3, status: '대기', pilot: '', date: formatDateStr(tPlus40m), time: formatTime(tPlus40m), name: 'KOREA PILOT', zone: 'E4 E1' }, // 🎯 타겟 (대기/도선 미지정)
     { no: 4, status: '대기', pilot: 'JY SH', date: formatDateStr(tPlus3h), time: formatTime(tPlus3h), name: 'SHAO YUN', zone: 'E6 IPA' },
     { no: 5, status: '대기', pilot: 'KG KH', date: formatDateStr(tPlus5_5h), time: formatTime(tPlus5_5h), name: 'TONG CHENG', zone: 'SGM SGM' },
     { no: 6, status: '대기', pilot: 'CS PC', date: formatDateStr(tTomorrow), time: formatTime(tTomorrow), name: 'PACIFIC STAR', zone: 'IPA E6' }
@@ -490,63 +490,57 @@ function triggerVirtualBookmarklet(btn) {
   if(!container.querySelector('#ps_s_virtual')){
     const s = document.createElement('style');
     s.id = 'ps_s_virtual';
-    s.innerHTML = '.t-hi td{background:#e8f5e9!important;border-top:2px solid #4caf50!important;border-bottom:2px solid #4caf50!important;font-weight:bold!important;color:#1b5e20!important;transition:all 0.4s ease;}';
+    s.innerHTML = '.t-hi td{background:#e8f5e9!important;border-top:2px solid #4caf50!important;border-bottom:2px solid #4caf50!important;font-weight:bold!important;color:#1b5e20!important;transition:all 0.4s ease;}.t-hi-pending td{box-shadow:inset 0 3px 0 0 #ff9800,inset 0 -3px 0 0 #ff9800!important;font-weight:bold!important;transition:all 0.3s;}';
     container.appendChild(s);
   }
 
   // 2. 실제 북마크릿 자바스크립트 비교/탐색 핵심 메커니즘 실행
-  const n = new Date();
-  const m = String(n.getMonth()+1).padStart(2,'0');
-  const d = String(n.getDate()).padStart(2,'0');
-  const tm = new Date(n);
-  tm.setDate(n.getDate()+1);
-  const tM = String(tm.getMonth()+1).padStart(2,'0');
-  const td = String(tm.getDate()).padStart(2,'0');
-  const d2 = m+'-'+d;
-  const t2 = tM+'-'+td;
-  
-  let nx = null;
+  const now = new Date();
+  const yr = now.getFullYear();
+  const hiList = [];
+  const nxList = [];
   let mD = Infinity;
-  let fC = 0;
 
   // 가상 브라우저의 테이블 tr들 순회
   container.querySelectorAll('tbody tr').forEach(function(r){
     r.classList.remove('t-hi');
+    r.classList.remove('t-hi-pending');
     const tds = r.querySelectorAll('td');
     if(tds.length < 5) return;
     const dt = tds[3].innerText.trim(); // 일자
     const tt = tds[4].innerText.trim(); // 시간
-    const iT = dt.includes(d2);
-    const iN = dt.includes(t2);
+    if(!dt||!tt) return;
+    if(!dt.match(/^\d{2}-\d{2}$/)||!tt.match(/^\d{2}:\d{2}$/)) return;
+    const shipTime = new Date(yr+'-'+dt+' '+tt);
+    const df = shipTime - now;
     
-    if(iT || iN){
-      const mt = tt.match(/(\d{2}):(\d{2})/);
-      if(mt){
-        const st = new Date(n);
-        if(iN) st.setDate(n.getDate()+1);
-        st.setHours(parseInt(mt[1]), parseInt(mt[2]), 0, 0);
-        const df = st - n;
-        
-        // 1시간(3,600,000ms) 이내 스케줄 즉시 하이라이트
-        if(iT && df >= 0 && df <= 3600000){
-          r.classList.add('t-hi');
-          fC = 1;
-        } else if(!fC && df > 0 && df < mD){
-          mD = df;
-          nx = r;
-        }
+    if(df >= 0 && df <= 3600000){
+      hiList.push(r);
+    }else if(df > 0){
+      if(df < mD - 60000){
+        mD = df;
+        nxList = [r];
+      }else if(df <= mD + 60000){
+        if(df < mD) mD = df;
+        nxList.push(r);
       }
     }
   });
   
-  // 1시간 이내 일정이 없는 경우, 향후 가장 임박한 일정을 강조
-  if(!fC && nx) {
-    nx.classList.add('t-hi');
-  }
+  const targets = hiList.length ? hiList : nxList;
+  targets.forEach(function(r){
+    const tds = r.querySelectorAll('td');
+    const pilot = tds[2].innerText.trim();
+    if(pilot){
+      r.classList.add('t-hi');
+    }else{
+      r.classList.add('t-hi-pending');
+    }
+  });
 
   // 3. 타겟 행을 가상 브라우저 화면 정중앙으로 스크롤 (부드러운 스크롤 재현)
   setTimeout(() => {
-    const t = container.querySelector('.t-hi');
+    const t = container.querySelector('.t-hi,.t-hi-pending');
     if(t) {
       t.scrollIntoView({behavior:'smooth', block:'center'});
     }
@@ -569,7 +563,7 @@ function triggerVirtualBookmarklet(btn) {
 }
 
 function copyBookmarklet() {
-  const code = `javascript:(function(){if(window.ptT)clearInterval(window.ptT);if(window.scT)clearInterval(window.scT);function h(){var n=new Date(),y=n.getFullYear(),m=String(n.getMonth()+1).padStart(2,'0'),d=String(n.getDate()).padStart(2,'0'),tm=new Date(n);tm.setDate(n.getDate()+1);var ty=tm.getFullYear(),tM=String(tm.getMonth()+1).padStart(2,'0'),td=String(tm.getDate()).padStart(2,'0'),d2=m+'-'+d,t2=tM+'-'+td,nx=null,mD=Infinity,fC=0;if(!document.getElementById('ps_s')){var s=document.createElement('style');s.id='ps_s';s.innerHTML='.t-hi td{background:#e8f5e9!important;border-top:2px solid #4caf50!important;border-bottom:2px solid #4caf50!important;font-weight:bold!important;color:#1b5e20!important;transition:all 0.3s;}';document.head.appendChild(s);}document.querySelectorAll('tr').forEach(function(r){r.classList.remove('t-hi');var tds=r.querySelectorAll('td');if(tds.length<5)return;var dt=tds[3].innerText.trim(),tt=tds[4].innerText.trim(),iT=dt.includes(d2),iN=dt.includes(t2);if(iT||iN){var mt=tt.match(/(\\d{2}):(\\d{2})/);if(mt){var st=new Date(n);if(iN)st.setDate(n.getDate()+1);st.setHours(parseInt(mt[1]),parseInt(mt[2]),0,0);var df=st-n;if(iT&&df>=0&&df<=3600000){r.classList.add('t-hi');fC=1;}else if(!fC&&df>0&&df<mD){mD=df;nx=r;}}}});if(!fC&&nx)nx.classList.add('t-hi');}function sC(){var t=document.querySelector('.t-hi');if(t)t.scrollIntoView({behavior:'smooth',block:'center'});}h();setTimeout(sC,100);window.ptT=setInterval(h,180000);window.scT=setInterval(sC,180000);})();`;
+  const code = `javascript:(function(){if(window.ptT)clearInterval(window.ptT);if(window.scT)clearInterval(window.scT);var old=document.getElementById('ps_s');if(old)old.remove();var s=document.createElement('style');s.id='ps_s';s.innerHTML='.t-hi td{background:#e8f5e9!important;border-top:2px solid #4caf50!important;border-bottom:2px solid #4caf50!important;font-weight:bold!important;color:#1b5e20!important;transition:all 0.3s;}.t-hi-pending td{box-shadow:inset 0 3px 0 0 #ff9800,inset 0 -3px 0 0 #ff9800!important;font-weight:bold!important;transition:all 0.3s;}';document.head.appendChild(s);function h(){var now=new Date(),yr=now.getFullYear(),hiList=[],nxList=[],mD=Infinity;document.querySelectorAll('tr').forEach(function(r){r.classList.remove('t-hi');r.classList.remove('t-hi-pending');var tds=r.querySelectorAll('td');if(tds.length<5)return;var dt=tds[3].innerText.trim(),tt=tds[4].innerText.trim();if(!dt||!tt)return;if(!dt.match(/^\\d{2}-\\d{2}$/)||!tt.match(/^\\d{2}:\\d{2}$/))return;var shipTime=new Date(yr+'-'+dt+' '+tt),df=shipTime-now;if(df>=0&&df<=3600000){hiList.push(r);}else if(df>0){if(df<mD-60000){mD=df;nxList=[r];}else if(df<=mD+60000){if(df<mD)mD=df;nxList.push(r);}}});var targets=hiList.length?hiList:nxList;targets.forEach(function(r){var tds=r.querySelectorAll('td');var pilot=tds[2].innerText.trim();if(pilot){r.classList.add('t-hi');}else{r.classList.add('t-hi-pending');}});}function sC(){var t=document.querySelector('.t-hi,.t-hi-pending');if(t)t.scrollIntoView({behavior:'smooth',block:'center'});}h();setTimeout(sC,100);window.ptT=setInterval(h,180000);window.scT=setInterval(sC,180000);})();`;
   navigator.clipboard.writeText(code).then(() => {
     const btn = document.getElementById('copy-bookmarklet-btn');
     btn.textContent = '✓ 복사됨!';
