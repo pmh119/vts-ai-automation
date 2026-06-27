@@ -1,6 +1,6 @@
-# [사례 6] PORT-MIS 관제신고 탭 선박명 자동 동기화 북마크릿 (PORT-MIS Tab Vessel Name Sync Bookmarklet)
+# [사례 6] PORT-MIS 확장팩 (PORT-MIS Extension Pack)
 
-VTS 관제실에서 해양수산부 PORT-MIS(항만운영정보시스템)를 이용해 선박 관제신고서를 작성할 때, 여러 선박의 탭을 띄워놓고 작업하는 멀티태스킹 환경에서 개별 탭 이름을 실제 선박명으로 실시간 동기화해 주는 경량 자바스크립트(JavaScript) 북마크릿 도구입니다.
+VTS 관제실에서 해양수산부 PORT-MIS(항만운영정보시스템)를 이용해 선박 관제신고서를 작성할 때, 여러 선박의 탭을 띄워놓고 작업하는 멀티태스킹 환경에서 개별 탭 이름을 실제 선박명으로 실시간 동기화해주고, 선박 상세 정보를 원클릭 복사할 수 있는 편리 기능까지 하나로 묶어 제공하는 경량 자바스크립트(JavaScript) 북마크릿 통합 확장팩 도구입니다.
 
 ---
 
@@ -34,56 +34,242 @@ VTS 관제실에서 해양수산부 PORT-MIS(항만운영정보시스템)를 이
 ---
 
 ## 4. 소스 코드 구조 및 설명
-`PORT-MIS 탭 선박명 표시 북마크릿.txt` 내부 코드는 주석이 생략되고 공백이 압축된 단일 행(Minified String) 형태로 제공되어 즐겨찾기 URL란에 바로 등록하여 사용할 수 있습니다.
+`PORT-MIS 확장팩 북마크릿.txt` 내부 코드는 주석이 생략되고 공백이 압축된 단일 행(Minified String) 형태로 제공되어 즐겨찾기 URL란에 바로 등록하여 사용할 수 있습니다.
 
 ```javascript
 javascript:(function(){
-  // 중복 실행 시 기존 감시자(Observer)가 존재하면 감시를 중단하고 청소
+  // 중복 실행 시 기존 Observer가 존재하면 감시를 중단하고 새로 시작
   if(window.vtsObserver){
     window.vtsObserver.disconnect();
   }
-  
-  // PORT-MIS 탭 이름과 폼 내부의 선박명을 동기화하는 핵심 함수
+
+  // 탭 가림 현상을 해결하기 위해 플렉스 랩(두줄 모드) 및 높이 보정 레이아웃 설정
+  function fixLayout(){
+    var mask = document.getElementById('mf_tacMain_mask');
+    var scroll = document.getElementById('mf_tacMain_scroll');
+    var tabhost = document.getElementById('mf_tacMain_tabhost');
+    var container = document.getElementById('mf_tacMain_container');
+    var btnL = document.getElementById('mf_tacMain_btn_scrollLeft');
+    var btnR = document.getElementById('mf_tacMain_btn_scrollRight');
+    
+    if(!mask || !scroll || !tabhost || !container) return;
+    
+    // 스크롤 영역을 100% 넓혀 모든 탭을 감싸도록 설정
+    scroll.style.setProperty('width', '100%', 'important');
+    scroll.style.setProperty('max-width', '100%', 'important');
+    scroll.style.setProperty('left', '0px', 'important');
+    scroll.style.setProperty('position', 'relative', 'important');
+    
+    // 탭바가 랩핑되어 줄바꿈 되도록 flex-wrap 설정
+    tabhost.style.setProperty('flex-wrap', 'wrap', 'important');
+    tabhost.style.setProperty('width', '100%', 'important');
+    tabhost.style.setProperty('height', 'auto', 'important');
+    
+    tabhost.querySelectorAll('li').forEach(function(li){
+      li.style.setProperty('float', 'none', 'important');
+      li.style.setProperty('display', 'inline-flex', 'important');
+      li.style.setProperty('height', '29px', 'important');
+      li.style.setProperty('margin-bottom', '2px', 'important');
+    });
+    
+    // 탭 이동 좌우 화살표 버튼 숨김 처리
+    if(btnL) btnL.style.setProperty('display', 'none', 'important');
+    if(btnR) btnR.style.setProperty('display', 'none', 'important');
+    
+    mask.style.setProperty('overflow', 'visible', 'important');
+    mask.style.setProperty('height', 'auto', 'important');
+    
+    // 늘어난 탭 높이만큼 콘텐츠 컨테이너 시작 높이(Top) 및 전체 높이 보정
+    var tabH = tabhost.offsetHeight;
+    var originalTabH = 30;
+    var extra = tabH - originalTabH;
+    container.style.setProperty('top', (originalTabH + extra) + 'px', 'important');
+    
+    var tacMain = document.getElementById('mf_tacMain');
+    if(tacMain){
+      var totalH = tacMain.offsetHeight;
+      if(totalH > 0){
+        container.style.setProperty('height', (totalH - tabH) + 'px', 'important');
+      }
+    }
+  }
+
+  // PORT-MIS 탭 및 입력 폼의 선박 한글명을 확인하여 탭 이름 동기화
   function syncTabs(){
-    var h=document.getElementById('mf_tacMain_tabhost')||document.querySelector('.w2tabcontrol_tabs');
-    if(!h)return;
-    var a=h.querySelectorAll('a[id*="tabHTML"]')||h.querySelectorAll('a');
-    for(var i=0;i<a.length;i++){
-      var n=a[i];
-      if(!n.id)continue;
-      var k=n.id.replace('mf_tacMain_tab_','').replace('_tabHTML','');
-      var targetId='mf_tacMain_contents_'+k;
-      var r=document.getElementById(targetId);
-      if(r){
-        // 선박 한글명 입력 필드(vsslKorNmD) 값 조회
-        var p=r.querySelector('input[id*="vsslKorNmD"]');
-        if(p&&p.value.trim()!==''){
-          var s=p.value.trim();
-          // 탭명이 선박명과 다른 경우 갱신
-          if(n.innerText!==s){
-            n.innerText=s;
-            n.title=s;
-            var m=n.querySelectorAll('span,label');
-            for(var d=0;d<m.length;d++){
-              m[d].innerText=s;
+    var tabContainer = document.getElementById('mf_tacMain_tabhost') || document.querySelector('.w2tabcontrol_tabs');
+    if(!tabContainer) return;
+    
+    // WebSquare5 기반 탭 요소들 검색
+    var tabLinks = tabContainer.querySelectorAll('a[id*="tabHTML"]') || tabContainer.querySelectorAll('a');
+    for(var i = 0; i < tabLinks.length; i++){
+      var tab = tabLinks[i];
+      if(!tab.id) continue;
+      
+      // 탭의 고유 ID 키값 추출
+      var tabKey = tab.id.replace('mf_tacMain_tab_', '').replace('_tabHTML', '');
+      var contentId = 'mf_tacMain_contents_' + tabKey;
+      var contentArea = document.getElementById(contentId);
+      
+      if(contentArea){
+        // 폼 내부의 선박 한글명 입력란(vsslKorNmD) 요소 검색
+        var vesselInput = contentArea.querySelector('input[id*="vsslKorNmD"]');
+        if(vesselInput && vesselInput.value.trim() !== ''){
+          var vesselName = vesselInput.value.trim();
+          // 현재 탭 텍스트가 선박명과 다른 경우 변경 처리
+          if(tab.innerText !== vesselName){
+            tab.innerText = vesselName;
+            tab.title = vesselName;
+            
+            // 탭 내부의 하위 텍스트 레이블(span, label)도 일치화
+            var childLabels = tab.querySelectorAll('span,label');
+            for(var d = 0; d < childLabels.length; d++){
+              childLabels[d].innerText = vesselName;
             }
           }
         }
       }
     }
   }
-  
-  // 감시 대상이 될 PORT-MIS 메인 프레임 영역 설정
-  var target=document.getElementById('mf_tacMain')||document.body;
-  window.vtsObserver=new MutationObserver(function(mutations){
+
+  // 선박 정보 복사 핵심 함수
+  function copyShipInfo(tabRoot){
+    if(!tabRoot){
+      alert('선박 정보 영역을 찾을 수 없습니다.');
+      return;
+    }
+    
+    function val(key){
+      var el = tabRoot.querySelector('input[id*="'+key+'"]');
+      return el ? (el.value || '').trim() : '';
+    }
+    
+    var name = val('vsslKorNmD');
+    var kind = val('vsslKndNm');
+    var nlty = val('vsslNltyNm');
+    var grtg = val('grtg');
+    var shdth = val('shdth');
+    var totLt = val('vsslTotLt');
+    var dp = val('vsslDp');
+    var tel1 = val('vsslTelno1');
+    var tel2 = val('vsslTelno2');
+    var tel3 = val('vsslTelno3');
+    var cmpny = val('cmpnyKorNm');
+    var cmpnyTel = val('entrpsTelno');
+    var agent = val('harborEntrpsNm');
+    var agentTel = val('harborEntrpsTel');
+    
+    var lines = [];
+    lines.push('선박명: ' + name);
+    lines.push('선박종류: ' + kind);
+    lines.push('선박국적: ' + nlty);
+    lines.push('총톤수: ' + grtg);
+    lines.push('선폭: ' + shdth);
+    lines.push('총길이: ' + totLt);
+    lines.push('깊이: ' + dp);
+    lines.push('전화번호(선박/업체/선장): ' + tel1 + ' / ' + tel2 + ' / ' + tel3);
+    lines.push('선박업체: ' + cmpny + (cmpnyTel ? ' (' + cmpnyTel + ')' : ''));
+    lines.push('대리점: ' + agent + (agentTel ? ' (' + agentTel + ')' : ''));
+    
+    var text = lines.join('\n');
+    
+    function ok(){
+      alert('선박정보가 복사되었습니다.\n\n' + text);
+    }
+    
+    function fb(){
+      try {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.top = '-9999px';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        ok();
+      } catch(err) {
+        alert('복사 실패: ' + err);
+      }
+    }
+    
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(ok).catch(fb);
+    } else {
+      fb();
+    }
+  }
+
+  // 선박 정보 영역에 [선박정보 복사] 버튼을 동적으로 생성 및 주입
+  function addCopyButtons(){
+    var rightareas = document.querySelectorAll('div.rightarea');
+    var re = /^mf_tacMain_contents_[A-Za-z0-9]+(_[0-9]+)?$/;
+    
+    for(var i = 0; i < rightareas.length; i++){
+      var ra = rightareas[i];
+      if(ra.querySelector('.shipInfoCopyBtn')) continue;
+      
+      var titleArea = ra.parentElement;
+      if(!titleArea) continue;
+      
+      var h4 = titleArea.querySelector('h4.tit_txt');
+      if(!h4 || h4.innerText.indexOf('선박정보') === -1) continue;
+      
+      var lcPopup = ra.querySelector('[id*="shipLcPopup"]');
+      var newBtn = document.createElement('div');
+      newBtn.className = 'w2anchor btn03 second shipInfoCopyBtn';
+      newBtn.style.setProperty('margin-left', '4px', 'important');
+      
+      var aBtn = document.createElement('a');
+      aBtn.href = 'javascript:void(null);';
+      aBtn.innerText = '선박정보 복사';
+      newBtn.appendChild(aBtn);
+      
+      newBtn.addEventListener('click', function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        
+        var node = this.parentElement;
+        var tabRoot = null;
+        while(node){
+          if(node.id && re.test(node.id)){
+            tabRoot = node;
+            break;
+          }
+          node = node.parentElement;
+        }
+        copyShipInfo(tabRoot);
+      });
+      
+      if(lcPopup && lcPopup.parentNode === ra){
+        ra.insertBefore(newBtn, lcPopup.nextSibling);
+      } else {
+        ra.appendChild(newBtn);
+      }
+    }
+  }
+
+  // MutationObserver를 통한 실시간 동적 레이아웃 및 탭 동기화 감시
+  var target = document.getElementById('mf_tacMain') || document.body;
+  window.vtsObserver = new MutationObserver(function(){
     syncTabs();
+    fixLayout();
+    addCopyButtons();
   });
   
-  // 하위 트리 노드 추가/삭제 및 value/style 속성 변경 실시간 감시
-  window.vtsObserver.observe(target,{childList:true,subtree:true,attributes:true,attributeFilter:['value','style']});
+  // 탭 생성, 폼 로딩 및 입력값/레이아웃 변화 감시
+  window.vtsObserver.observe(target, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: ['value', 'style']
+  });
   
-  // 기동 직후 즉시 동기화 실행
+  // 초기 즉시 실행
   syncTabs();
+  fixLayout();
+  addCopyButtons();
+  console.log('평택VTS 탭 동기화+두줄모드+선박정보복사 기동 완료!');
 })();
 ```
 
@@ -93,13 +279,13 @@ javascript:(function(){
 
 ### 최초 설치 방법
 1. 현재 웹 브라우저(Edge, Chrome 등) 상단의 **북마크 바(즐겨찾기 바)** 영역에 마우스 우클릭하여 `페이지 추가`를 누릅니다.
-2. 즐겨찾기 추가 팝업창에서 이름을 **`PORT-MIS 탭 선박명 표시`**로 입력합니다.
-3. URL 입력란에 **`PORT-MIS 탭 선박명 표시 북마크릿.txt`** 파일에 들어있는 텍스트 코드 전체(`javascript:...`)를 복사하여 붙여넣고 저장합니다.
+2. 즐겨찾기 추가 팝업창에서 이름을 **`PORT-MIS 확장팩`**으로 입력합니다.
+3. URL 입력란에 **`PORT-MIS 확장팩 북마크릿.txt`** 파일에 들어있는 텍스트 코드 전체(`javascript:...`)를 복사하여 붙여넣고 저장합니다.
 
 ### 실행 방법
 1. 관제석 PC에서 해양수산부 PORT-MIS 민원신고 혹은 입출항 관제 신고 웹 화면을 엽니다.
-2. 브라우저 북마크 바에 등록해 둔 **`PORT-MIS 탭 선박명 표시`** 버튼을 한 번 클릭합니다.
-3. 여러 개의 신고창 탭을 열고 선박명을 입력하면, 해당 탭들의 이름이 실시간으로 **입력된 선박명**으로 자동 변경되어 탭을 일일이 눌러볼 필요가 없어집니다.
+2. 브라우저 북마크 바에 등록해 둔 **`PORT-MIS 확장팩`** 버튼을 한 번 클릭합니다.
+3. 여러 개의 신고창 탭을 열고 선박명을 입력하면, 해당 탭들의 이름이 실시간으로 **입력된 선박명**으로 자동 변경되고, 선박정보 상세 화면에 **[선박정보 복사]** 버튼이 생성되어 원클릭으로 취합 복사가 가능해집니다.
 
 ---
 

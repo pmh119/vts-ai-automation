@@ -43,6 +43,8 @@
 ### 사전 필수 설치 요소
 스크립트의 안정적인 동작을 위해 아래 WebView2 DLL 파일들이 해당 경로에 위치해야 합니다.
 * **DLL 경로:** `C:\WebView2\Microsoft.Web.WebView2.Core.dll` 및 `Microsoft.Web.WebView2.WinForms.dll`
+* **VTS 내부망 G드라이브 다운로드 링크:** 해양경찰 내부 G드라이브에 전 직원 대상으로 `webview2` 폴더와 DLL 3종을 공유해 두었습니다. 폐쇄망 PC인 경우 아래 주소를 복사하여 G드라이브에서 간편하게 내려받아 `C:\WebView2` 폴더 내에 배치하실 수 있습니다.
+  * [G드라이브 공유 링크](https://gdrive.gcloud.go.kr/link/178257309108862184)
 
 ### 실행 방법
 1. **`portmis.ps1`** 파일을 마우스 우클릭하여 `PowerShell에서 실행`을 누릅니다.
