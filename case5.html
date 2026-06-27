@@ -500,6 +500,19 @@
   <div class="section-card">
     <div class="section-header">
       <span class="section-step">+</span>
+      <span class="section-title">소스코드 전문 공개</span>
+    </div>
+    <div class="section-body">
+      <p style="font-size:13px;color:#6b7280;margin-bottom:16px;">실제 구동되는 북마크릿 소스코드 원본의 주석 포함 가독성을 높인 버전입니다.(주석을 삭제 후 한줄로 압축해서 사용해야 작동함)</p>
+      <div class="code-wrap">
+        <div class="code-header">
+          <span class="code-filename">도선표 강조기능 북마크릿.txt</span>
+          <div class="btn-row">
+            <button class="code-copy-btn" onclick="copyCode('code-5', this)">복사</button>
+            <a class="code-copy-btn" href="사례5/도선표 강조기능 북마크릿.txt" download="도선표 강조기능 북마크릿.txt" target="_blank" style="text-decoration:none">⬇ 다운로드</a>
+          </div>
+        </div>
+        <pre class="code-pre"><code id="code-5">javascript:(function(){
   if(window.ptT) clearInterval(window.ptT);
   if(window.scT) clearInterval(window.scT);
 
@@ -759,7 +772,7 @@ const pilotPorts = [
   { id: 'masan', name: '마산항', assoc: '마산항도선사회', url: 'http://www.mspilot.co.kr', hasWeb: true },
   { id: 'daesan', name: '대산항', assoc: '대산항도선사회', url: 'http://www.ds-pilot.co.kr/forecast/status', hasWeb: true },
   { id: 'pohang', name: '포항항', assoc: '포항항도선사회', url: 'https://kmpilot.or.kr/main/sub.html?Mode=sub2_7', hasWeb: false, note: '독립 홈페이지 없음' },
-  { id: 'gunsan', name: '군산항', assoc: '군산항도선사회', url: 'http://cafe.daum.net/gunsanpilot', hasWeb: true, note: '다음 카페 운영' },
+  { id: 'gunsan', name: '군산항', assoc: '군산항도선사회', url: 'http://cafe.daum.net/gunsanpilot', hasWeb: true, noBookmarklet: true, note: '다음 카페(회원제) 운영으로 적용 불가' },
   { id: 'mokpo', name: '목포항', assoc: '목포항도선사회', url: 'https://kmpilot.or.kr/main/sub.html?Mode=sub2_9', hasWeb: false, note: '독립 홈페이지 없음' },
   { id: 'donghae', name: '동해항', assoc: '동해항도선사회', url: 'http://www.dhpilot.co.kr', hasWeb: true },
   { id: 'jeju', name: '제주항', assoc: '제주항도선사회', url: 'https://kmpilot.or.kr/main/sub.html?Mode=sub2_12', hasWeb: false, note: '독립 홈페이지 없음' }
@@ -1094,7 +1107,7 @@ function renderPortTable() {
       tdDrag.style.fontSize = '12px';
       tdDrag.style.textAlign = 'center';
       tdDrag.style.fontStyle = 'italic';
-      tdDrag.textContent = '자체 스케줄 필터링 제공 (북마크릿 불필요)';
+      tdDrag.textContent = port.id === 'gunsan' ? '회원제 카페 운영 (적용 불가)' : '자체 스케줄 필터링 제공 (북마크릿 불필요)';
       tr.appendChild(tdDrag);
       
       const tdAction = document.createElement('td');
@@ -1103,7 +1116,7 @@ function renderPortTable() {
       tdAction.style.fontSize = '12px';
       tdAction.style.textAlign = 'center';
       tdAction.style.fontStyle = 'italic';
-      tdAction.textContent = '북마크릿 미요구 항만';
+      tdAction.textContent = port.id === 'gunsan' ? '북마크릿 미지원' : '북마크릿 미요구 항만';
       tr.appendChild(tdAction);
     } else {
       const tdDrag = document.createElement('td');
