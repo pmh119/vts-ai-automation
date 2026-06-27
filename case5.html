@@ -1344,8 +1344,14 @@ function selectPort(portId) {
   const port = pilotPorts.find(p => p.id === portId);
   const codeContent = generateSourceCodeText(port.id, port.name);
   
-  document.getElementById('viewer-filename').textContent = `도선표_강조기능_북마크릿_${port.name}.txt`;
-  document.getElementById('code-viewer').textContent = codeContent;
+  const filenameEl = document.getElementById('viewer-filename');
+  if (filenameEl) {
+    filenameEl.textContent = `도선표_강조기능_북마크릿_${port.name}.txt`;
+  }
+  const viewerEl = document.getElementById('code-viewer');
+  if (viewerEl) {
+    viewerEl.textContent = codeContent;
+  }
 }
 
 // 클립보드 복사 헬퍼 함수
