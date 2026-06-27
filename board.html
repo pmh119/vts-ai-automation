@@ -93,7 +93,6 @@
     transition: transform 0.2s, box-shadow 0.2s;
   }
   .post-card:hover {
-    transform: translateY(-2px);
     box-shadow: var(--shadow);
   }
   .post-meta {
@@ -121,6 +120,7 @@
     align-items: center;
     justify-content: center;
     font-size: 11px;
+    font-weight: 700;
   }
   .post-title {
     font-size: 17px;
@@ -135,17 +135,168 @@
     white-space: pre-wrap;
     word-break: break-all;
   }
-  .btn-delete-post {
+  
+  /* 버튼 액션 스타일 */
+  .post-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-action {
     padding: 4px 8px;
-    background: #fee2e2;
-    color: #ef4444;
-    border: 1px solid #fca5a5;
     border-radius: 4px;
     font-size: 11px;
     cursor: pointer;
     font-weight: 600;
+    border: 1px solid transparent;
+    transition: all 0.15s;
   }
-  .btn-delete-post:hover { background: #fecaca; }
+  .btn-action.edit {
+    background: #e0f2fe;
+    color: #0284c7;
+    border-color: #bae6fd;
+  }
+  .btn-action.edit:hover { background: #bae6fd; }
+  
+  .btn-action.delete {
+    background: #fee2e2;
+    color: #ef4444;
+    border-color: #fca5a5;
+  }
+  .btn-action.delete:hover { background: #fecaca; }
+
+  /* 인라인 수정 폼 */
+  .edit-form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-top: 10px;
+  }
+  .edit-form-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  /* 댓글 섹션 */
+  .comments-section {
+    margin-top: 16px;
+    border-top: 1px dashed var(--border);
+    padding-top: 16px;
+  }
+  .comments-title {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .comment-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .comment-item {
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 13.5px;
+    border: 1px solid #f1f5f9;
+    position: relative;
+  }
+  .comment-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+  .comment-author-info {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .comment-author {
+    font-weight: 700;
+    color: var(--text);
+  }
+  .comment-content {
+    color: #374151;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+  .btn-comment-delete {
+    padding: 2px 6px;
+    background: #ffffff;
+    color: #94a3b8;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    font-size: 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-comment-delete:hover {
+    background: #fee2e2;
+    color: #ef4444;
+    border-color: #fca5a5;
+  }
+
+  /* 댓글 작성 폼 */
+  .comment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+  }
+  .comment-form-row {
+    display: flex;
+    gap: 8px;
+  }
+  .comment-form-row input {
+    flex: 1;
+    padding: 8px 10px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    font-size: 12.5px;
+    outline: none;
+  }
+  .comment-form-row input:focus { border-color: var(--accent); }
+  .comment-form-textarea {
+    resize: none;
+    height: 56px;
+    padding: 8px 10px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    outline: none;
+    font-family: var(--font);
+  }
+  .comment-form-textarea:focus { border-color: var(--accent); }
+  .btn-submit-comment {
+    align-self: flex-end;
+    padding: 6px 14px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .btn-submit-comment:hover { background: var(--accent-hover); }
 
   /* 글 쓰기 폼 */
   .write-card {
@@ -286,8 +437,6 @@
 
 <div class="page-content" style="max-width: 1100px;">
 
-
-
   <div class="board-layout">
     
     <!-- 왼쪽: 게시글 목록 -->
@@ -311,8 +460,8 @@
         </div>
         
         <div class="form-group">
-          <label for="post-pw-input">글 비밀번호 (삭제용)</label>
-          <input type="password" id="post-pw-input" class="form-input" placeholder="4자리 숫자 권장">
+          <label for="post-pw-input">글 비밀번호 (수정/삭제용)</label>
+          <input type="password" id="post-pw-input" class="form-input" placeholder="4자리 숫자 권장 (*관리자는 5688)">
         </div>
         
         <div class="form-group">
@@ -336,12 +485,12 @@
 <!-- 삭제용 비밀번호 확인 모달 -->
 <div class="modal-overlay" id="delete-modal">
   <div class="modal-box">
-    <div class="modal-title">🔐 글 삭제 비밀번호 확인</div>
-    <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5;">글을 작성할 때 지정한 비밀번호를 입력해 주세요.</p>
+    <div class="modal-title" id="delete-modal-title">🔐 삭제 비밀번호 확인</div>
+    <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5;">작성 시 지정한 비밀번호를 입력해 주세요.</p>
     <input type="password" id="delete-pw-input" class="form-input" placeholder="비밀번호 입력">
     <div class="modal-buttons">
       <button class="btn-modal cancel" onclick="closeDeleteModal()">취소</button>
-      <button class="btn-modal confirm" onclick="confirmDeletePost()">삭제하기</button>
+      <button class="btn-modal confirm" onclick="confirmDelete()">삭제하기</button>
     </div>
   </div>
 </div>
@@ -360,14 +509,14 @@ const LOCAL_POSTS_KEY = "vts_board_local_posts";
 
 let currentGasUrl = "";
 let activeDeleteId = null;
+let activeDeleteType = "post"; // "post" or "comment"
 
 // 초기화
 window.onload = function() {
-  // 1. 연동 URL 로드 (최초 실행 또는 구버전 캐시 감지 시 새로 배포한 웹앱 URL로 자동 업데이트)
+  // 1. 연동 URL 로드
   currentGasUrl = localStorage.getItem(GAS_URL_KEY);
   const newUrl = "https://script.google.com/macros/s/AKfycbysXw8R0fn9v_5cB2cumZFqJVICOtzkYiwUoBJ0GNuJqWeafmiNsW1RAVToS0pucbyF5g/exec";
   
-  // 이전 구버전 웹앱 주소들 목록
   const oldUrls = [
     "https://script.google.com/macros/s/AKfycbwKqhgFQHvMiohJkQq6xDkoNJ_FpRmH_DbmQLfZPczs1XkrmF1sdJmU12lo-IwsD_wKLg/exec",
     "https://script.google.com/macros/s/AKfycbwrP24WpwAflgMMxLDqbf0Kb23pSTtRls0YcEOcYCRd2s9uFj6obkxCJo_MdI40toPzlA/exec"
@@ -401,21 +550,8 @@ function loadPosts() {
         showError("구글 스프레드시트 서버 통신 실패. URL 확인 또는 CORS 허용 여부를 검토하세요.<br>오류내용: " + err.message);
       });
   } else {
-    // 2. 데모 모드 로드 (LocalStorage 병합)
+    // 2. 데모 모드 로드 (LocalStorage)
     let localPosts = JSON.parse(localStorage.getItem(LOCAL_POSTS_KEY)) || [];
-    
-    // 기존 브라우저 캐시(LocalStorage)에 남아있던 샘플 데모글(demo-1, demo-2) 강제 필터링
-    const originalLength = localPosts.length;
-    localPosts = localPosts.filter(p => p && p.id && !p.id.startsWith("demo-"));
-    if (localPosts.length !== originalLength) {
-      localStorage.setItem(LOCAL_POSTS_KEY, JSON.stringify(localPosts));
-    }
-    
-    // 임시 더미 데이터가 로컬 스토리지에 없는 경우 초기화
-    if (localStorage.getItem(LOCAL_POSTS_KEY) === null) {
-      localStorage.setItem(LOCAL_POSTS_KEY, JSON.stringify(defaultDemoPosts));
-      localPosts = defaultDemoPosts;
-    }
     renderPosts(localPosts);
   }
 }
@@ -442,26 +578,106 @@ function renderPosts(posts) {
   posts.forEach(post => {
     const card = document.createElement("div");
     card.className = "post-card";
+    card.id = `post-${post.id}`;
     
-    // 이니셜 아이콘 구문
     const initial = post.author ? post.author.substring(0, 1) : "👤";
     
+    // 댓글 목록 HTML 빌드
+    let commentsHtml = "";
+    if (post.comments && post.comments.length > 0) {
+      post.comments.forEach(comment => {
+        commentsHtml += `
+          <div class="comment-item">
+            <div class="comment-meta">
+              <span class="comment-author-info">
+                <span class="comment-author">${escapeHtml(comment.author)}</span>
+                <span>📅 ${comment.date}</span>
+              </span>
+              <button class="btn-comment-delete" onclick="openDeleteModal('${comment.id}', 'comment')">삭제</button>
+            </div>
+            <div class="comment-content">${escapeHtml(comment.content)}</div>
+          </div>
+        `;
+      });
+    } else {
+      commentsHtml = `<p style="font-size: 12px; color: #94a3b8; text-align: center; padding: 10px 0;">작성된 댓글이 없습니다.</p>`;
+    }
+    
     card.innerHTML = `
-      <div class="post-meta">
-        <span class="post-author">
-          <span class="post-author-icon">${initial}</span>
-          ${escapeHtml(post.author)}
-        </span>
-        <div style="display:flex; align-items:center; gap:12px;">
-          <span>📅 ${post.date}</span>
-          <button class="btn-delete-post" onclick="openDeleteModal('${post.id}')">삭제</button>
+      <div id="post-view-content-${post.id}">
+        <div class="post-meta">
+          <span class="post-author">
+            <span class="post-author-icon">${initial}</span>
+            ${escapeHtml(post.author)}
+          </span>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <span>📅 ${post.date}</span>
+            <div class="post-actions">
+              <button class="btn-action edit" onclick="toggleEditMode('${post.id}', '${escapeJs(post.title)}', '${escapeJs(post.content)}')">수정</button>
+              <button class="btn-action delete" onclick="openDeleteModal('${post.id}', 'post')">삭제</button>
+            </div>
+          </div>
+        </div>
+        <h3 class="post-title">${escapeHtml(post.title)}</h3>
+        <div class="post-body">${escapeHtml(post.content)}</div>
+      </div>
+      
+      <!-- 수정 모드 컨테이너 (기본 비활성) -->
+      <div id="post-edit-container-${post.id}" style="display:none;">
+        <div class="edit-form-container">
+          <div class="edit-form-title">✏️ 게시물 수정</div>
+          <div class="form-group">
+            <label>제목</label>
+            <input type="text" id="edit-title-${post.id}" class="form-input" value="${escapeHtml(post.title)}">
+          </div>
+          <div class="form-group">
+            <label>내용</label>
+            <textarea id="edit-content-${post.id}" class="form-input form-textarea">${escapeHtml(post.content)}</textarea>
+          </div>
+          <div class="form-group" style="max-width: 200px;">
+            <label>비밀번호</label>
+            <input type="password" id="edit-password-${post.id}" class="form-input" placeholder="수정 비밀번호 입력">
+          </div>
+          <div class="modal-buttons" style="margin-top: 10px;">
+            <button class="btn-modal cancel" onclick="toggleEditMode('${post.id}')">취소</button>
+            <button class="btn-modal confirm" style="background:var(--accent); border-color:var(--accent);" onclick="submitEdit('${post.id}')">저장하기</button>
+          </div>
         </div>
       </div>
-      <h3 class="post-title">${escapeHtml(post.title)}</h3>
-      <div class="post-body">${escapeHtml(post.content)}</div>
+      
+      <!-- 댓글 섹션 -->
+      <div class="comments-section">
+        <div class="comments-title">
+          💬 댓글 ${post.comments ? post.comments.length : 0}개
+        </div>
+        <div class="comment-list">
+          ${commentsHtml}
+        </div>
+        
+        <!-- 댓글 쓰기 폼 -->
+        <div class="comment-form">
+          <div class="comment-form-row">
+            <input type="text" id="comment-author-${post.id}" placeholder="작성자(관제실/이름)">
+            <input type="password" id="comment-password-${post.id}" placeholder="비밀번호 (*관리자 5688)">
+          </div>
+          <textarea id="comment-content-${post.id}" class="comment-form-textarea" placeholder="댓글 내용을 적어주세요."></textarea>
+          <button class="btn-submit-comment" onclick="submitComment('${post.id}')">댓글 등록</button>
+        </div>
+      </div>
     `;
     container.appendChild(card);
   });
+}
+
+// 작성자명이 '관리자' 일 때 패스워드 검증
+function checkAdminPassword(author, password) {
+  if (author.trim() === '관리자') {
+    if (password.trim() !== '5688') {
+      alert("작성자명이 '관리자'일 경우 비밀번호는 '5688'이어야 합니다.");
+      return false;
+    }
+  }
+  return true;
 }
 
 // 글 등록하기
@@ -476,8 +692,11 @@ function submitPost() {
     return;
   }
   
+  if (!checkAdminPassword(author, password)) {
+    return;
+  }
+  
   if (currentGasUrl) {
-    // 1. 구글 스프레드시트 전송
     const payload = {
       action: "add",
       author: author,
@@ -504,7 +723,7 @@ function submitPost() {
         alert("서버 전송 실패: " + err.message);
       });
   } else {
-    // 2. 로컬 스토리지 추가 (데모)
+    // 로컬 스토리지 추가 (데모)
     const today = new Date();
     const formatDate = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + String(today.getDate()).padStart(2,'0');
     
@@ -514,17 +733,18 @@ function submitPost() {
       title: title,
       content: content,
       date: formatDate,
-      password: password, // 데모 삭제 확인용
-      hasPassword: true
+      password: password,
+      hasPassword: true,
+      comments: []
     };
     
     let localPosts = JSON.parse(localStorage.getItem(LOCAL_POSTS_KEY)) || [];
-    localPosts.unshift(newPost); // 최신 글 맨 앞으로
+    localPosts.unshift(newPost);
     localStorage.setItem(LOCAL_POSTS_KEY, JSON.stringify(localPosts));
     
     clearForm();
     loadPosts();
-    alert("임시 데모 등록이 완료되었습니다! (연동 완료 시 다른 PC에도 노출됩니다)");
+    alert("임시 데모 등록이 완료되었습니다!");
   }
 }
 
@@ -535,31 +755,38 @@ function clearForm() {
   document.getElementById("post-content-input").value = "";
 }
 
-// 글 삭제 관련
-function openDeleteModal(postId) {
-  activeDeleteId = postId;
-  document.getElementById("delete-pw-input").value = "";
-  document.getElementById("delete-modal").classList.add("active");
-  document.getElementById("delete-pw-input").focus();
+// 수정 모드 토글
+function toggleEditMode(postId, currentTitle = '', currentContent = '') {
+  const viewDiv = document.getElementById(`post-view-content-${postId}`);
+  const editDiv = document.getElementById(`post-edit-container-${postId}`);
+  
+  if (editDiv.style.display === "none") {
+    viewDiv.style.display = "none";
+    editDiv.style.display = "block";
+    document.getElementById(`edit-password-${postId}`).value = "";
+  } else {
+    viewDiv.style.display = "block";
+    editDiv.style.display = "none";
+  }
 }
 
-function closeDeleteModal() {
-  document.getElementById("delete-modal").classList.remove("active");
-  activeDeleteId = null;
-}
-
-function confirmDeletePost() {
-  const password = document.getElementById("delete-pw-input").value.trim();
-  if (!password) {
-    alert("비밀번호를 입력해 주세요.");
+// 글 수정 서버 전송
+function submitEdit(postId) {
+  const title = document.getElementById(`edit-title-${postId}`).value.trim();
+  const content = document.getElementById(`edit-content-${postId}`).value.trim();
+  const password = document.getElementById(`edit-password-${postId}`).value.trim();
+  
+  if (!title || !content || !password) {
+    alert("제목, 내용, 비밀번호를 입력해 주세요.");
     return;
   }
   
   if (currentGasUrl) {
-    // 1. 구글 스프레드시트 삭제 요청
     const payload = {
-      action: "delete",
-      id: activeDeleteId,
+      action: "edit",
+      id: postId,
+      title: title,
+      content: content,
       password: password
     };
     
@@ -570,34 +797,221 @@ function confirmDeletePost() {
       .then(res => res.json())
       .then(data => {
         if (data.success) {
+          toggleEditMode(postId);
+          loadPosts();
+          alert("글이 성공적으로 수정되었습니다.");
+        } else {
+          alert("수정 오류: " + data.error);
+        }
+      })
+      .catch(err => {
+        alert("수정 요청 실패: " + err.message);
+      });
+  } else {
+    // 로컬 데모 모드 수정
+    let localPosts = JSON.parse(localStorage.getItem(LOCAL_POSTS_KEY)) || [];
+    const postIdx = localPosts.findIndex(p => p.id === postId);
+    
+    if (postIdx >= 0) {
+      const post = localPosts[postIdx];
+      // 관리자 글일 경우 비밀번호 5688 검사
+      if (post.author === '관리자' && password !== '5688') {
+        alert("관리자 작성글 수정 시 비밀번호는 5688이어야 합니다.");
+        return;
+      }
+      
+      if (post.password === password) {
+        post.title = title;
+        post.content = content;
+        localStorage.setItem(LOCAL_POSTS_KEY, JSON.stringify(localPosts));
+        toggleEditMode(postId);
+        loadPosts();
+        alert("수정되었습니다.");
+      } else {
+        alert("비밀번호가 일치하지 않습니다.");
+      }
+    } else {
+      alert("포스트를 찾을 수 없습니다.");
+    }
+  }
+}
+
+// 댓글 등록
+function submitComment(postId) {
+  const author = document.getElementById(`comment-author-${postId}`).value.trim();
+  const password = document.getElementById(`comment-password-${postId}`).value.trim();
+  const content = document.getElementById(`comment-content-${postId}`).value.trim();
+  
+  if (!author || !password || !content) {
+    alert("작성자, 비밀번호, 댓글 내용을 모두 입력하세요.");
+    return;
+  }
+  
+  if (!checkAdminPassword(author, password)) {
+    return;
+  }
+  
+  if (currentGasUrl) {
+    const payload = {
+      action: "addComment",
+      postId: postId,
+      author: author,
+      password: password,
+      content: content
+    };
+    
+    fetch(currentGasUrl, {
+      method: "POST",
+      body: JSON.stringify(payload)
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          document.getElementById(`comment-author-${postId}`).value = "";
+          document.getElementById(`comment-password-${postId}`).value = "";
+          document.getElementById(`comment-content-${postId}`).value = "";
+          loadPosts();
+        } else {
+          alert("댓글 등록 실패: " + data.error);
+        }
+      })
+      .catch(err => {
+        alert("댓글 요청 실패: " + err.message);
+      });
+  } else {
+    // 로컬 데모 모드 댓글
+    let localPosts = JSON.parse(localStorage.getItem(LOCAL_POSTS_KEY)) || [];
+    const postIdx = localPosts.findIndex(p => p.id === postId);
+    
+    if (postIdx >= 0) {
+      const today = new Date();
+      const formatDate = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + String(today.getDate()).padStart(2,'0');
+      
+      const newComment = {
+        id: "comment-" + today.getTime(),
+        postId: postId,
+        author: author,
+        password: password,
+        content: content,
+        date: formatDate,
+        hasPassword: true
+      };
+      
+      if (!localPosts[postIdx].comments) {
+        localPosts[postIdx].comments = [];
+      }
+      localPosts[postIdx].comments.push(newComment);
+      localStorage.setItem(LOCAL_POSTS_KEY, JSON.stringify(localPosts));
+      loadPosts();
+    }
+  }
+}
+
+// 삭제 모달 활성화
+function openDeleteModal(id, type = "post") {
+  activeDeleteId = id;
+  activeDeleteType = type;
+  
+  document.getElementById("delete-pw-input").value = "";
+  if (type === "post") {
+    document.getElementById("delete-modal-title").innerText = "🔐 글 삭제 비밀번호 확인";
+  } else {
+    document.getElementById("delete-modal-title").innerText = "🔐 댓글 삭제 비밀번호 확인";
+  }
+  
+  document.getElementById("delete-modal").classList.add("active");
+  document.getElementById("delete-pw-input").focus();
+}
+
+function closeDeleteModal() {
+  document.getElementById("delete-modal").classList.remove("active");
+  activeDeleteId = null;
+}
+
+// 통합 삭제 수행
+function confirmDelete() {
+  const password = document.getElementById("delete-pw-input").value.trim();
+  if (!password) {
+    alert("비밀번호를 입력해 주세요.");
+    return;
+  }
+  
+  if (currentGasUrl) {
+    const payload = {
+      action: activeDeleteType === "post" ? "delete" : "deleteComment",
+      password: password
+    };
+    if (activeDeleteType === "post") {
+      payload.id = activeDeleteId;
+    } else {
+      payload.commentId = activeDeleteId;
+    }
+    
+    fetch(currentGasUrl, {
+      method: "POST",
+      body: JSON.stringify(payload)
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
           closeDeleteModal();
           loadPosts();
-          alert("성공적으로 삭제되었습니다.");
+          alert("삭제 완료되었습니다.");
         } else {
           alert("삭제 오류: " + data.error);
         }
       })
       .catch(err => {
-        alert("삭제 서버 요청 실패: " + err.message);
+        alert("삭제 요청 실패: " + err.message);
       });
   } else {
-    // 2. 로컬 스토리지 삭제 (데모)
+    // 로컬 데모 모드 삭제
     let localPosts = JSON.parse(localStorage.getItem(LOCAL_POSTS_KEY)) || [];
-    const targetPost = localPosts.find(p => p.id === activeDeleteId);
     
-    if (targetPost) {
-      // 데모 생성 글이거나 비밀번호 매칭 시 삭제 지원
-      if (!targetPost.password || targetPost.password.toString() === password) {
-        localPosts = localPosts.filter(p => p.id !== activeDeleteId);
-        localStorage.setItem(LOCAL_POSTS_KEY, JSON.stringify(localPosts));
-        closeDeleteModal();
-        loadPosts();
-        alert("삭제되었습니다.");
-      } else {
-        alert("비밀번호가 일치하지 않습니다. (샘플 글 삭제용 기본 패스워드: 1234)");
+    if (activeDeleteType === "post") {
+      const targetPost = localPosts.find(p => p.id === activeDeleteId);
+      if (targetPost) {
+        if (targetPost.author === '관리자' && password !== '5688') {
+          alert("관리자 작성글 삭제 시 비밀번호는 5688이어야 합니다.");
+          return;
+        }
+        if (targetPost.password === password) {
+          localPosts = localPosts.filter(p => p.id !== activeDeleteId);
+          localStorage.setItem(LOCAL_POSTS_KEY, JSON.stringify(localPosts));
+          closeDeleteModal();
+          loadPosts();
+          alert("글이 삭제되었습니다.");
+        } else {
+          alert("비밀번호가 일치하지 않습니다.");
+        }
       }
     } else {
-      closeDeleteModal();
+      // 댓글 삭제
+      let done = false;
+      for (let i = 0; i < localPosts.length; i++) {
+        if (localPosts[i].comments) {
+          const targetComment = localPosts[i].comments.find(c => c.id === activeDeleteId);
+          if (targetComment) {
+            if (targetComment.author === '관리자' && password !== '5688') {
+              alert("관리자 댓글 삭제 시 비밀번호는 5688이어야 합니다.");
+              return;
+            }
+            if (targetComment.password === password) {
+              localPosts[i].comments = localPosts[i].comments.filter(c => c.id !== activeDeleteId);
+              localStorage.setItem(LOCAL_POSTS_KEY, JSON.stringify(localPosts));
+              done = true;
+              break;
+            }
+          }
+        }
+      }
+      if (done) {
+        closeDeleteModal();
+        loadPosts();
+        alert("댓글이 삭제되었습니다.");
+      } else {
+        alert("비밀번호가 일치하지 않거나 대상을 찾을 수 없습니다.");
+      }
     }
   }
 }
@@ -611,6 +1025,17 @@ function escapeHtml(str) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
+}
+
+// JS string escape 헬퍼
+function escapeJs(str) {
+  if (!str) return "";
+  return str
+    .replace(/\\/g, '\\\\')
+    .replace(/'/g, "\\'")
+    .replace(/"/g, '\\"')
+    .replace(/\n/g, '\\n')
+    .replace(/\r/g, '\\r');
 }
 </script>
 </body>
