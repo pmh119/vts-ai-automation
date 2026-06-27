@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>파워쉘 바로가기 생성 가이드 | VTS 업무자동화 공유 포털</title>
-<meta name="description" content="PowerShell 스크립트를 더블클릭으로 즉시 실행하고, 검은 창을 숨기며 실행 정책을 우회하는 최적의 윈도우 바로가기 구성 가이드">
+<meta name="description" content="PowerShell 스크립트를 더블클릭으로 즉시 실행하고, 검은 창을 숨기며 실행 권한 정책(ExecutionPolicy)을 적용하는 최적의 윈도우 바로가기 구성 가이드">
 <link rel="stylesheet" href="style.css">
 <style>
   body { background: #f0f2f5; }
@@ -64,7 +64,7 @@
 <div class="hero" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: #ffffff; padding: 60px 24px; border-radius: 16px; margin: 32px auto 20px; max-width: 1000px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
   <span class="hero-label" style="background: #334155; color: #cbd5e1; border: 1px solid #475569; margin-bottom: 20px;">💡 VTS 관제석 편의성 극대화</span>
   <h1 style="color: #ffffff; margin-bottom: 16px;">PowerShell 스크립트<br>원클릭 바로가기 생성 가이드</h1>
-  <p style="color: #cbd5e1; max-width: 700px;">스크립트(.ps1) 파일을 더블클릭만으로 즉시 구동하고,<br>검은색 콘솔 창을 투명하게 가리며 스크립트 실행 정책 우회(ExecutionPolicy)까지 원클릭으로 결합한 단일 명령어 셋팅 방법</p>
+  <p style="color: #cbd5e1; max-width: 700px;">스크립트(.ps1) 파일을 더블클릭만으로 즉시 구동하고,<br>검은색 콘솔 창을 투명하게 가리며 파워쉘 스크립트 실행 권한 정책(ExecutionPolicy) 적용까지 원클릭으로 결합한 단일 명령어 셋팅 방법</p>
 </div>
 
 <div class="page-content">
@@ -123,8 +123,8 @@
           <tr>
             <td><span class="param-name">-ExecutionPolicy Bypass</span></td>
             <td>
-              <strong>[스크립트 실행 정책 우회 (보안 통과)]</strong><br>
-              윈도우 OS의 보안 정책으로 인해 기본 설정(Restricted) 상태에서 외부 파워쉘 스크립트(<code>.ps1</code>)가 차단 및 실행 거부당하는 현상을 합법적으로 우회하여 강제 허용 구동 상태로 진입하게 돕습니다.
+              <strong>[스크립트 실행 정책 범위 지정 (구동 허용)]</strong><br>
+              윈도우 OS의 기본 정책(Restricted)으로 인해 로컬 파워쉘 스크립트(<code>.ps1</code>) 실행이 차단되는 현상을 일시적으로 승인하여 정상적인 위젯 동작 상태로 진입하게 돕습니다.
             </td>
           </tr>
           <tr>
