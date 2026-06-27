@@ -1067,33 +1067,60 @@ function renderPortTable() {
   
   pilotPorts.forEach(port => {
     const tr = document.createElement('tr');
-    const bookmarkletCode = generateBookmarkletCode(port.id);
     
-    tr.innerHTML = `
-      <td data-label="항만명">
-        <span class="port-badge">🚢 ${port.name}</span>
-      </td>
-      <td data-label="도선사회 홈페이지">
-        <a href="${port.url}" target="_blank" class="site-link-btn ${!port.hasWeb ? 'no-web' : ''}" title="${port.assoc} 바로가기">
-          🌐 ${port.assoc} ${port.note ? ` <small>(${port.note})</small>` : ''}
-        </a>
-      </td>
-      <td data-label="북마크릿 설치 (드래그)">
-        <a class="bookmarklet-drag-sm" href="${bookmarkletCode}" title="클릭하지 마시고 즐겨찾기 바에 드래그하여 놓으세요.">
-          🔖 ${port.name} 하이라이트
-        </a>
-      </td>
-      <td data-label="코드 관리">
-        <div class="action-group">
-          <button class="btn-action-sm btn-copy-port" onclick="copyPortBookmarklet('${port.id}', this)" title="북마크릿 코드 복사">
-            📋 복사
-          </button>
-          <button class="btn-action-sm btn-download-port" onclick="downloadPortBookmarklet('${port.id}', '${port.name}')" title="북마크릿 스크립트 다운로드">
-            다운로드
-          </button>
-        </div>
-      </td>
-    `;
+    // 1. 항만명 셀 생성
+    const tdName = document.createElement('td');
+    tdName.setAttribute('data-label', '항만명');
+    tdName.innerHTML = `<span class="port-badge">🚢 ${port.name}</span>`;
+    tr.appendChild(tdName);
+    
+    // 2. 홈페이지 셀 생성
+    const tdLink = document.createElement('td');
+    tdLink.setAttribute('data-label', '도선사회 홈페이지');
+    const aLink = document.createElement('a');
+    aLink.href = port.url;
+    aLink.target = '_blank';
+    aLink.className = `site-link-btn ${!port.hasWeb ? 'no-web' : ''}`;
+    aLink.title = `${port.assoc} 바로가기`;
+    aLink.innerHTML = `🌐 ${port.assoc}${port.note ? ` <small>(${port.note})</small>` : ''}`;
+    tdLink.appendChild(aLink);
+    tr.appendChild(tdLink);
+    
+    // 3. 북마크릿 드래그 셀 생성 (객체 프로퍼티 직접 대입 방식으로 HTML 파싱 특수문자 버그 원천 차단)
+    const tdDrag = document.createElement('td');
+    tdDrag.setAttribute('data-label', '북마크릿 설치 (드래그)');
+    const aDrag = document.createElement('a');
+    aDrag.className = 'bookmarklet-drag-sm';
+    aDrag.href = generateBookmarkletCode(port.id);
+    aDrag.title = "클릭하지 마시고 즐겨찾기 바에 드래그하여 놓으세요.";
+    aDrag.textContent = `🔖 ${port.name} 하이라이트`;
+    tdDrag.appendChild(aDrag);
+    tr.appendChild(tdDrag);
+    
+    // 4. 코드 관리 셀 생성
+    const tdAction = document.createElement('td');
+    tdAction.setAttribute('data-label', '코드 관리');
+    
+    const actionGroup = document.createElement('div');
+    actionGroup.className = 'action-group';
+    
+    const btnCopy = document.createElement('button');
+    btnCopy.className = 'btn-action-sm btn-copy-port';
+    btnCopy.title = '북마크릿 코드 복사';
+    btnCopy.textContent = '📋 복사';
+    btnCopy.onclick = (e) => copyPortBookmarklet(port.id, btnCopy);
+    
+    const btnDown = document.createElement('button');
+    btnDown.className = 'btn-action-sm btn-download-port';
+    btnDown.title = '북마크릿 스크립트 다운로드';
+    btnDown.textContent = '다운로드';
+    btnDown.onclick = (e) => downloadPortBookmarklet(port.id, port.name);
+    
+    actionGroup.appendChild(btnCopy);
+    actionGroup.appendChild(btnDown);
+    tdAction.appendChild(actionGroup);
+    tr.appendChild(tdAction);
+    
     tbody.appendChild(tr);
   });
 }
