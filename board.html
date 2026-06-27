@@ -461,7 +461,7 @@
         
         <div class="form-group">
           <label for="post-pw-input">글 비밀번호 (수정/삭제용)</label>
-          <input type="password" id="post-pw-input" class="form-input" placeholder="4자리 숫자 권장 (*관리자는 5688)">
+          <input type="password" id="post-pw-input" class="form-input" placeholder="비밀번호 입력">
         </div>
         
         <div class="form-group">
@@ -658,7 +658,7 @@ function renderPosts(posts) {
         <div class="comment-form">
           <div class="comment-form-row">
             <input type="text" id="comment-author-${post.id}" placeholder="작성자(관제실/이름)">
-            <input type="password" id="comment-password-${post.id}" placeholder="비밀번호 (*관리자 5688)">
+            <input type="password" id="comment-password-${post.id}" placeholder="비밀번호 입력">
           </div>
           <textarea id="comment-content-${post.id}" class="comment-form-textarea" placeholder="댓글 내용을 적어주세요."></textarea>
           <button class="btn-submit-comment" onclick="submitComment('${post.id}')">댓글 등록</button>
