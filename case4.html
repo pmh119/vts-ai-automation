@@ -6,6 +6,43 @@
 <title>사례 4 · 실시간 조석 모니터링 위젯 | VTS 업무자동화 공유 포털</title>
 <meta name="description" content="평택항 실시간 조석 정보를 작업표시줄 위에 상시 표출하는 초경량 오버레이 위젯. PowerShell + WebView2.">
 <link rel="stylesheet" href="style.css">
+<style>
+/* 소스코드 탭 메뉴 */
+.code-tab-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+.code-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 10px;
+}
+.code-tab-btn {
+  padding: 6px 12px;
+  background: #fff;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.code-tab-btn:hover {
+  background: var(--bg);
+  color: var(--text);
+}
+.code-tab-btn.active {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+  font-weight: 600;
+}
+</style>
 </head>
 <body>
 
