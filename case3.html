@@ -268,7 +268,7 @@
 
         <li style="padding-left: 0; margin-bottom: 0; line-height: 1.5; margin-top: 8px;">
           <strong style="color:#2563eb;">② 라이브러리 및 DLL 파일 배치:</strong> 
-          NuGet 패키지 압축을 해제하거나 <strong>사용자님의 깃허브 저장소 `사례3/` 폴더에 동봉</strong>된 파일을 활용하여, 스크립트 실행에 필요한 3개의 연동 DLL 파일을 모두 동일한 폴더 안에 배치합니다.
+          아래의 **파일 다운로드 버튼**을 활용하여 스크립트 실행에 필요한 3개의 연동 DLL 파일을 모두 확보합니다.
           <br>컴퓨터에 <span style="font-family:monospace;background:#f3f4f6;padding:2px 4px;border-radius:4px;font-weight:bold;">C:\webview2</span> 폴더를 생성하신 후, 3개의 DLL 파일들을 아래 구조처럼 <strong>런타임 폴더(runtimes) 생성 없이 모두 같은 위치에 직접 복사</strong>해 배치해 주세요.
           <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
             <a href="사례3/Microsoft.Web.WebView2.Core.dll" download="Microsoft.Web.WebView2.Core.dll" style="display:inline-block;background:#0366d6;color:#fff;padding:6px 12px;border-radius:4px;text-decoration:none;font-weight:bold;font-size:12px;box-shadow:0 2px 4px rgba(3,102,214,0.2);">
@@ -280,22 +280,19 @@
             <a href="사례3/WebView2Loader.dll" download="WebView2Loader.dll" style="display:inline-block;background:#0366d6;color:#fff;padding:6px 12px;border-radius:4px;text-decoration:none;font-weight:bold;font-size:12px;box-shadow:0 2px 4px rgba(3,102,214,0.2);">
               ⬇ WebView2Loader.dll 다운로드
             </a>
-            <a href="https://github.com/pmh119/vts-ai-automation/tree/main/%EC%82%AC%EB%A1%803" target="_blank" style="display:inline-block;background:#475569;color:#fff;padding:6px 12px;border-radius:4px;text-decoration:none;font-weight:bold;font-size:12px;box-shadow:0 2px 4px rgba(71,85,105,0.2);">
-              📂 깃허브 저장소 ↗
-            </a>
           </div>
           <pre style="background:#1e293b;color:#f8fafc;padding:10px;border-radius:6px;margin-top:10px;font-family:monospace;font-size:11.5px;line-height:1.4;margin-bottom:0;">
 C:\
 └── webview2\
-    ├── Microsoft.Web.WebView2.Core.dll       (저장소 [사례3/] 동봉)
-    ├── Microsoft.Web.WebView2.WinForms.dll   (저장소 [사례3/] 동봉)
-    └── WebView2Loader.dll                    (저장소 [사례3/] 동봉)
+    ├── Microsoft.Web.WebView2.Core.dll       (위의 다운로드 버튼으로 획득)
+    ├── Microsoft.Web.WebView2.WinForms.dll   (위의 다운로드 버튼으로 획득)
+    └── WebView2Loader.dll                    (위의 다운로드 버튼으로 획득)
           </pre>
         </li>
 
         <li style="padding-left: 0; margin-bottom: 0; line-height: 1.5; margin-top: 8px;">
           <strong style="color:#2563eb;">💡 [폐쇄망 실용 팁] 로컬 검색 'Everything'을 통한 수집 방법</strong><br>
-          만약 폐쇄망 환경에서 깃허브 접속이 차단되어 파일 반입이 번거롭다면, PC 내의 타 소프트웨어(예: Microsoft Edge 브라우저 등) 설치 경로에서 이미 활성화된 DLL들을 가져올 수 있습니다. 
+          만약 외부망 차단 등으로 인해 파일 반입이 불가하고 G드라이브 접속이 어려운 상황이라면, PC 내의 타 소프트웨어(예: Microsoft Edge 브라우저 등) 설치 경로에서 이미 활성화된 DLL들을 가져올 수 있습니다. 
           초고속 로컬 검색 프로그램인 <strong>Everything</strong>(혹은 윈도우 기본 탐색기)을 통해 아래 3개 파일을 검색하여 한곳으로 복사해 수집하셔도 정상 구동이 가능합니다.
           <ul style="list-style:disc; margin-left:20px; margin-top:6px; font-size:12.5px; color:#6b7280; display:flex; flex-direction:column; gap:2px;">
             <li><code>Microsoft.Web.WebView2.Core.dll</code> (RPA 핵심 컨트롤러 API)</li>
@@ -346,9 +343,6 @@ C:\
         <pre class="code-pre" id="case3-pre-box" style="min-height: 220px; display: flex; align-items: center; justify-content: center; position: relative;"><div id="code-load-overlay" style="text-align: center; padding: 40px 20px; z-index: 10; width: 100%; box-sizing: border-box;"><p style="color: #9ca3af; font-size: 13px; margin-bottom: 16px; line-height: 1.6; margin-top: 0; margin-bottom: 16px;">본 스크립트는 약 830줄에 달하는 대규모 RPA 자동화 소스코드입니다.<br>원활한 페이지 로딩과 성능 최적화를 위해 코드가 비활성화되어 있습니다.</p><button class="btn-download" onclick="loadFullCode3()" style="background: #2563eb; color: #fff; padding: 10px 20px; font-size: 12.5px; font-weight: bold; border-radius: 6px; border: none; cursor: pointer; transition: all 0.2s; display: inline-block; margin: 0 auto;">🔍 832줄 전체 소스코드 로드하기</button></div><code id="code-3" style="display: none; width: 100%; text-align: left; white-space: pre;"></code></pre>
       </div>
       <div style="margin-top:12px; display:flex; flex-direction:column; gap:8px;">
-        <a class="btn-download" href="https://github.com/pmh119/vts-ai-automation/blob/main/%EC%82%AC%EB%A1%803/portmis.ps1" target="_blank" style="font-size:13px; align-self:flex-start;">
-          📄 GitHub에서 전체 소스코드 보기 ↗
-        </a>
         <div style="margin-top:4px; padding:10px 14px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; color:#475569; font-size:12.5px; line-height:1.5; text-align:left;">
           <strong>💡 타 센터 적용 안내:</strong> 평택항 외 항만 VTS는 바로 적용이 불가하여 현장에 맞는 최적화가 필요합니다. (직접 AI를 통한 개량 또는 <a href="board.html" style="color: #2563eb; text-decoration: underline;">자유게시판</a>에 문의를 남겨주시기 바랍니다.)
         </div>
