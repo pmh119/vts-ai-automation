@@ -4,8 +4,221 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>사례 5 · 도선표 강조기능 북마크릿 | VTS 업무자동화 공유 포털</title>
-<meta name="description" content="도선 스케줄 목록에서 현재 시각 기준 가장 가까운 일정을 자동 하이라이트하고 화면 중앙으로 스크롤하는 북마크릿">
+<meta name="description" content="전국 12개 항만별 도선 스케줄 목록에서 현재 시각 기준 가장 가까운 일정을 자동 하이라이트하고 화면 중앙으로 스크롤하는 북마크릿">
 <link rel="stylesheet" href="style.css">
+<style>
+/* 항만 테이블 스타일 */
+.port-table-wrapper {
+  overflow-x: auto;
+  margin-top: 15px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+}
+.port-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 13px;
+}
+.port-table th {
+  background: #f8fafc;
+  padding: 12px 16px;
+  font-weight: 600;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+}
+.port-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+.port-table tr:last-child td {
+  border-bottom: none;
+}
+.port-table tr:hover {
+  background: #f8fafc;
+}
+.port-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.port-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  color: var(--text);
+  font-size: 14px;
+}
+.port-assoc {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.site-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  background: #fff;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.15s;
+}
+.site-link-btn:hover {
+  background: var(--accent-light);
+  border-color: var(--accent);
+}
+.site-link-btn.no-web {
+  color: var(--text-light);
+  border-color: var(--border);
+  cursor: not-allowed;
+  background: #fafafa;
+}
+.site-link-btn.no-web:hover {
+  background: #fafafa;
+  border-color: var(--border);
+}
+.bookmarklet-drag-sm {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: grab;
+  text-decoration: none;
+  box-shadow: 0 2px 4px rgba(217,119,6,0.2);
+  transition: all 0.15s;
+}
+.bookmarklet-drag-sm:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(217,119,6,0.3);
+}
+.bookmarklet-drag-sm:active {
+  cursor: grabbing;
+}
+.btn-action-sm {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-action-sm:hover {
+  background: var(--border);
+}
+.btn-action-sm.btn-copy-port.copied {
+  background: var(--green-light);
+  border-color: var(--green);
+  color: var(--green);
+}
+.btn-action-sm.btn-download-port {
+  background: var(--accent-light);
+  border-color: var(--blue-border);
+  color: var(--accent);
+}
+.btn-action-sm.btn-download-port:hover {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+.action-group {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+/* 모바일 대응 */
+@media (max-width: 768px) {
+  .port-table thead {
+    display: none;
+  }
+  .port-table tr {
+    display: block;
+    border-bottom: 2px solid var(--border);
+    padding: 12px 6px;
+  }
+  .port-table tr:last-child {
+    border-bottom: none;
+  }
+  .port-table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px dashed #f3f4f6;
+    padding: 8px 12px;
+    text-align: right;
+  }
+  .port-table td:last-child {
+    border-bottom: none;
+  }
+  .port-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: var(--text-muted);
+    font-size: 12px;
+    float: left;
+    text-align: left;
+  }
+  .action-group {
+    justify-content: flex-end;
+    width: 100%;
+  }
+}
+
+/* 소스코드 탭 메뉴 */
+.code-tab-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+.code-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 10px;
+}
+.code-tab-btn {
+  padding: 6px 12px;
+  background: #fff;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.code-tab-btn:hover {
+  background: var(--bg);
+  color: var(--text);
+}
+.code-tab-btn.active {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+  font-weight: 600;
+}
+</style>
 </head>
 <body>
 
@@ -16,8 +229,8 @@
 
 <div class="hero">
   <span class="hero-label">사례 5 · JavaScript · Bookmarklet · 브라우저 직접 테스트 가능</span>
-  <span class="hero-label" style="background:#fff7ed;color:#c2410c;border:1px solid #fdba74;margin-left:8px;">💡 평택VTS외 개량 후 사용가능</span>
-  <span class="hero-label" id="ver-badge" style="background:#e0f2fe;color:#0369a1;border:1px solid #bae6fd;margin-left:8px;">버전: v1.3.5 (최근 업데이트: 17:25)</span>
+  <span class="hero-label" style="background:#f0fdf4;color:#16a34a;border:1px solid #86efac;margin-left:8px;">💡 전국 12개 항만 대응 완료</span>
+  <span class="hero-label" id="ver-badge" style="background:#e0f2fe;color:#0369a1;border:1px solid #bae6fd;margin-left:8px;">버전: v1.4.0 (최근 업데이트: 11:31)</span>
   <h1>실시간 도선 정보 시인성 극대화<br>북마크릿</h1>
   <p>설치 없이 즐겨찾기 클릭 하나로.<br>도선 스케줄 목록에서 지금 당장 중요한 일정을 자동 탐색하여 녹색으로 하이라이트.</p>
 </div>
@@ -201,103 +414,58 @@
         </div>
       </div>
 
-      <!-- 사용 가이드 -->
-      <div style="margin-bottom:24px;">
-        <h4 style="font-size:16px;font-weight:600;margin-bottom:12px;color:#374151;">📖 사용 방법</h4>
-        <div class="manual-steps">
-          <div class="manual-step" style="display:flex; flex-direction:column; gap:12px; align-items:flex-start;">
-            <div style="display:flex; gap:12px; align-items:center;">
-              <span class="manual-step-num">1</span>
-              <span class="manual-step-text" style="font-weight:600;">실제 설치 방법: 아래 노란색 버튼을 브라우저 상단 <strong>즐겨찾기 바(Bookmark Bar)</strong>로 드래그해서 놓으세요.</span>
-            </div>
-            <!-- 실제 북마크릿 코드 및 복사 버튼 -->
-            <div class="btn-row" style="margin-left:48px; margin-top:4px; display:flex; gap:10px; flex-wrap:wrap;">
-              <a class="bookmarklet-drag"
-                 id="bookmarklet-btn"
-                 href="javascript:(function(){if(window.ptT)clearInterval(window.ptT);if(window.scT)clearInterval(window.scT);var old=document.getElementById('ps_s');if(old)old.remove();var s=document.createElement('style');s.id='ps_s';s.innerHTML='.t-hi td{background:#e8f5e9!important;border-top:2px solid #4caf50!important;border-bottom:2px solid #4caf50!important;font-weight:bold!important;color:#1b5e20!important;transition:all 0.3s;}.t-hi-pending td{background:#fff3e0!important;border-top:2px solid #ff9800!important;border-bottom:2px solid #ff9800!important;font-weight:bold!important;color:#b45309!important;transition:all 0.3s;}';document.head.appendChild(s);function h(){var now=new Date(),yr=now.getFullYear(),hiList=[],nxList=[],mD=Infinity;document.querySelectorAll('tr').forEach(function(r){r.classList.remove('t-hi');r.classList.remove('t-hi-pending');var tds=r.querySelectorAll('td');if(tds.length&lt;5)return;var dt=tds[3].innerText.trim(),tt=tds[4].innerText.trim();if(!dt||!tt)return;if(!dt.match(/^\d{2}-\d{2}$/)||!tt.match(/^\d{2}:\d{2}$/))return;var p=dt.split('-'),t=tt.split(':'),shipTime=new Date(yr,p[0]-1,p[1],t[0],t[1]),df=shipTime-now;if(df&gt;=0&amp;&amp;df&lt;=3600000){hiList.push(r);}else if(df&gt;0){if(df&lt;mD-60000){mD=df;nxList=[r];}else if(df&lt;=mD+60000){if(df&lt;mD)mD=df;nxList.push(r);}}});var targets=hiList.length?hiList:nxList;targets.forEach(function(r){var tds=r.querySelectorAll('td');var pilot=tds[2].innerText.trim();if(pilot){r.classList.add('t-hi');}else{r.classList.add('t-hi-pending');}});}function sC(){var t=document.querySelector('.t-hi,.t-hi-pending');if(t)t.scrollIntoView({behavior:'smooth',block:'center'});}h();setTimeout(sC,100);window.ptT=setInterval(h,180000);window.scT=setInterval(sC,180000);})();"
-                 title="도선표 하이라이트 — 즐겨찾기 바로 드래그하세요"
-                 style="margin:0; padding:10px 18px; font-size:13px;">
-                🔖 도선표 하이라이트 (즐겨찾기 바로 드래그!)
-              </a>
-              <button class="btn-copy-code" id="copy-bookmarklet-btn" onclick="copyBookmarklet()" style="margin:0; padding:10px 16px; font-size:13px;">
-                📋 코드 복사
-              </button>
-            </div>
-            <span style="font-size:12px; color:#6b7280; margin-left:48px; margin-top:-4px;">(드래그가 안 될 경우 "코드 복사" 후 즐겨찾기를 임의로 생성하여 URL란에 붙여넣기 하셔도 됩니다)</span>
-          </div>
-          
-          <div class="manual-step" style="display:flex; flex-direction:column; gap:12px; align-items:flex-start; width:100%;">
-            <div style="display:flex; gap:16px; align-items:center; flex-wrap:wrap;">
-              <div style="display:flex; gap:12px; align-items:center;">
-                <span class="manual-step-num">2</span>
-                <span class="manual-step-text" style="font-weight:600;">도선 스케줄 테이블이 있는 웹 페이지로 이동</span>
-              </div>
-              <a href="http://119.205.184.46/forecast/1" target="_blank" style="background:#0284c7; color:white; border:1px solid #0369a1; text-decoration:none; padding:6px 12px; font-size:12px; font-weight:bold; border-radius:6px; display:inline-flex; align-items:center; gap:4px; transition:all 0.2s;" onmouseover="this.style.background='#0369a1'" onmouseout="this.style.background='#0284c7'">
-                🌐 평택도선예보 실제 사이트 바로가기 ↗
-              </a>
-            </div>
-          </div>
-          
-          <div class="manual-step">
-            <span class="manual-step-num">3</span>
-            <span class="manual-step-text">즐겨찾기 바의 <strong>"도선표 하이라이트"</strong> 버튼 클릭<br>→ 현재 시각 기준 가장 가까운 도선 일정 행이 상태에 따라 <span style="color:#16a34a;font-weight:600;">녹색(도선사 지정)</span> 또는 <span style="color:#d97706;font-weight:600;">주황색(도선사 대기)</span>으로 강조되며 화면 중앙으로 이동</span>
-          </div>
-          <div class="manual-step">
-            <span class="manual-step-num">4</span>
-            <span class="manual-step-text">3분마다 자동으로 재탐색 — 탭을 유지하는 한 계속 작동</span>
-          </div>
+      <!-- 전국 12개 항만 북마크릿 다운로드 센터 -->
+      <div style="margin-top:40px; border-top:1px dashed var(--border); padding-top:32px;">
+        <h4 style="font-size:16px; font-weight:700; margin-bottom:16px; color:#1f2937; display:flex; align-items:center; gap:6px;">
+          ⚓ 전국 12개 항만 도선표 북마크릿 다운로드 센터
+        </h4>
+        
+        <!-- 드래그 안내 -->
+        <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:14px 18px;margin-bottom:24px;font-size:13px;color:#92400e;line-height:1.6;">
+          💡 <strong>설치 방법:</strong> 아래 표의 주황색 <strong>[🔖 북마크릿 드래그]</strong> 버튼을 마우스로 드래그하여 브라우저의 <strong>즐겨찾기 바(Bookmark Bar)</strong>에 놓으면 설치가 완료됩니다.
+          즐겨찾기 바가 보이지 않는다면 단축키 <code>Ctrl + Shift + B</code>를 누르세요.
         </div>
-      </div>
 
-      <!-- 하이라이트 효과 미리보기 -->
-      <div style="margin-top:8px;">
-        <p style="font-size:12px;color:#9ca3af;margin-bottom:10px;">📟 하이라이트 효과 미리보기 (실제 적용 시와 유사)</p>
-        <div style="border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;font-size:13px;">
-          <table style="width:100%;border-collapse:collapse;">
+        <!-- 항만 목록 테이블 -->
+        <div class="port-table-wrapper">
+          <table class="port-table">
             <thead>
-              <tr style="background:#f9fafb;">
-                <th style="padding:8px 12px;text-align:left;font-size:11px;color:#6b7280;font-weight:600;border-bottom:1px solid #e5e7eb;">선박명</th>
-                <th style="padding:8px 12px;text-align:left;font-size:11px;color:#6b7280;font-weight:600;border-bottom:1px solid #e5e7eb;">구분</th>
-                <th style="padding:8px 12px;text-align:left;font-size:11px;color:#6b7280;font-weight:600;border-bottom:1px solid #e5e7eb;">항로</th>
-                <th style="padding:8px 12px;text-align:left;font-size:11px;color:#6b7280;font-weight:600;border-bottom:1px solid #e5e7eb;">날짜</th>
-                <th style="padding:8px 12px;text-align:left;font-size:11px;color:#6b7280;font-weight:600;border-bottom:1px solid #e5e7eb;">시각</th>
+              <tr>
+                <th style="width: 25%;">항만명</th>
+                <th style="width: 25%;">도선사회 홈페이지</th>
+                <th style="width: 28%;">북마크릿 설치 (드래그)</th>
+                <th style="width: 22%;">코드 관리</th>
               </tr>
             </thead>
-            <tbody>
-              <tr style="border-bottom:1px solid #f3f4f6;">
-                <td style="padding:8px 12px;">STAR PHOENIX</td><td style="padding:8px 12px;">입항</td><td style="padding:8px 12px;">2항로</td><td style="padding:8px 12px;" id="prev-date">05-20</td><td style="padding:8px 12px;">07:00</td>
-              </tr>
-              <tr style="border-bottom:1px solid #f3f4f6;">
-                <td style="padding:8px 12px;">OCEAN BRAVE</td><td style="padding:8px 12px;">출항</td><td style="padding:8px 12px;">1항로</td><td style="padding:8px 12px;" id="prev-date2">05-20</td><td style="padding:8px 12px;">09:00</td>
-              </tr>
-              <!-- 하이라이트된 행 1: 도선사 대기 (주황색) -->
-              <tr style="background:#fff3e0;border-top:2px solid #ff9800;border-bottom:2px solid #ff9800;">
-                <td style="padding:8px 12px;font-weight:bold;color:#b45309;">KOREA PILOT</td>
-                <td style="padding:8px 12px;font-weight:bold;color:#b45309;">입항</td>
-                <td style="padding:8px 12px;font-weight:bold;color:#b45309;">3항로</td>
-                <td style="padding:8px 12px;font-weight:bold;color:#b45309;" id="today-date">05-21</td>
-                <td style="padding:8px 12px;font-weight:bold;color:#b45309;" id="nearby-time">--:--</td>
-              </tr>
-              <!-- 하이라이트된 행 2: 도선사 배정 (녹색) -->
-              <tr style="background:#e8f5e9;border-top:2px solid #4caf50;border-bottom:2px solid #4caf50;">
-                <td style="padding:8px 12px;font-weight:bold;color:#1b5e20;">SHAO YUN</td>
-                <td style="padding:8px 12px;font-weight:bold;color:#1b5e20;">대기</td>
-                <td style="padding:8px 12px;font-weight:bold;color:#1b5e20;">3항로</td>
-                <td style="padding:8px 12px;font-weight:bold;color:#1b5e20;" id="today-date-green">05-21</td>
-                <td style="padding:8px 12px;font-weight:bold;color:#1b5e20;" id="nearby-time-green">--:--</td>
-              </tr>
-              <tr style="border-bottom:1px solid #f3f4f6;">
-                <td style="padding:8px 12px;">SAEBOM</td><td style="padding:8px 12px;">출항</td><td style="padding:8px 12px;">1항로</td><td style="padding:8px 12px;" id="next-date">05-21</td><td style="padding:8px 12px;">19:00</td>
-              </tr>
-              <tr>
-                <td style="padding:8px 12px;">GRAND PEACE</td><td style="padding:8px 12px;">입항</td><td style="padding:8px 12px;">2항로</td><td style="padding:8px 12px;" id="next-date2">05-21</td><td style="padding:8px 12px;">21:00</td>
-              </tr>
+            <tbody id="port-table-body">
+              <!-- JavaScript를 통해 동적 렌더링됨 -->
             </tbody>
           </table>
         </div>
-        <p style="font-size:11px;color:#9ca3af;margin-top:6px;">↑ 녹색(도선사 지정) 및 주황색(도선사 대기) 행이 현재 시각 기준 가장 임박한 도선 일정으로 자동 선택됩니다</p>
       </div>
 
+      <!-- 사용 가이드 -->
+      <div style="margin-top:32px; margin-bottom:24px;">
+        <h4 style="font-size:14px;font-weight:600;margin-bottom:12px;color:#374151;">📖 도선표 강조 북마크릿 사용 방법</h4>
+        <div class="manual-steps">
+          <div class="manual-step">
+            <span class="manual-step-num">1</span>
+            <span class="manual-step-text">해당 항만의 <strong>[🔖 북마크릿 드래그]</strong> 버튼을 브라우저 상단 즐겨찾기 바에 저장합니다.</span>
+          </div>
+          <div class="manual-step">
+            <span class="manual-step-num">2</span>
+            <span class="manual-step-text">도선사회의 <strong>도선 스케줄/예보 조회 화면</strong>으로 이동합니다 (위 표의 '도선사회 홈페이지' 참조).</span>
+          </div>
+          <div class="manual-step">
+            <span class="manual-step-num">3</span>
+            <span class="manual-step-text">즐겨찾기 바에 등록된 <strong>"도선표 하이라이트"</strong> 버튼을 클릭합니다.</span>
+          </div>
+          <div class="manual-step">
+            <span class="manual-step-num">4</span>
+            <span class="manual-step-text">현재 시각 기준 가장 가까운 도선 일정 행이 상태에 따라 지정 완료 또는 대기중으로 강조되고 화면 중앙으로 부드럽게 스크롤됩니다. (3분 주기 자동 갱신 작동)</span>
+          </div>
+        </div>
+      </div>
       
       <!-- 시연 영상 영역 -->
       <div style="margin-top:28px; border-top:1px solid #e2e8f0; padding-top:24px;">
@@ -309,7 +477,6 @@
           <div style="position:absolute; top:0; left:0; width:100%; height:60px; z-index:10; background:transparent; cursor:default;"></div>
           <iframe src="https://www.youtube-nocookie.com/embed/bZ7ECe-sbXw?modestbranding=1&rel=0" style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
         </div>
-        
       </div>
 
       <div class="result-badges" style="margin-top:20px;">
@@ -329,24 +496,10 @@
     </div>
   </div>
 
-  <!-- 소스코드 -->
+  <!-- 소스코드 전문 공개 및 개별 수정 가이드 -->
   <div class="section-card">
     <div class="section-header">
       <span class="section-step">+</span>
-      <span class="section-title">소스코드 전문 공개</span>
-    </div>
-    <div class="section-body">
-      <p style="font-size:13px;color:#6b7280;margin-bottom:16px;">실제 구동되는 북마크릿 소스코드 원본의 주석 포함 가독성을 높인 버전입니다.(주석을 삭제 후 한줄로 압축해서 사용해야 작동함)</p>
-      <div class="code-wrap">
-        <div class="code-header">
-          <span class="code-filename">도선표 강조기능 북마크릿.txt</span>
-          <div class="btn-row">
-            <button class="code-copy-btn" onclick="copyCode('code-5', this)">복사</button>
-            <a class="code-copy-btn" href="사례5/도선표 강조기능 북마크릿.txt" download="도선표 강조기능 북마크릿.txt" target="_blank" style="text-decoration:none">⬇ 다운로드</a>
-          </div>
-        </div>
-        <pre class="code-pre"><code id="code-5">javascript:(function(){
-  // 중복 실행 시 기존 타이머 클리어
   if(window.ptT) clearInterval(window.ptT);
   if(window.scT) clearInterval(window.scT);
 
@@ -428,7 +581,7 @@
 </div>
 
 <script>
-// 오늘/내일 날짜 동적 표시 및 가상 테이블 데이터 실시간 생성
+// 오늘/내일 날짜 동적 표시 및 가상 테이블 데이터 실시간 생성 (가상 에뮬레이터용)
 (function(){
   const now = new Date();
   window.mockNow = now; // 가상 시연 시간 고정을 위해 전역 저장
@@ -595,22 +748,452 @@ function triggerVirtualBookmarklet(btn) {
   }, 4000);
 }
 
-function copyBookmarklet() {
-  const code = `javascript:(function(){if(window.ptT)clearInterval(window.ptT);if(window.scT)clearInterval(window.scT);var old=document.getElementById('ps_s');if(old)old.remove();var s=document.createElement('style');s.id='ps_s';s.innerHTML='.t-hi td{background:#e8f5e9!important;border-top:2px solid #4caf50!important;border-bottom:2px solid #4caf50!important;font-weight:bold!important;color:#1b5e20!important;transition:all 0.3s;}.t-hi-pending td{background:#fff3e0!important;border-top:2px solid #ff9800!important;border-bottom:2px solid #ff9800!important;font-weight:bold!important;color:#b45309!important;transition:all 0.3s;}';document.head.appendChild(s);function h(){var now=new Date(),yr=now.getFullYear(),hiList=[],nxList=[],mD=Infinity;document.querySelectorAll('tr').forEach(function(r){r.classList.remove('t-hi');r.classList.remove('t-hi-pending');var tds=r.querySelectorAll('td');if(tds.length<5)return;var dt=tds[3].innerText.trim(),tt=tds[4].innerText.trim();if(!dt||!tt)return;if(!dt.match(/^\\d{2}-\\d{2}$/)||!tt.match(/^\\d{2}:\\d{2}$/))return;var p=dt.split('-'),t=tt.split(':'),shipTime=new Date(yr,p[0]-1,p[1],t[0],t[1]),df=shipTime-now;if(df>=0&&df<=3600000){hiList.push(r);}else if(df>0){if(df<mD-60000){mD=df;nxList=[r];}else if(df<=mD+60000){if(df<mD)mD=df;nxList.push(r);}}});var targets=hiList.length?hiList:nxList;targets.forEach(function(r){var tds=r.querySelectorAll('td');var pilot=tds[2].innerText.trim();if(pilot){r.classList.add('t-hi');}else{r.classList.add('t-hi-pending');}});}function sC(){var t=document.querySelector('.t-hi,.t-hi-pending');if(t)t.scrollIntoView({behavior:'smooth',block:'center'});}h();setTimeout(sC,100);window.ptT=setInterval(h,180000);window.scT=setInterval(sC,180000);})();`;
-  navigator.clipboard.writeText(code).then(() => {
-    const btn = document.getElementById('copy-bookmarklet-btn');
-    btn.textContent = '✓ 복사됨!';
-    btn.classList.add('copied');
-    setTimeout(() => { btn.textContent = '📋 코드 복사'; btn.classList.remove('copied'); }, 2500);
+// ----------------------------------------------------
+// 전국 12개 항만 정보 데이터베이스 정의
+const pilotPorts = [
+  { id: 'pyungtaek', name: '평택항', assoc: '평택당진도선사회', url: 'http://www.ptpilot.co.kr', hasWeb: true },
+  { id: 'busan', name: '부산항', assoc: '부산항도선사회', url: 'http://www.busanpilot.co.kr', hasWeb: true },
+  { id: 'yeosu', name: '여수항', assoc: '여수항도선사회', url: 'http://www.yspilot.co.kr', hasWeb: true },
+  { id: 'incheon', name: '인천항', assoc: '인천항도선사회', url: 'http://www.incheonpilot.com/pilot/pilot04_01.asp', hasWeb: true },
+  { id: 'ulsan', name: '울산항', assoc: '울산항도선사회', url: 'http://www.ulsanpilot.co.kr', hasWeb: true },
+  { id: 'masan', name: '마산항', assoc: '마산항도선사회', url: 'http://www.mspilot.co.kr', hasWeb: true },
+  { id: 'daesan', name: '대산항', assoc: '대산항도선사회', url: 'http://www.ds-pilot.co.kr/forecast/status', hasWeb: true },
+  { id: 'pohang', name: '포항항', assoc: '포항항도선사회', url: 'https://kmpilot.or.kr/main/sub.html?Mode=sub2_7', hasWeb: false, note: '독립 홈페이지 없음' },
+  { id: 'gunsan', name: '군산항', assoc: '군산항도선사회', url: 'http://cafe.daum.net/gunsanpilot', hasWeb: true, note: '다음 카페 운영' },
+  { id: 'mokpo', name: '목포항', assoc: '목포항도선사회', url: 'https://kmpilot.or.kr/main/sub.html?Mode=sub2_9', hasWeb: false, note: '독립 홈페이지 없음' },
+  { id: 'donghae', name: '동해항', assoc: '동해항도선사회', url: 'http://www.dhpilot.co.kr', hasWeb: true },
+  { id: 'jeju', name: '제주항', assoc: '제주항도선사회', url: 'https://kmpilot.or.kr/main/sub.html?Mode=sub2_12', hasWeb: false, note: '독립 홈페이지 없음' }
+];
+
+// 각 항만별 북마크릿 한 줄 코드 데이터베이스 (공백 및 줄바꿈 압축)
+const portBookmarkletCodes = {
+  pyungtaek: `javascript:(function(){if(window.ptT)clearInterval(window.ptT);if(window.scT)clearInterval(window.scT);var old=document.getElementById('ps_s');if(old)old.remove();var s=document.createElement('style');s.id='ps_s';s.innerHTML='.t-hi td{background:#e8f5e9!important;border-top:2px solid #4caf50!important;border-bottom:2px solid #4caf50!important;font-weight:bold!important;color:#1b5e20!important;transition:all 0.3s;}.t-hi-pending td{background:#fff3e0!important;border-top:2px solid #ff9800!important;border-bottom:2px solid #ff9800!important;font-weight:bold!important;color:#b45309!important;transition:all 0.3s;}';document.head.appendChild(s);function h(){var now=new Date(),yr=now.getFullYear(),hiList=[],nxList=[],mD=Infinity;document.querySelectorAll('tr').forEach(function(r){r.classList.remove('t-hi');r.classList.remove('t-hi-pending');var tds=r.querySelectorAll('td');if(tds.length<5)return;var dt=tds[3].innerText.trim(),tt=tds[4].innerText.trim();if(!dt||!tt)return;if(!dt.match(/^\\d{2}-\\d{2}$/)||!tt.match(/^\\d{2}:\\d{2}$/))return;var p=dt.split('-'),t=tt.split(':'),shipTime=new Date(yr,p[0]-1,p[1],t[0],t[1]),df=shipTime-now;if(df>=0&&df<=3600000){hiList.push(r);}else if(df>0){if(df<mD-60000){mD=df;nxList=[r];}else if(df<=mD+60000){if(df<mD)mD=df;nxList.push(r);}}});var targets=hiList.length?hiList:nxList;targets.forEach(function(r){var tds=r.querySelectorAll('td');var pilot=tds[2].innerText.trim();if(pilot){r.classList.add('t-hi');}else{r.classList.add('t-hi-pending');}});}function sC(){var t=document.querySelector('.t-hi,.t-hi-pending');if(t)t.scrollIntoView({behavior:'smooth',block:'center'});}h();setTimeout(sC,100);window.ptT=setInterval(h,180000);window.scT=setInterval(sC,180000);})();`,
+  
+  incheon: `javascript:(function(){if(window.icT)clearInterval(window.icT);if(window.icSc)clearInterval(window.icSc);var old=document.getElementById('ic_s');if(old)old.remove();var s=document.createElement('style');s.id='ic_s';s.innerHTML='.ic-hi td{background:#e8f5e9!important;border-top:2px solid #4caf50!important;border-bottom:2px solid #4caf50!important;font-weight:bold!important;color:#1b5e20!important;transition:all 0.3s;}.ic-hi-pending td{box-shadow:inset 0 3px 0 0 #ff9800,inset 0 -3px 0 0 #ff9800!important;font-weight:bold!important;transition:all 0.3s;}';document.head.appendChild(s);function h(){var now=new Date(),yr=now.getFullYear(),mon=now.getMonth(),day=now.getDate(),hiList=[],nxList=[],mD=Infinity;document.querySelectorAll('tr').forEach(function(r){r.classList.remove('ic-hi');r.classList.remove('ic-hi-pending');var tds=r.querySelectorAll('td');if(tds.length<5)return;var tt=tds[2].innerText.replace(/\\u00a0/g,' ').trim();var pilot=tds[1].innerText.replace(/\\u00a0/g,' ').trim();if(!tt||!tt.match(/^\\d{2}:\\d{2}$/))return;var tParts=tt.split(':');var shipTime=new Date(yr,mon,day,parseInt(tParts[0],10),parseInt(tParts[1],10));var df=shipTime-now;if(df>=0&&df<=3600000){hiList.push(r);}else if(df>0){if(df<mD-60000){mD=df;nxList=[r];}else if(df<=mD+60000){if(df<mD)mD=df;nxList.push(r);}}});var targets=hiList.length?hiList:nxList;targets.forEach(function(r){var tds=r.querySelectorAll('td');var pilot=tds[1].innerText.replace(/\\u00a0/g,' ').trim();if(pilot&&pilot!=='(0)'){r.classList.add('ic-hi');}else{r.classList.add('ic-hi-pending');}});}function sC(){var t=document.querySelector('.ic-hi,.ic-hi-pending');if(t)t.scrollIntoView({behavior:'smooth',block:'center'});}h();setTimeout(sC,100);window.icT=setInterval(h,180000);window.icSc=setInterval(sC,180000);})();`,
+
+  daesan: `javascript:(function(){if(window.dsT)clearInterval(window.dsT);if(window.dsSc)clearInterval(window.dsSc);var old=document.getElementById('ds_s');if(old)old.remove();var s=document.createElement('style');s.id='ds_s';s.innerHTML='.ds-hi td{background:#e8f5e9!important;border-top:2px solid #4caf50!important;border-bottom:2px solid #4caf50!important;font-weight:bold!important;color:#1b5e20!important;transition:all 0.3s;}.ds-hi-pending td{box-shadow:inset 0 3px 0 0 #ff9800,inset 0 -3px 0 0 #ff9800!important;font-weight:bold!important;transition:all 0.3s;}';document.head.appendChild(s);function h(){var now=new Date(),hiList=[],nxList=[],mD=Infinity;document.querySelectorAll('tr[role="row"]').forEach(function(r){r.classList.remove('ds-hi');r.classList.remove('ds-hi-pending');var dTd=r.querySelector('[aria-describedby="jqgrid-list_DT_SHIP"]'),tTd=r.querySelector('[aria-describedby="jqgrid-list_TM_SHIP"]'),sTd=r.querySelector('[aria-describedby="jqgrid-list_FG_STATUS"]');if(!dTd||!tTd)return;var dt=dTd.innerText.replace(/\\u00a0/g,' ').trim(),tt=tTd.innerText.replace(/\\u00a0/g,' ').trim(),st=sTd?sTd.innerText.trim():'';if(st==='취소')return;if(!dt.match(/^\\d{4}\/\\d{2}\/\\d{2}$/)||!tt.match(/^\\d{2}:\\d{2}$/))return;var dParts=dt.split('/'),tParts=tt.split(':');var shipTime=new Date(parseInt(dParts[0],10),parseInt(dParts[1],10)-1,parseInt(dParts[2],10),parseInt(tParts[0],10),parseInt(tParts[1],10));var df=shipTime-now;if(df>=0&&df<=3600000){hiList.push(r);}else if(df>0){if(df<mD-60000){mD=df;nxList=[r];}else if(df<=mD+60000){if(df<mD)mD=df;nxList.push(r);}}});var targets=hiList.length?hiList:nxList;targets.forEach(function(r){var pTd=r.querySelector('[aria-describedby="jqgrid-list_CD_PILOT"]');var pilot=pTd?pTd.innerText.replace(/\\u00a0/g,' ').trim():'';if(pilot){r.classList.add('ds-hi');}else{r.classList.add('ds-hi-pending');}});}function sC(){var t=document.querySelector('.ds-hi,.ds-hi-pending');if(t)t.scrollIntoView({behavior:'smooth',block:'center'});}h();setTimeout(sC,100);window.dsT=setInterval(h,180000);window.dsSc=setInterval(sC,180000);})();`
+};
+
+// 각 항만별 주석 가독성 소스코드 데이터베이스 (뷰어 노출용)
+const portSourceCodeTexts = {
+  pyungtaek: `javascript:(function(){
+  // [평택항] 중복 실행 시 기존 타이머 클리어
+  if(window.ptT) clearInterval(window.ptT);
+  if(window.scT) clearInterval(window.scT);
+
+  var old=document.getElementById('ps_s');
+  if(old) old.remove();
+
+  // CSS 하이라이트 스타일 동적 주입 (도선 완료: 녹색 테두리 / 대기: 주황색 테두리)
+  var s=document.createElement('style');
+  s.id='ps_s';
+  s.innerHTML='.t-hi td{background:#e8f5e9!important;border-top:2px solid #4caf50!important;border-bottom:2px solid #4caf50!important;font-weight:bold!important;color:#1b5e20!important;transition:all 0.3s;}.t-hi-pending td{background:#fff3e0!important;border-top:2px solid #ff9800!important;border-bottom:2px solid #ff9800!important;font-weight:bold!important;color:#b45309!important;transition:all 0.3s;}';
+  document.head.appendChild(s);
+
+  function h(){
+    var now=new Date(),
+        yr=now.getFullYear(),
+        hiList=[],
+        nxList=[],
+        mD=Infinity;
+
+    // 전체 tr 순회하며 시각 비교 (도선예보 스케줄 탐색)
+    document.querySelectorAll('tr').forEach(function(r){
+      r.classList.remove('t-hi');
+      r.classList.remove('t-hi-pending');
+      
+      var tds=r.querySelectorAll('td');
+      if(tds.length < 5) return;
+      
+      // 날짜(4번째 열)와 시간(5번째 열) 텍스트 추출 및 정제
+      var dt=tds[3].innerText.trim(),
+          tt=tds[4].innerText.trim();
+      if(!dt||!tt) return;
+      if(!dt.match(/^\\d{2}-\\d{2}$/)||!tt.match(/^\\d{2}:\\d{2}$/)) return;
+      
+      var p=dt.split('-'),
+          t=tt.split(':'),
+          shipTime=new Date(yr,p[0]-1,p[1],t[0],t[1]),
+          df=shipTime-now;
+          
+      // 1시간 이내 도선 스케줄 탐색
+      if(df>=0 && df<=3600000){
+        hiList.push(r);
+      }else if(df>0){
+        if(df<mD-60000){
+          mD=df;
+          nxList=[r];
+        }else if(df<=mD+60000){
+          if(df<mD) mD=df;
+          nxList.push(r);
+        }
+      }
+    });
+
+    // 타겟 행 강조 처리 (도선사 배정 상태에 따른 색상 구분)
+    var targets=hiList.length?hiList:nxList;
+    targets.forEach(function(r){
+      var tds=r.querySelectorAll('td');
+      var pilot=tds[2].innerText.trim(); // 도선사명 (3번째 열)
+      if(pilot){
+        r.classList.add('t-hi'); // 녹색 강조 (배정 완료)
+      }else{
+        r.classList.add('t-hi-pending'); // 주황색 강조 (대기중)
+      }
+    });
+  }
+
+  // 타겟 행을 화면 정중앙으로 부드럽게 스크롤
+  function sC(){
+    var t=document.querySelector('.t-hi,.t-hi-pending');
+    if(t) t.scrollIntoView({behavior:'smooth', block:'center'});
+  }
+
+  h();
+  setTimeout(sC, 100);
+  window.ptT=setInterval(h, 180000); // 3분마다 데이터 자동 재스캔
+  window.scT=setInterval(sC, 180000); // 3분마다 스크롤 리포지셔닝
+})();`,
+
+  incheon: `javascript:(function(){
+  // [인천항] 중복 실행 시 기존 타이머 클리어
+  if(window.icT) clearInterval(window.icT);
+  if(window.icSc) clearInterval(window.icSc);
+
+  var old=document.getElementById('ic_s');
+  if(old) old.remove();
+
+  // CSS 하이라이트 스타일 동적 주입 (도선 완료: 녹색 테두리 / 대기: 주황색 테두리 입체 박스섀도)
+  var s=document.createElement('style');
+  s.id='ic_s';
+  s.innerHTML='.ic-hi td{background:#e8f5e9!important;border-top:2px solid #4caf50!important;border-bottom:2px solid #4caf50!important;font-weight:bold!important;color:#1b5e20!important;transition:all 0.3s;}.ic-hi-pending td{box-shadow:inset 0 3px 0 0 #ff9800,inset 0 -3px 0 0 #ff9800!important;font-weight:bold!important;transition:all 0.3s;}';
+  document.head.appendChild(s);
+
+  function h(){
+    var now=new Date(),
+        yr=now.getFullYear(),
+        mon=now.getMonth(),
+        day=now.getDate(),
+        hiList=[],
+        nxList=[],
+        mD=Infinity;
+
+    // 인천항 도선 스케줄 tr 순회하며 시각 비교
+    document.querySelectorAll('tr').forEach(function(r){
+      r.classList.remove('ic-hi');
+      r.classList.remove('ic-hi-pending');
+      
+      var tds=r.querySelectorAll('td');
+      if(tds.length < 5) return;
+      
+      // 공백문자 제거 및 시간(3번째 열), 도선사(2번째 열) 텍스트 정제
+      var tt=tds[2].innerText.replace(/\\u00a0/g,' ').trim();
+      var pilot=tds[1].innerText.replace(/\\u00a0/g,' ').trim();
+      
+      if(!tt || !tt.match(/^\\d{2}:\\d{2}$/)) return;
+      
+      var tParts=tt.split(':');
+      // 오늘 날짜 기준으로 선박 시간(shipTime) 생성
+      var shipTime=new Date(yr, mon, day, parseInt(tParts[0],10), parseInt(tParts[1],10));
+      var df=shipTime-now;
+      
+      // 1시간 이내 일정 자동 탐색
+      if(df>=0 && df<=3600000){
+        hiList.push(r);
+      }else if(df>0){
+        if(df<mD-60000){
+          mD=df;
+          nxList=[r];
+        }else if(df<=mD+60000){
+          if(df<mD) mD=df;
+          nxList.push(r);
+        }
+      }
+    });
+
+    var targets=hiList.length?hiList:nxList;
+    targets.forEach(function(r){
+      var tds=r.querySelectorAll('td');
+      var pilot=tds[1].innerText.replace(/\\u00a0/g,' ').trim();
+      
+      // 도선사 배정 여부 확인 (도선사가 지정되었고 '(0)'이 아닌 경우)
+      if(pilot && pilot!=='(0)'){
+        r.classList.add('ic-hi'); // 녹색 강조 (지정 완료)
+      }else{
+        r.classList.add('ic-hi-pending'); // 주황색 테두리 강조 (대기중)
+      }
+    });
+  }
+
+  // 타겟 행 화면 중앙 자동 스크롤
+  function sC(){
+    var t=document.querySelector('.ic-hi,.ic-hi-pending');
+    if(t) t.scrollIntoView({behavior:'smooth', block:'center'});
+  }
+
+  h();
+  setTimeout(sC, 100);
+  window.icT=setInterval(h, 180000); // 3분 주기 스케줄 재스캔
+  window.icSc=setInterval(sC, 180000); // 3분 주기 스크롤 리포지셔닝
+})();`,
+
+  daesan: `javascript:(function(){
+  // [대산항] 중복 실행 시 기존 타이머 클리어
+  if(window.dsT) clearInterval(window.dsT);
+  if(window.dsSc) clearInterval(window.dsSc);
+
+  var old=document.getElementById('ds_s');
+  if(old) old.remove();
+
+  // CSS 하이라이트 스타일 동적 주입 (도선 완료: 녹색 테두리 / 대기: 주황색 테두리 입체 박스섀도)
+  var s=document.createElement('style');
+  s.id='ds_s';
+  s.innerHTML='.ds-hi td{background:#e8f5e9!important;border-top:2px solid #4caf50!important;border-bottom:2px solid #4caf50!important;font-weight:bold!important;color:#1b5e20!important;transition:all 0.3s;}.ds-hi-pending td{box-shadow:inset 0 3px 0 0 #ff9800,inset 0 -3px 0 0 #ff9800!important;font-weight:bold!important;transition:all 0.3s;}';
+  document.head.appendChild(s);
+
+  function h(){
+    var now=new Date(),
+        hiList=[],
+        nxList=[],
+        mD=Infinity;
+
+    // jqGrid 기반 테이블 행 순회 (tr[role="row"])
+    document.querySelectorAll('tr[role="row"]').forEach(function(r){
+      r.classList.remove('ds-hi');
+      r.classList.remove('ds-hi-pending');
+      
+      var dTd=r.querySelector('[aria-describedby="jqgrid-list_DT_SHIP"]'), // 날짜 셀
+          tTd=r.querySelector('[aria-describedby="jqgrid-list_TM_SHIP"]'), // 시간 셀
+          sTd=r.querySelector('[aria-describedby="jqgrid-list_FG_STATUS"]'); // 상태 셀
+      
+      if(!dTd || !tTd) return;
+      
+      var dt=dTd.innerText.replace(/\\u00a0/g,' ').trim(),
+          tt=tTd.innerText.replace(/\\u00a0/g,' ').trim(),
+          st=sTd?sTd.innerText.trim():'';
+          
+      // 취소된 일정 제외
+      if(st==='취소') return;
+      if(!dt.match(/^\\d{4}\/\\d{2}\/\\d{2}$/) || !tt.match(/^\\d{2}:\\d{2}$/)) return;
+      
+      var dParts=dt.split('/'), // YYYY/MM/DD 분할
+          tParts=tt.split(':'); // HH:MM 분할
+          
+      var shipTime=new Date(parseInt(dParts[0],10), parseInt(dParts[1],10)-1, parseInt(dParts[2],10), parseInt(tParts[0],10), parseInt(tParts[1],10));
+      var df=shipTime-now;
+      
+      // 1시간 이내 일정 자동 탐색
+      if(df>=0 && df<=3600000){
+        hiList.push(r);
+      }else if(df>0){
+        if(df<mD-60000){
+          mD=df;
+          nxList=[r];
+        }else if(df<=mD+60000){
+          if(df<mD) mD=df;
+          nxList.push(r);
+        }
+      }
+    });
+
+    var targets=hiList.length?hiList:nxList;
+    targets.forEach(function(r){
+      var pTd=r.querySelector('[aria-describedby="jqgrid-list_CD_PILOT"]'); // 도선사명 셀
+      var pilot=pTd?pTd.innerText.replace(/\\u00a0/g,' ').trim():'';
+      
+      if(pilot){
+        r.classList.add('ds-hi'); // 녹색 강조 (지정 완료)
+      }else{
+        r.classList.add('ds-hi-pending'); // 주황색 테두리 강조 (대기중)
+      }
+    });
+  }
+
+  // 타겟 행 화면 중앙 자동 스크롤
+  function sC(){
+    var t=document.querySelector('.ds-hi,.ds-hi-pending');
+    if(t) t.scrollIntoView({behavior:'smooth', block:'center'});
+  }
+
+  h();
+  setTimeout(sC, 100);
+  window.dsT=setInterval(h, 180000); // 3분 주기 갱신
+  window.dsSc=setInterval(sC, 180000);
+})();`
+};
+
+// 특정 항만의 북마크릿 한 줄 코드 반환 (없으면 평택항 기반 템플릿 치환으로 자동 격리하여 생성)
+function generateBookmarkletCode(portId) {
+  if (portBookmarkletCodes[portId]) {
+    return portBookmarkletCodes[portId];
+  }
+  
+  // 기본 평택항 템플릿 치환
+  const pId = portId.substring(0, 2);
+  const defaultCode = portBookmarkletCodes.pyungtaek;
+  return defaultCode
+    .replace(/window\.ptT/g, `window.${pId}T`)
+    .replace(/window\.scT/g, `window.${pId}Sc`)
+    .replace(/ps_s/g, `${pId}_s`)
+    .replace(/\.t-hi/g, `.${pId}-hi`)
+    .replace(/t-hi-pending/g, `${pId}-hi-pending`);
+}
+
+// 특정 항만의 가독성 소스코드 반환 (없으면 평택항 기반 템플릿 치환으로 자동 격리하여 생성)
+function generateSourceCodeText(portId, portName) {
+  if (portSourceCodeTexts[portId]) {
+    return portSourceCodeTexts[portId];
+  }
+  
+  // 기본 평택항 가독성 텍스트 치환
+  const pId = portId.substring(0, 2);
+  const defaultText = portSourceCodeTexts.pyungtaek;
+  return defaultText
+    .replace(/\[평택항\]/g, `[${portName}]`)
+    .replace(/window\.ptT/g, `window.${pId}T`)
+    .replace(/window\.scT/g, `window.${pId}Sc`)
+    .replace(/ps_s/g, `${pId}_s`)
+    .replace(/\.t-hi/g, `.${pId}-hi`)
+    .replace(/t-hi-pending/g, `${pId}-hi-pending`);
+}
+
+let activePortId = 'pyungtaek';
+
+// 12개 항만 테이블 동적 렌더링
+function renderPortTable() {
+  const tbody = document.getElementById('port-table-body');
+  if(!tbody) return;
+  tbody.innerHTML = '';
+  
+  pilotPorts.forEach(port => {
+    const tr = document.createElement('tr');
+    const bookmarkletCode = generateBookmarkletCode(port.id);
+    
+    tr.innerHTML = `
+      <td data-label="항만명">
+        <span class="port-badge">🚢 ${port.name}</span>
+      </td>
+      <td data-label="도선사회 홈페이지">
+        <a href="${port.url}" target="_blank" class="site-link-btn ${!port.hasWeb ? 'no-web' : ''}" title="${port.assoc} 바로가기">
+          🌐 ${port.assoc} ${port.note ? ` <small>(${port.note})</small>` : ''}
+        </a>
+      </td>
+      <td data-label="북마크릿 설치 (드래그)">
+        <a class="bookmarklet-drag-sm" href="${bookmarkletCode}" title="클릭하지 마시고 즐겨찾기 바에 드래그하여 놓으세요.">
+          🔖 ${port.name} 하이라이트
+        </a>
+      </td>
+      <td data-label="코드 관리">
+        <div class="action-group">
+          <button class="btn-action-sm btn-copy-port" onclick="copyPortBookmarklet('${port.id}', this)" title="북마크릿 코드 복사">
+            📋 복사
+          </button>
+          <button class="btn-action-sm btn-download-port" onclick="downloadPortBookmarklet('${port.id}', '${port.name}')" title="북마크릿 스크립트 다운로드">
+            다운로드
+          </button>
+        </div>
+      </td>
+    `;
+    tbody.appendChild(tr);
   });
 }
 
-function copyCode(id, btn) {
-  navigator.clipboard.writeText(document.getElementById(id).innerText).then(() => {
-    btn.textContent = '✓ 복사됨'; btn.classList.add('copied');
-    setTimeout(() => { btn.textContent = '복사'; btn.classList.remove('copied'); }, 2000);
+// 소스코드 뷰어용 항만 탭 렌더링
+function renderCodeTabs() {
+  const tabsContainer = document.getElementById('port-code-tabs');
+  if(!tabsContainer) return;
+  tabsContainer.innerHTML = '';
+  
+  pilotPorts.forEach(port => {
+    const btn = document.createElement('button');
+    btn.className = `code-tab-btn ${port.id === activePortId ? 'active' : ''}`;
+    btn.textContent = port.name;
+    btn.onclick = () => selectPort(port.id);
+    tabsContainer.appendChild(btn);
   });
 }
+
+// 특정 항만 탭 선택 시 동작
+function selectPort(portId) {
+  activePortId = portId;
+  
+  const buttons = document.querySelectorAll('.code-tab-btn');
+  buttons.forEach(btn => {
+    if (btn.textContent === pilotPorts.find(p => p.id === portId).name) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+  
+  const port = pilotPorts.find(p => p.id === portId);
+  const codeContent = generateSourceCodeText(port.id, port.name);
+  
+  document.getElementById('viewer-filename').textContent = `도선표_강조기능_북마크릿_${port.name}.txt`;
+  document.getElementById('code-viewer').textContent = codeContent;
+}
+
+// 클립보드 복사 헬퍼 함수
+function copyToClipboard(text, element) {
+  navigator.clipboard.writeText(text).then(() => {
+    const originalText = element.textContent;
+    element.textContent = '✓ 복사됨!';
+    element.classList.add('copied');
+    setTimeout(() => {
+      element.textContent = originalText;
+      element.classList.remove('copied');
+    }, 2000);
+  });
+}
+
+// 특정 항만 북마크릿 코드 복사
+function copyPortBookmarklet(portId, btnElement) {
+  const code = generateBookmarkletCode(portId);
+  copyToClipboard(code, btnElement);
+}
+
+// 특정 항만 북마크릿 다운로드 (Blob 활용)
+function downloadPortBookmarklet(portId, portName) {
+  const code = generateBookmarkletCode(portId);
+  const blob = new Blob([code], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `도선표_강조_북마크릿_${portName}.txt`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// 뷰어 코드 복사
+function copyViewerCode() {
+  const code = document.getElementById('code-viewer').textContent;
+  const btn = document.getElementById('viewer-copy-btn');
+  copyToClipboard(code, btn);
+}
+
+// 뷰어 코드 다운로드
+function downloadViewerCode() {
+  const code = document.getElementById('code-viewer').textContent;
+  const portName = pilotPorts.find(p => p.id === activePortId).name;
+  const blob = new Blob([code], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `도선표_강조_북마크릿_${portName}_주석포함.txt`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// 12개 항만 목록 초기 렌더링 시작
+(function(){
+  renderPortTable();
+  renderCodeTabs();
+  selectPort('pyungtaek');
+})();
 </script>
 </body>
 </html>
