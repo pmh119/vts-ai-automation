@@ -1383,8 +1383,14 @@ function downloadPortBookmarklet(portId, portName) {
 
 // 뷰어 코드 복사
 function copyViewerCode() {
-  const code = document.getElementById('code-viewer').textContent;
+  const code = generateBookmarkletCode(activePortId);
   const btn = document.getElementById('viewer-copy-btn');
+  copyToClipboard(code, btn);
+}
+
+// 구버전 복사 버튼 호환 함수 (평택 북마크릿 한줄 복사)
+function copyCode(id, btn) {
+  const code = generateBookmarkletCode('pyungtaek');
   copyToClipboard(code, btn);
 }
 
