@@ -766,7 +766,7 @@ function triggerVirtualBookmarklet(btn) {
 const pilotPorts = [
   { id: 'pyungtaek', name: '평택항', assoc: '평택당진도선사회', url: 'http://www.ptpilot.co.kr', hasWeb: true },
   { id: 'busan', name: '부산항', assoc: '부산항도선사회', url: 'http://www.busanpilot.co.kr', hasWeb: true, noBookmarklet: true, note: '자체 스케줄 필터링 제공' },
-  { id: 'yeosu', name: '여수항', assoc: '여수항도선사회', url: 'http://www.yspilot.co.kr', hasWeb: true },
+  { id: 'yeosu', name: '여수항', assoc: '여수항도선사회', url: 'http://www.yspilot.co.kr/forecast/status', hasWeb: true },
   { id: 'incheon', name: '인천항', assoc: '인천항도선사회', url: 'http://www.incheonpilot.com/pilot/pilot04_01.asp', hasWeb: true },
   { id: 'ulsan', name: '울산항', assoc: '울산항도선사회', url: 'http://www.ulsanpilot.co.kr', hasWeb: true },
   { id: 'masan', name: '마산항', assoc: '마산항도선사회', url: 'http://www.mspilot.co.kr', hasWeb: true },
@@ -781,6 +781,8 @@ const pilotPorts = [
 // 각 항만별 북마크릿 한 줄 코드 데이터베이스 (공백 및 줄바꿈 압축)
 const portBookmarkletCodes = {
   pyungtaek: `javascript:(function(){if(window.ptT)clearInterval(window.ptT);if(window.scT)clearInterval(window.scT);var old=document.getElementById('ps_s');if(old)old.remove();var s=document.createElement('style');s.id='ps_s';s.innerHTML='.t-hi td{background:#e8f5e9!important;border-top:2px solid #4caf50!important;border-bottom:2px solid #4caf50!important;font-weight:bold!important;color:#1b5e20!important;transition:all 0.3s;}.t-hi-pending td{background:#fff3e0!important;border-top:2px solid #ff9800!important;border-bottom:2px solid #ff9800!important;font-weight:bold!important;color:#b45309!important;transition:all 0.3s;}';document.head.appendChild(s);function h(){var now=new Date(),yr=now.getFullYear(),hiList=[],nxList=[],mD=Infinity;document.querySelectorAll('tr').forEach(function(r){r.classList.remove('t-hi');r.classList.remove('t-hi-pending');var tds=r.querySelectorAll('td');if(tds.length<5)return;var dt=tds[3].innerText.trim(),tt=tds[4].innerText.trim();if(!dt||!tt)return;if(!dt.match(/^\\d{2}-\\d{2}$/)||!tt.match(/^\\d{2}:\\d{2}$/))return;var p=dt.split('-'),t=tt.split(':'),shipTime=new Date(yr,p[0]-1,p[1],t[0],t[1]),df=shipTime-now;if(df>=0&&df<=3600000){hiList.push(r);}else if(df>0){if(df<mD-60000){mD=df;nxList=[r];}else if(df<=mD+60000){if(df<mD)mD=df;nxList.push(r);}}});var targets=hiList.length?hiList:nxList;targets.forEach(function(r){var tds=r.querySelectorAll('td');var pilot=tds[2].innerText.trim();if(pilot){r.classList.add('t-hi');}else{r.classList.add('t-hi-pending');}});}function sC(){var t=document.querySelector('.t-hi,.t-hi-pending');if(t)t.scrollIntoView({behavior:'smooth',block:'center'});}h();setTimeout(sC,100);window.ptT=setInterval(h,180000);window.scT=setInterval(sC,180000);})();`,
+  
+  yeosu: `javascript:(function(){if(window.ysT)clearInterval(window.ysT);if(window.ysSc)clearInterval(window.ysSc);var old=document.getElementById('ys_s');if(old)old.remove();var s=document.createElement('style');s.id='ys_s';s.innerHTML='.ys-hi td{background:#e8f5e9!important;border-top:2px solid #4caf50!important;border-bottom:2px solid #4caf50!important;font-weight:bold!important;color:#1b5e20!important;transition:all 0.3s;}.ys-hi-pending td{box-shadow:inset 0 3px 0 0 #ff9800,inset 0 -3px 0 0 #ff9800!important;font-weight:bold!important;transition:all 0.3s;}';document.head.appendChild(s);function h(){var now=new Date(),yr=now.getFullYear(),mon=now.getMonth(),day=now.getDate(),hiList=[],nxList=[],mD=Infinity;document.querySelectorAll('.lien-table tbody tr').forEach(function(r){var tds=r.querySelectorAll('td');if(tds.length<13)return;var spec=tds[1].innerText.replace(/\\u00a0/g,' ').trim();if(spec==='예보')return;var tt=tds[7].innerText.replace(/\\u00a0/g,' ').trim();if(!tt||!tt.match(/^\\d{2}:\\d{2}$/))return;var tParts=tt.split(':');var shipTime=new Date(yr,mon,day,parseInt(tParts[0],10),parseInt(tParts[1],10));var df=shipTime-now;if(df>=0&&df<=3600000){hiList.push(r);}else if(df>0){if(df<mD-60000){mD=df;nxList=[r];}else if(df<=mD+60000){if(df<mD)mD=df;nxList.push(r);}}});var targets=hiList.length?hiList:nxList;targets.forEach(function(r){var tds=r.querySelectorAll('td');var pilot=tds[11].innerText.replace(/\\u00a0/g,' ').trim();if(pilot&&pilot!==''){r.classList.add('ys-hi');}else{r.classList.add('ys-hi-pending');}});}function sC(){var t=document.querySelector('.ys-hi,.ys-hi-pending');if(t)t.scrollIntoView({behavior:'smooth',block:'center'});}h();setTimeout(sC,100);window.ysT=setInterval(h,180000);window.ysSc=setInterval(sC,180000);})();`,
   
   incheon: `javascript:(function(){if(window.icT)clearInterval(window.icT);if(window.icSc)clearInterval(window.icSc);var old=document.getElementById('ic_s');if(old)old.remove();var s=document.createElement('style');s.id='ic_s';s.innerHTML='.ic-hi td{background:#e8f5e9!important;border-top:2px solid #4caf50!important;border-bottom:2px solid #4caf50!important;font-weight:bold!important;color:#1b5e20!important;transition:all 0.3s;}.ic-hi-pending td{box-shadow:inset 0 3px 0 0 #ff9800,inset 0 -3px 0 0 #ff9800!important;font-weight:bold!important;transition:all 0.3s;}';document.head.appendChild(s);function h(){var now=new Date(),yr=now.getFullYear(),mon=now.getMonth(),day=now.getDate(),hiList=[],nxList=[],mD=Infinity;document.querySelectorAll('tr').forEach(function(r){r.classList.remove('ic-hi');r.classList.remove('ic-hi-pending');var tds=r.querySelectorAll('td');if(tds.length<5)return;var tt=tds[2].innerText.replace(/\\u00a0/g,' ').trim();var pilot=tds[1].innerText.replace(/\\u00a0/g,' ').trim();if(!tt||!tt.match(/^\\d{2}:\\d{2}$/))return;var tParts=tt.split(':');var shipTime=new Date(yr,mon,day,parseInt(tParts[0],10),parseInt(tParts[1],10));var df=shipTime-now;if(df>=0&&df<=3600000){hiList.push(r);}else if(df>0){if(df<mD-60000){mD=df;nxList=[r];}else if(df<=mD+60000){if(df<mD)mD=df;nxList.push(r);}}});var targets=hiList.length?hiList:nxList;targets.forEach(function(r){var tds=r.querySelectorAll('td');var pilot=tds[1].innerText.replace(/\\u00a0/g,' ').trim();if(pilot&&pilot!=='(0)'){r.classList.add('ic-hi');}else{r.classList.add('ic-hi-pending');}});}function sC(){var t=document.querySelector('.ic-hi,.ic-hi-pending');if(t)t.scrollIntoView({behavior:'smooth',block:'center'});}h();setTimeout(sC,100);window.icT=setInterval(h,180000);window.icSc=setInterval(sC,180000);})();`,
 
@@ -866,6 +868,86 @@ const portSourceCodeTexts = {
   setTimeout(sC, 100);
   window.ptT=setInterval(h, 180000); // 3분마다 데이터 자동 재스캔
   window.scT=setInterval(sC, 180000); // 3분마다 스크롤 리포지셔닝
+})();`,
+
+  yeosu: `javascript:(function(){
+  // [여수항] 중복 실행 시 기존 타이머 클리어
+  if(window.ysT) clearInterval(window.ysT);
+  if(window.ysSc) clearInterval(window.ysSc);
+
+  var old=document.getElementById('ys_s');
+  if(old) old.remove();
+
+  // CSS 하이라이트 스타일 동적 주입 (도선 완료: 녹색 테두리 / 대기: 주황색 테두리 입체 박스섀도)
+  var s=document.createElement('style');
+  s.id='ys_s';
+  s.innerHTML='.ys-hi td{background:#e8f5e9!important;border-top:2px solid #4caf50!important;border-bottom:2px solid #4caf50!important;font-weight:bold!important;color:#1b5e20!important;transition:all 0.3s;}.ys-hi-pending td{box-shadow:inset 0 3px 0 0 #ff9800,inset 0 -3px 0 0 #ff9800!important;font-weight:bold!important;transition:all 0.3s;}';
+  document.head.appendChild(s);
+
+  function h(){
+    var now=new Date(),
+        yr=now.getFullYear(),
+        mon=now.getMonth(),
+        day=now.getDate(),
+        hiList=[],
+        nxList=[],
+        mD=Infinity;
+
+    // 여수항 .lien-table tbody tr 순회하며 시각 비교
+    document.querySelectorAll('.lien-table tbody tr').forEach(function(r){
+      var tds=r.querySelectorAll('td');
+      if(tds.length<13) return;
+
+      // 구분(2번째 열)이 '예보'인 행은 제외
+      var spec=tds[1].innerText.replace(/\\u00a0/g,' ').trim();
+      if(spec==='예보') return;
+
+      // 시간(8번째 열) 텍스트 추출 및 정제
+      var tt=tds[7].innerText.replace(/\\u00a0/g,' ').trim();
+      if(!tt||!tt.match(/^\\d{2}:\\d{2}$/)) return;
+
+      var tParts=tt.split(':');
+      var shipTime=new Date(yr, mon, day, parseInt(tParts[0],10), parseInt(tParts[1],10));
+      var df=shipTime-now;
+
+      // 1시간 이내 일정 자동 탐색
+      if(df>=0 && df<=3600000){
+        hiList.push(r);
+      }else if(df>0){
+        if(df<mD-60000){
+          mD=df;
+          nxList=[r];
+        }else if(df<=mD+60000){
+          if(df<mD) mD=df;
+          nxList.push(r);
+        }
+      }
+    });
+
+    var targets=hiList.length?hiList:nxList;
+    targets.forEach(function(r){
+      var tds=r.querySelectorAll('td');
+      var pilot=tds[11].innerText.replace(/\\u00a0/g,' ').trim(); // 도선사명 (12번째 열)
+      
+      // 도선사 배정 여부 확인
+      if(pilot && pilot!==''){
+        r.classList.add('ys-hi'); // 녹색 강조 (지정 완료)
+      }else{
+        r.classList.add('ys-hi-pending'); // 주황색 테두리 강조 (대기중)
+      }
+    });
+  }
+
+  // 타겟 행 화면 중앙 자동 스크롤
+  function sC(){
+    var t=document.querySelector('.ys-hi,.ys-hi-pending');
+    if(t) t.scrollIntoView({behavior:'smooth', block:'center'});
+  }
+
+  h();
+  setTimeout(sC, 100);
+  window.ysT=setInterval(h, 180000); // 3분 주기 스케줄 재스캔
+  window.ysSc=setInterval(sC, 180000); // 3분 주기 스크롤 리포지셔닝
 })();`,
 
   incheon: `javascript:(function(){
