@@ -442,6 +442,17 @@
             </tbody>
           </table>
         </div>
+        <!-- 자체 업데이트 및 사이트 미제공 항만 안내 -->
+        <div style="margin-top: 16px; display: flex; flex-direction: column; gap: 8px; font-size: 13px; line-height: 1.6; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px; background: #fafafa;">
+          <div style="display: flex; gap: 8px; color: #475569;">
+            <span style="font-weight: 700; color: #1e293b; min-width: 180px;">⚙️ 사이트 자체 최신관리 중:</span>
+            <span>부산항, 울산항, 마산항, 목포항</span>
+          </div>
+          <div style="display: flex; gap: 8px; color: #475569; border-top: 1px solid var(--border); padding-top: 8px;">
+            <span style="font-weight: 700; color: #1e293b; min-width: 180px;">❌ 사이트 없음 또는 폐쇄적 운영:</span>
+            <span>포항항 (독립 홈페이지 없음), 군산항 (회원제 카페 폐쇄적 운영), 제주항 (독립 홈페이지 없음)</span>
+          </div>
+        </div>
       </div>
 
       <!-- 사용 가이드 -->
@@ -1239,6 +1250,9 @@ function renderPortTable() {
   tbody.innerHTML = '';
   
   pilotPorts.forEach(port => {
+    // 자체 최신 업데이트를 제공하거나 예보 사이트가 없는 항만은 테이블에서 제외
+    if (port.noBookmarklet || !port.hasWeb) return;
+
     const tr = document.createElement('tr');
     
     // 1. 항만명 셀 생성
@@ -1259,59 +1273,41 @@ function renderPortTable() {
     tdLink.appendChild(aLink);
     tr.appendChild(tdLink);
     
-    // 3. 북마크릿 드래그 및 코드 관리 셀 생성 (분기 처리)
-    if (port.noBookmarklet) {
-      const tdDrag = document.createElement('td');
-      tdDrag.setAttribute('data-label', '북마크릿 설치 (드래그)');
-      tdDrag.style.color = '#9ca3af';
-      tdDrag.style.fontSize = '12px';
-      tdDrag.style.textAlign = 'center';
-      tdDrag.style.fontStyle = 'italic';
-      tdDrag.textContent = port.id === 'gunsan' ? '회원제 카페 운영 (적용 불가)' : '자체 스케줄 필터링 제공 (북마크릿 불필요)';
-      tr.appendChild(tdDrag);
-      
-      const tdAction = document.createElement('td');
-      tdAction.setAttribute('data-label', '코드 관리');
-      tdAction.style.color = '#9ca3af';
-      tdAction.style.fontSize = '12px';
-      tdAction.style.textAlign = 'center';
-      tdAction.style.fontStyle = 'italic';
-      tdAction.textContent = port.id === 'gunsan' ? '북마크릿 미지원' : '북마크릿 미요구 항만';
-      tr.appendChild(tdAction);
-    } else {
-      const tdDrag = document.createElement('td');
-      tdDrag.setAttribute('data-label', '북마크릿 설치 (드래그)');
-      const aDrag = document.createElement('a');
-      aDrag.className = 'bookmarklet-drag-sm';
-      aDrag.href = generateBookmarkletCode(port.id);
-      aDrag.title = "클릭하지 마시고 즐겨찾기 바에 드래그하여 놓으세요.";
-      aDrag.textContent = `🔖 ${port.name} 하이라이트`;
-      tdDrag.appendChild(aDrag);
-      tr.appendChild(tdDrag);
-      
-      const tdAction = document.createElement('td');
-      tdAction.setAttribute('data-label', '코드 관리');
-      
-      const actionGroup = document.createElement('div');
-      actionGroup.className = 'action-group';
-      
-      const btnCopy = document.createElement('button');
-      btnCopy.className = 'btn-action-sm btn-copy-port';
-      btnCopy.title = '북마크릿 코드 복사';
-      btnCopy.textContent = '📋 복사';
-      btnCopy.onclick = (e) => copyPortBookmarklet(port.id, btnCopy);
-      
-      const btnDown = document.createElement('button');
-      btnDown.className = 'btn-action-sm btn-download-port';
-      btnDown.title = '북마크릿 스크립트 다운로드';
-      btnDown.textContent = '다운로드';
-      btnDown.onclick = (e) => downloadPortBookmarklet(port.id, port.name);
-      
-      actionGroup.appendChild(btnCopy);
-      actionGroup.appendChild(btnDown);
-      tdAction.appendChild(actionGroup);
-      tr.appendChild(tdAction);
-    }
+    // 3. 북마크릿 드래그 및 코드 관리 셀 생성
+    const bookmarkletCode = generateBookmarkletCode(port.id);
+    
+    const tdDrag = document.createElement('td');
+    tdDrag.setAttribute('data-label', '북마크릿 설치 (드래그)');
+    const aDrag = document.createElement('a');
+    aDrag.className = 'bookmarklet-drag-sm';
+    aDrag.href = bookmarkletCode;
+    aDrag.title = "클릭하지 마시고 즐겨찾기 바에 드래그하여 놓으세요.";
+    aDrag.textContent = `🔖 ${port.name} 하이라이트`;
+    tdDrag.appendChild(aDrag);
+    tr.appendChild(tdDrag);
+    
+    const tdAction = document.createElement('td');
+    tdAction.setAttribute('data-label', '코드 관리');
+    
+    const actionGroup = document.createElement('div');
+    actionGroup.className = 'action-group';
+    
+    const btnCopy = document.createElement('button');
+    btnCopy.className = 'btn-action-sm btn-copy-port';
+    btnCopy.title = '북마크릿 코드 복사';
+    btnCopy.textContent = '📋 복사';
+    btnCopy.onclick = (e) => copyPortBookmarklet(port.id, btnCopy);
+    
+    const btnDown = document.createElement('button');
+    btnDown.className = 'btn-action-sm btn-download-port';
+    btnDown.title = '북마크릿 스크립트 다운로드';
+    btnDown.textContent = '다운로드';
+    btnDown.onclick = (e) => downloadPortBookmarklet(port.id, port.name);
+    
+    actionGroup.appendChild(btnCopy);
+    actionGroup.appendChild(btnDown);
+    tdAction.appendChild(actionGroup);
+    tr.appendChild(tdAction);
     
     tbody.appendChild(tr);
   });
