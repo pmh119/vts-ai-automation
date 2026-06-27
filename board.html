@@ -673,7 +673,7 @@ function renderPosts(posts) {
 function checkAdminPassword(author, password) {
   if (author.trim() === '관리자') {
     if (password.trim() !== '5688') {
-      alert("작성자명이 '관리자'일 경우 비밀번호는 '5688'이어야 합니다.");
+      alert("관리자 비밀번호가 일치하지 않습니다.");
       return false;
     }
   }
@@ -816,7 +816,7 @@ function submitEdit(postId) {
       const post = localPosts[postIdx];
       // 관리자 글일 경우 비밀번호 5688 검사
       if (post.author === '관리자' && password !== '5688') {
-        alert("관리자 작성글 수정 시 비밀번호는 5688이어야 합니다.");
+        alert("관리자 비밀번호가 일치하지 않습니다.");
         return;
       }
       
@@ -972,7 +972,7 @@ function confirmDelete() {
       const targetPost = localPosts.find(p => p.id === activeDeleteId);
       if (targetPost) {
         if (targetPost.author === '관리자' && password !== '5688') {
-          alert("관리자 작성글 삭제 시 비밀번호는 5688이어야 합니다.");
+          alert("관리자 비밀번호가 일치하지 않습니다.");
           return;
         }
         if (targetPost.password === password) {
@@ -993,7 +993,7 @@ function confirmDelete() {
           const targetComment = localPosts[i].comments.find(c => c.id === activeDeleteId);
           if (targetComment) {
             if (targetComment.author === '관리자' && password !== '5688') {
-              alert("관리자 댓글 삭제 시 비밀번호는 5688이어야 합니다.");
+              alert("관리자 비밀번호가 일치하지 않습니다.");
               return;
             }
             if (targetComment.password === password) {
