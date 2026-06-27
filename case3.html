@@ -249,9 +249,9 @@
       <ul style="list-style:none;display:flex;flex-direction:column;gap:18px;padding:0;font-size:13px;color:#4b5563;" class="no-bullet">
         <li style="padding-left: 0; margin-bottom: 0; line-height: 1.5;">
           <strong style="color:#2563eb;">① WebView2 공식 런타임(엔진) 존재 여부 확인 및 설치:</strong> 
-          최신 Windows 10/11 OS 및 Edge 브라우저 환경에서는 대부분 **WebView2 런타임이 기본 설치**되어 작동 중입니다. 
-          따라서 먼저 제어판(또는 앱 및 기능 설정)의 프로그램 목록에서 **'Microsoft Edge WebView2 Runtime'**이 설치되어 있는지 조회해 보세요.
-          <br>만약 이미 설치되어 있다면 추가 런타임 설치(Evergreen Bootstrapper 등)는 생략하고 곧바로 **② 라이브러리 및 DLL 파일 배치** 단계로 넘어가시면 됩니다. (만약 구형 OS 등의 이유로 미설치 상태인 경우만 아래 링크에서 런타임을 다운로드하여 수동 설치해 주세요.)
+          최신 Windows 10/11 OS 및 Edge 브라우저 환경에서는 대부분 **WebView2 런타임이 기본 설치**되어 작동 중입니다.
+          <br>기본적으로 <span style="font-family:monospace;background:#f3f4f6;padding:2px 4px;border-radius:4px;font-weight:bold;">C:\Program Files (x86)\Microsoft\EdgeWebView\Application\버전명\msedgewebview2.exe</span> 경로에 실행 엔진이 이미 설치되어 있다고 가정하고 진행하시면 됩니다. 
+          제어판 프로그램 목록 혹은 해당 탐색기 경로에서 존재 여부를 먼저 확인하시고, **파일이 이미 있다면 추가 런타임 설치 과정은 생략**한 채 곧바로 **② 라이브러리 및 DLL 파일 배치** 단계로 진행해 주세요. (만약 설치되어 있지 않은 경우만 아래 링크에서 런타임을 다운로드하여 설치합니다.)
           <div style="margin-top:8px; margin-bottom:8px; display:flex; gap:8px; flex-wrap:wrap;">
             <a href="https://developer.microsoft.com/ko-kr/microsoft-edge/webview2/consumer/" target="_blank" style="display:inline-block;background:#2563eb;color:#fff;padding:6px 12px;border-radius:4px;text-decoration:none;font-weight:bold;font-size:12px;box-shadow:0 2px 4px rgba(37,99,235,0.2);">
               🔗 WebView2 런타임 다운로드 ↗
