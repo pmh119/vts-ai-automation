@@ -1327,7 +1327,7 @@ function renderCodeTabs() {
   tabsContainer.innerHTML = '';
   
   pilotPorts.forEach(port => {
-    if (port.noBookmarklet) return; // 북마크릿이 필요 없는 항만은 탭에서 제외
+    if (port.noBookmarklet || !port.hasWeb) return; // 북마크릿이 필요 없거나 사이트가 없는 항만은 탭에서 제외
     const btn = document.createElement('button');
     btn.className = `code-tab-btn ${port.id === activePortId ? 'active' : ''}`;
     btn.textContent = port.name;
