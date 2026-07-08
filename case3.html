@@ -468,7 +468,6 @@ function loadFullCode3() {
   }
   
   const primaryUrl = '사례3/portmis.ps1';
-  const fallbackUrl = 'https://raw.githubusercontent.com/pmh119/vts-ai-automation/main/%EC%82%AC%EB%A1%803/portmis.ps1';
 
   function displayCode(text) {
     codeEl.textContent = text;
@@ -487,10 +486,10 @@ function loadFullCode3() {
       loadBtn.innerHTML = '❌ 로드 실패! 다시 시도하기';
       loadBtn.style.background = '#dc2626';
     }
-    alert('보안 정책(CORS 및 raw.githubusercontent.com 도메인 차단) 또는 네트워크 문제로 소스코드 로드에 실패했습니다.\n\n[해결 방법]\n1. 우측 상단의 "⬇ 다운로드" 버튼을 눌러 소스코드를 내려받으시거나, 하단의 "GitHub에서 전체 소스코드 보기" 링크를 이용해 주세요.\n2. 혹은 보안 정책이 해제된 일반 외부 인터넷망 환경에서 접속해 주시기 바랍니다.');
+    alert('보안 정책 또는 네트워크 문제로 소스코드 로드에 실패했습니다.\n\n[해결 방법]\n1. 우측 상단의 "⬇ 다운로드" 버튼을 눌러 소스코드를 내려받아 주시기 바랍니다.\n2. 혹은 보안 정책이 해제된 일반 외부 인터넷망 환경에서 접속해 주시기 바랍니다.');
   }
 
-  // 1차 시도: GitHub Raw API
+  // 로컬 경로에서 파일 로드 시도
   fetch(primaryUrl)
     .then(response => {
       if (!response.ok) throw new Error('Primary URL response not ok');
@@ -500,19 +499,7 @@ function loadFullCode3() {
       displayCode(text);
     })
     .catch(err => {
-      console.warn('1차 GitHub Raw 로드 실패. jsDelivr CDN으로 2차 우회 시도를 진행합니다...', err);
-      // 2차 시도: jsDelivr CDN Bypass
-      fetch(fallbackUrl)
-        .then(response => {
-          if (!response.ok) throw new Error('Fallback URL response not ok');
-          return response.text();
-        })
-        .then(text => {
-          displayCode(text);
-        })
-        .catch(fallbackErr => {
-          handleFailure(fallbackErr);
-        });
+      handleFailure(err);
     });
 }
 
