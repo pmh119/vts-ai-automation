@@ -2,7 +2,7 @@
 // 이 스크립트는 구글 스프레드시트의 [확장 프로그램] -> [Apps Script]에 복사하여 배포합니다.
 
 // 스프레드시트 ID (비워둘 경우 이 스크립트가 포함된 스프레드시트를 자동으로 사용합니다)
-const SPREADSHEET_ID = '1-pmckKcDKfSg4I986rz65Da0JDrhu8377Ynm495F4us'; 
+const SPREADSHEET_ID = ''; 
 
 /**
  * 스프레드시트 인스턴스 가져오기
