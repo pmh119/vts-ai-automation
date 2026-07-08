@@ -1,4 +1,4 @@
-﻿# encoding: ANSI
+# encoding: ANSI
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
@@ -20,8 +20,8 @@ $targetDay     = $now.Day
 $targetDateStr = $now.ToString("yyyy-MM-dd")
 
 $PORTMIS_LOGIN_URL = "https://new.portmis.go.kr/portmis/websquare/websquare.jsp?w2xPath=/portmis/w2/main/intro.xml"
-$FIELD_LOGIN_URL   = "http://hp.kcg.internal/FisdOBS/index.jsp"
-$FIELD_DIARY_URL   = "http://hp.kcg.internal/FisdOBS/vt/vtsWorkDiary.do?progrm_id=OBS0501"
+$FIELD_LOGIN_URL   = "http://hp.kcg.internal/login"
+$FIELD_DIARY_URL   = "http://hp.kcg.internal/diary"
 $WV2_DATA_DIR_PM   = "$env:TEMP\VTS_WV2_PM"
 $WV2_DATA_DIR_FP   = "$env:TEMP\VTS_WV2_FP"
 
